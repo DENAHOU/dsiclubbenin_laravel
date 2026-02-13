@@ -1,0 +1,344 @@
+    /* Variables de couleurs de notre maquette */
+    :root {
+      --dsi-blue-dark: #0a2b5c;
+      --dsi-blue-light: #1f61a9;
+      --dsi-gold: #ffc107;
+      --ink: #121f2d;
+      --text-muted: #5a6a7b;
+      --light-ink: #f9fafb;
+    }
+
+    /* Utiliser notre police "Inter" pour une touche plus pro */
+    body { font-family: 'Inter', sans-serif; }
+
+    /* ======================================================= */
+/*      CSS FINAL POUR LA NAVBAR (À UTILISER DANS <style>) */
+/* ======================================================= */
+
+/* ... (Vos variables :root et autres styles restent ici) ... */
+
+/*** Navbar ***/
+.navbar {
+    /* LA SOLUTION EST ICI : On sort la navbar du flux normal */
+    position: absolute; /* La fait "flotter" au-dessus des autres éléments */
+    width: 100%;
+    top: 50px;      /* On la décale de 45px vers le bas (la hauteur du Topbar) */
+    left: 0;
+    z-index: 999;     /* On s'assure qu'elle soit bien au premier plan */
+
+    /* Le thème gère la transparence, donc on n'a pas besoin de 'background-color' ici */
+}
+
+/* Le reste du CSS gère les couleurs et le comportement au scroll */
+
+.navbar-dark .navbar-nav .nav-link,
+.navbar .navbar-brand {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+}
+
+/* Style des éléments quand la navbar est TRANSPARENTE (sur le hero) */
+.navbar-dark .navbar-brand,
+.navbar-dark .navbar-nav .nav-link {
+    color: white !important;
+}
+.btn-cta-secondary {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.5);
+    color: white !important;
+    font-weight: 600;
+}
+.btn-cta-secondary:hover {
+    background-color: white;
+    color: var(--dsi-blue-dark) !important;
+}
+
+.btn-cta-primary{
+    background-color: var(--dsi-gold);
+    color: var(--dsi-blue-dark);
+    padding: 20px;
+}
+
+
+/* Style des éléments quand la navbar devient STICKY (fond BLANC) */
+.sticky-top.navbar-dark {
+    top: 0 !important; /* Quand elle devient fixe, on la colle tout en haut */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.sticky-top.navbar-dark .navbar-brand,
+.sticky-top.navbar-dark .navbar-nav .nav-link {
+    color: var(--dsi-blue-dark) !important;
+}
+.sticky-top.navbar-dark .navbar-nav .nav-link:hover,
+.sticky-top.navbar-dark .navbar-nav .nav-link.active {
+    color: var(--primary) !important;
+}
+.sticky-top.navbar-dark .btn-cta-secondary {
+    border-color: var(--dsi-blue-dark);
+    color: var(--dsi-blue-dark) !important;
+}
+.sticky-top.navbar-dark .btn-cta-secondary:hover {
+    background-color: var(--dsi-blue-dark);
+    color: white !important;
+}
+
+.btn-primary :hover{
+    background-color: #fff;
+    color: var(--dsi-blue-dark) !important;
+}
+
+.btn-light{
+    background-color: #fff;
+    color: black;
+}
+
+.btn-light :hover{
+    background-color: var(--dsi-blue-light);
+    color: #fff;
+}
+
+/* ======================================================= */
+/*      CSS FINAL POUR LA RESPONSIVITÉ DU HERO & TITRES    */
+/* ======================================================= */
+
+/* --- Style par défaut (Grands écrans) --- */
+#header-carousel .carousel-item {
+    /* Sur grand écran, on prend une hauteur généreuse */
+    height: 90vh;
+    min-height: 700px; /* Hauteur de sécurité */
+}
+
+#header-carousel .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-caption {
+    /* On utilise Flexbox pour un centrage vertical parfait */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inset: 0; /* Prend toute la place */
+}
+
+.carousel-caption h1 {
+    font-size: clamp(3rem, 6vw, 5rem); /* Taille de police flexible */
+}
+
+.carousel-caption .btn {
+    padding: 0.9rem 2.2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/*** Section Title (Grands écrans) ***/
+.section-title {
+    max-width: 600px;
+    /* Le style du titre est déjà bon pour les grands écrans */
+}
+.section-title::before {
+    position: absolute;
+    content: "";
+    width: 50px;
+    height: 4px;
+    bottom: 0;
+    left: 50%;
+    margin-left: -25px;
+    background: var(--primary);
+}
+.section-title.text-start::before {
+    left: 0;
+    margin-left: 0;
+}
+
+
+/* ======================================================= */
+/*      MEDIA QUERIES : La Magie pour les Mobiles          */
+/* ======================================================= */
+
+/* --- Pour les Tablettes et Mobiles (en dessous de 992px) --- */
+@media (max-width: 991.98px) {
+    #header-carousel .carousel-item {
+        height: 80vh; /* On réduit un peu la hauteur */
+        min-height: 600px;
+    }
+
+    .carousel-caption h1 {
+        font-size: clamp(2.5rem, 8vw, 3.5rem); /* Le titre peut être un peu plus gros proportionnellement */
+    }
+}
+
+
+/* --- Uniquement pour les Mobiles (en dessous de 768px) --- */
+@media (max-width: 767.98px) {
+    #header-carousel .carousel-item {
+        height: 65vh; /* Hauteur beaucoup plus petite pour laisser voir la suite */
+        min-height: 500px;
+    }
+
+    .carousel-caption h1 {
+        font-size: 2rem; /* Taille de titre bien adaptée au mobile */
+        margin-bottom: 1.5rem !important; /* On force un peu d'espace sous le titre */
+    }
+
+    .carousel-caption .btn {
+        padding: 0.7rem 1.5rem; /* Boutons légèrement plus petits */
+        font-size: 0.95rem;
+    }
+
+    /* On cache le sous-titre du carrousel s'il prend trop de place */
+    .carousel-caption h5 {
+        display: none;
+    }
+
+    /* On adapte les titres de section */
+    .section-title h1, .section-title h2 {
+        font-size: 1.8rem !important;
+    }
+}
+/* ------------------------------------------------------- */
+/* 3. STYLE POUR NOS SECTIONS SPÉCIFIQUES
+/* ------------------------------------------------------- */
+
+/* Style général pour nos cartes custom */
+.card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -15px rgba(11, 63, 122, 0.2);
+}
+
+/* Section Écosystème (Carrières & ESN) */
+.feature-list {
+    list-style: none;
+    padding: 0;
+}
+.feature-list li {
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: flex-start;
+}
+.feature-list li .fa-check-circle {
+    margin-right: 0.75rem;
+    margin-top: 5px;
+}
+
+/* Section Partage de Compétences (Plexus) */
+.skills-plexus-section {
+    position: relative;
+    background-color: var(--light-bg);
+    overflow: hidden;
+    border-top: 1px solid var(--border-color);
+}
+#plexus-bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+}
+.skills-plexus-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: clamp(2rem, 6vw, 4rem);
+}
+@media (max-width: 992px) { .skills-plexus-container { grid-template-columns: 1fr; } }
+.skills-presentation .eyebrow { color: var(--dsi-green); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.skills-presentation h2 { color: var(--ink); font-size: clamp(2.2rem, 4.5vw, 3.2rem); font-weight: 800; margin: 0.5rem 0 1rem 0; }
+.skills-presentation p { color: var(--muted-ink); line-height: 1.7; font-size: 1.1rem; max-width: 500px; margin-bottom: 2rem; }
+.skills-presentation .btn { background: linear-gradient(95deg, var(--dsi-blue), var(--dsi-green)); color: white; padding: .9rem 1.8rem; border-radius: 12px; font-weight: 700; text-decoration: none; border: none; }
+.skills-features { display: grid; gap: 1.5rem; }
+.feature-card {
+    display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem;
+    border-radius: 16px; background: white; border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px -15px rgba(11, 63, 122, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.feature-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -15px rgba(11, 63, 122, 0.2); }
+.feature-icon {
+    flex-shrink: 0; width: 50px; height: 50px; border-radius: 12px;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--dsi-blue), var(--dsi-green));
+    color: white; font-size: 1.5rem;
+}
+.feature-card h4 { margin: 0 0 0.25rem 0; color: var(--ink); font-weight: 600; }
+.feature-card p { margin: 0; color: var(--muted-ink); font-size: 0.9rem; }
+
+/* Section NexusDSI Hub (Présentation Forum) */
+.forum-section {
+    position: relative;
+    padding: clamp(3rem, 8vw, 6rem) 1.5rem;
+    overflow: hidden;
+    background-color: white;
+}
+#particles-js { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+.section-title-wrapper { text-align: center; margin-bottom: clamp(2rem, 5vw, 4rem); position: relative; z-index: 1; }
+.section-title-wrapper .eyebrow { font-size: .9rem; letter-spacing: .1em; text-transform: uppercase; color: var(--dsi-green); font-weight: 700; margin-bottom: 0.5rem; }
+.section-title-wrapper h2 { margin: 0; font-size: clamp(2.2rem, 4.5vw, 3.2rem); line-height: 1.2; font-weight: 800; color: var(--ink); max-width: 800px; margin-left: auto; margin-right: auto; }
+.forum-wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.2fr; align-items: center; gap: clamp(2rem, 6vw, 5rem); }
+@media (max-width: 992px) { .forum-wrap { grid-template-columns: 1fr; } }
+.forum-presentation { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+.forum-header { margin-bottom: 2rem; }
+.forum-title { margin: 0; font-size: clamp(2.5rem, 5vw, 3.8rem); line-height: 1.1; font-weight: 800; background: linear-gradient(95deg, var(--dsi-blue), var(--dsi-green)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.forum-subtitle { margin: 1rem 0 0; color: var(--muted-ink); font-size: clamp(1rem, 2vw, 1.25rem); max-width: 450px; }
+.forum-points { display: grid; gap: 1.5rem; padding: 0; list-style: none; grid-template-columns: 1fr 1fr; }
+@media (max-width: 600px) { .forum-points { grid-template-columns: 1fr; } }
+.point {
+    position: relative; border-radius: 20px; padding: 1.5rem; text-align: left;
+    background: color-mix(in oklab, var(--light-bg) 50%, transparent);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in oklab, var(--dsi-blue) 15%, transparent);
+    box-shadow: 0 10px 30px -15px color-mix(in oklab, var(--dsi-blue) 15%, transparent);
+}
+.point-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+.point h3 { margin: 0; color: var(--ink); font-size: 1.15rem; font-weight: 600; }
+.point p { margin: 0; color: var(--muted-ink); font-size: 0.95rem; }
+.icon { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg, var(--dsi-blue), var(--dsi-green)); color: white; font-size: 1.2rem; flex-shrink: 0; }
+.forum-cta { margin-top: auto; padding-top: 2rem; width: 100%; text-align: center; }
+.btn.primary { background: linear-gradient(95deg, var(--dsi-blue), var(--dsi-green)); color: white; }
+
+/* Section Partenaires ( Carousel du Thème ) */
+.partner-logo {
+    height: 50px;
+    filter: grayscale(1);
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+.partner-logo:hover {
+    filter: none;
+    opacity: 1;
+}
+
+/* Section CTA Finale */
+#join {
+    background: linear-gradient(45deg, var(--dsi-blue-light), var(--dsi-blue-dark));
+    color: white;
+}
+#join .lead {
+    color: rgba(255,255,255,0.8);
+}
+#join .d-flex span {
+    color: rgba(255,255,255,0.7);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

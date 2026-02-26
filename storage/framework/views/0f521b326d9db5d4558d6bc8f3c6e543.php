@@ -122,12 +122,59 @@
                 display: none;
             }
         }
-    </style>
+
+        /* ================= MOBILE RESPONSIVE ================= */
+
+@media (max-width: 991px) {
+
+    .app-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -260px;
+        width: 260px;
+        height: 100%;
+        z-index: 1050;
+        transition: left 0.3s ease;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .main-content {
+        padding: 1rem;
+    }
+
+    .mobile-toggle {
+        display: block;
+        background: var(--dsi-blue);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin-bottom: 10px;
+    }
+}
+
+/* Desktop : cacher bouton */
+.mobile-toggle {
+    display: none;
+}
+
+</style>
 </head>
 <body>
 
 
 <div class="app-shell">
+<button class="mobile-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
+
     <!-- ============================================= -->
     <!--       SIDEBAR (MENU LATÉRAL FIXE)             -->
     <!-- ============================================= -->
@@ -249,6 +296,11 @@ document.querySelectorAll('.submenu-toggle').forEach(toggle => {
         this.closest('.has-submenu').classList.toggle('open');
     });
 });
+</script>
+<script>
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('show');
+}
 </script>
 
 </body>

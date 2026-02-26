@@ -39,7 +39,9 @@ class UnifiedLoginController extends Controller
 
             // Récupérer l'utilisateur connecté
             $user = Auth::user();
-            
+
+
+
             // Rediriger selon le rôle
             return $this->redirectToDashboard($user->role);
         }
@@ -53,22 +55,24 @@ class UnifiedLoginController extends Controller
     /**
      * Redirige vers le dashboard approprié selon le rôle
      */
-    private function redirectToDashboard(string $role): RedirectResponse
-    {
-        $routeName = match($role) {
-            'admin' => 'admin.dashboard',
-            'company' => 'company.dashboard',
-            'college' => 'college.dashboard',
-            'administration' => 'administration.dashboard',
-            'candidat' => 'candidat.dashboard',
-            'recruter' => 'recruter.dashboard',
-            'partner' => 'partner.dashboard',
-            'esn' => 'esn.dashboard',
-            default => 'dashboard', // membre par défaut
-        };
-        
-        return redirect()->intended(route($routeName));
-    }
+private function redirectToDashboard(string $role): RedirectResponse
+{
+    $routeName = match($role) {
+        'admin' => 'admin.dashboard',
+        'tresor' => 'tresor.dashboard',
+        'company' => 'company.dashboard',
+        'college' => 'college.dashboard',
+        'administration' => 'administration.dashboard',
+        'candidat' => 'candidat.dashboard',
+        'recruter' => 'recruter.dashboard',
+        'partner' => 'partner.dashboard',
+        'esn' => 'esn.dashboard',
+        default => 'dashboard',
+    };
+
+    return redirect()->route($routeName);
+}
+
 
     /**
      * Déconnexion unifiée
@@ -80,7 +84,7 @@ class UnifiedLoginController extends Controller
 
         // Détruire complètement la session
         $request->session()->invalidate();
-        
+
         // Régénérer le token CSRF pour sécurité
         $request->session()->regenerateToken();
 

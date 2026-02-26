@@ -99,28 +99,38 @@
         .tag-autre { background-color: #95a5a6; }
 
         .card-title { font-size: 1.2rem; font-weight: 700; color: var(--ink); text-decoration: none; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 3.6rem; margin-bottom: 1rem; }
-        /* --- Section Premium DSI Awards Gold Élégant --- */
+       
+       
+    /* --- Section Premium DSI Awards Gold Élégant --- */
         .premium-section {
             margin: 4rem 0;
-            padding: 4rem 0;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #fff9e6 100%);
+            padding: 5rem 0;
+            background: #ebf2fa;
             position: relative;
             overflow: hidden;
+            color: black;
         }
+
 
         .premium-section::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="gold-pattern" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,215,0,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23gold-pattern)"/></svg>');
+            inset: 0;
+            background-image: radial-gradient(rgba(255,215,0,0.4) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.15;
+            animation: sparkleMove 20s linear infinite;
             pointer-events: none;
         }
 
+        @keyframes sparkleMove {
+            from { transform: translateY(0); }
+            to { transform: translateY(-40px); }
+        }
+
+
         .premium-content {
-            max-width: 1200px;
+            max-width: 1700px;
             margin: 0 auto;
             padding: 0 2rem;
             display: grid;
@@ -131,17 +141,35 @@
             z-index: 1;
         }
 
-        .premium-text h2 {
-            font-size: 3.5rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 2rem;
-            line-height: 1.1;
-            text-shadow: 0 2px 4px rgba(255,215,0,0.1);
-        }
+.premium-text h2 {
+    font-size: 3.8rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #ffd700, #fff4b0, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+/* reflet lumineux */
+.premium-text h2::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.8), transparent);
+    transform: skewX(-25deg);
+    animation: shine 4s infinite;
+}
+
+@keyframes shine {
+    0% { left: -60%; }
+    100% { left: 120%; }
+}
+
 
         .premium-text .gold-accent {
             color: #ffd700;
@@ -157,57 +185,58 @@
             font-weight: 400;
         }
 
-        .premium-image {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(255,215,0,0.15);
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 3px solid transparent;
-            background: linear-gradient(white, white) padding-box,
-                        linear-gradient(135deg, #ffd700, #ffed4e) border-box;
-        }
+.premium-image {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+    transition: 0.6s;
+    border: 2px solid rgba(255,215,0,0.6);
+    width: 700px;
+}
 
-        .premium-image:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 30px 60px rgba(255,215,0,0.25);
-        }
+.premium-image::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 20px;
+    background: linear-gradient(45deg, #ffd700, transparent, #ffd700);
+    opacity: 0.4;
+    z-index: 0;
+}
 
-        .premium-image img {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            display: block;
-        }
+.premium-image img {
+    position: relative;
+    z-index: 1;
+}
 
-        .premium-image::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(255,215,0,0.1) 0%, transparent 50%);
-            pointer-events: none;
-        }
+.premium-image:hover {
+    transform: translateY(-12px) scale(1.03);
+    box-shadow: 0 40px 90px rgba(255,215,0,0.35);
+}
 
-        .premium-btn {
-            display: inline-block;
-            padding: 1.2rem 3.5rem;
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
-            color: #2c3e50;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 15px 35px rgba(255,215,0,0.3);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-            border: 2px solid #ffd700;
-        }
+
+.premium-btn {
+    display: inline-block;
+    padding: 1.3rem 3.8rem;
+    background: linear-gradient(135deg, #ffd700, #fff0a0, #ffd700);
+    color: #041c36;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 15px 35px rgba(255,215,0,0.4);
+    transition: 0.4s;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-btn:hover {
+    transform: translateY(-6px) scale(1.07);
+    box-shadow: 0 25px 55px rgba(255,215,0,0.6);
+}
+
 
         .premium-btn::before {
             content: '';
@@ -220,24 +249,21 @@
             transition: left 0.6s ease;
         }
 
-        .premium-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 20px 45px rgba(255,215,0,0.4);
-            background: linear-gradient(135deg, #ffed4e 0%, #ffd700 50%, #ffed4e 100%);
-        }
 
         .premium-btn:hover::before {
             left: 100%;
         }
 
         /* --- Éléments décoratifs dorés --- */
-        .gold-corner {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border: 3px solid #ffd700;
-            opacity: 0.3;
-        }
+.gold-corner {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border: 2px solid #ffd700;
+    opacity: 0.5;
+    filter: drop-shadow(0 0 8px rgba(255,215,0,0.6));
+}
+
 
         .gold-corner.top-left {
             top: 20px;
@@ -266,6 +292,68 @@
             border-left: none;
             border-top: none;
         }
+
+/* ================= MOBILE VERSION GALA ================= */
+
+@media (max-width: 768px) {
+
+    .premium-section {
+        padding: 50px 20px;
+        text-align: center;
+    }
+
+    .premium-content {
+        display: flex;
+        flex-direction: column;   /* empile verticalement */
+        align-items: center;
+        gap: 25px;
+    }
+
+    /* TEXTE EN HAUT */
+    .premium-text {
+        order: 1;
+    }
+
+    /* IMAGE EN BAS */
+    .premium-image {
+        order: 2;
+        width: 100%;
+    
+    }
+
+    .premium-text h2 {
+        font-size: 28px;
+        line-height: 1.2;
+        margin-bottom: 15px;
+    }
+
+    .premium-text p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .premium-image img {
+        width: 100%;
+        max-width: 420px;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25); /* effet gala */
+    }
+
+    .premium-btn {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+
+    /* Coins dorés plus discrets */
+    .gold-corner {
+        width: 40px;
+        height: 40px;
+        opacity: 0.6;
+    }
+
+}
+
+
 
         /* --- Animations innovantes pour les cartes d'événements --- */
         .event-card {

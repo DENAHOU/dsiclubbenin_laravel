@@ -23,6 +23,12 @@ class CheckPayment
             return redirect()->route('login');
         }
 
+        // 🔓 Exempter les utilisateurs SSO Microsoft de la vérification de paiement
+        // Ils vont directement au dashboard sans d'autres étapes
+        // if ($user->microsoft_id && str_ends_with($user->email, '@clubdsibenin.org')) {
+        //     return $next($request);
+        // }
+
         // Vérifier si l'utilisateur a un paiement valide et complété
         $payment = Payment::where('payable_id', $user->id)
             ->where('payable_type', get_class($user))

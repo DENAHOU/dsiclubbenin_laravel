@@ -34,8 +34,8 @@ class DashboardController extends Controller
         // 🔹 Montant total cotisé
         $montantCotise = $cotisationsPayees->sum('amount');
 
-        // 🔹 Vérifier si c'est un nouvel adhérent (moins de 6 mois)
-        $estNouveauAdherent = $dateAdhesion->diffInMonths(now()) < 6;
+        // 🔹 Vérifier si c'est un nouvel adhérent (moins de 3 mois)
+        $estNouveauAdherent = $dateAdhesion->diffInMonths(now()) < 3;
 
         if ($estNouveauAdherent) {
             // 🔹 NOUVELLE LOGIQUE - Pour les nouveaux adhérents

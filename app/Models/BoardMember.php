@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+
 
 class BoardMember extends Model
 {
@@ -96,4 +98,45 @@ class BoardMember extends Model
 
         return '—';
     }
+
+
+    public function photo()
+    {
+        
+        if (!$this->user) {
+            return asset('images/default-user.png');
+        }
+
+        $firstname = Str::slug($this->user->firstname);
+        $lastname  = Str::slug($this->user->lastname);
+
+        $possibleNames = [
+            "{$firstname}-{$lastname}",
+            "{$lastname}-{$firstname}",
+            $firstname,
+            $lastname,
+        ];
+
+        $extensions = ['jpg','jpeg','png'];
+
+        foreach ($possibleNames as $name) {
+
+            foreach ($extensions as $ext) {
+
+                $relative = "storage/profile/{$name}.{$ext}";
+                $full = public_path($relative);
+
+                if (file_exists($full)) {
+                    return asset($relative);
+                }
+            }
+        }
+
+        return asset('images/default-user.png');
+    }
+
+        protected $casts = [
+    'start_date' => 'date',
+    'end_date' => 'date',
+];
 }

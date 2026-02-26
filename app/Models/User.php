@@ -18,11 +18,11 @@ class User extends Authenticatable
      */
 
     protected $fillable = [
-            
+
         // --- ON AJOUTE TOUTES NOS NOUVELLES COLONNES ICI ---
         'role',
         'microsoft_id',
-        'google_id',
+        'google_id', 
         'linkedin_id',
         'microsoft_token',
         'name',
@@ -74,4 +74,33 @@ class User extends Authenticatable
             'birthday' => 'date', // On dit à Laravel que ce champ est une date
         ];
     }
+
+    public function cotisations()
+    {
+        return $this->hasMany(Cotisation::class, 'user_id', 'id');
+    }
+
+    // Si $member représente un membre et qu'il est lié à un user
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id'); // 'user_id' = clé étrangère
+    }
+
+    // ===== Relations Microsoft 365 =====
+    public function microsoftCalendars()
+    {
+        return $this->hasMany(MicrosoftCalendar::class);
+    }
+
+    public function microsoftDocuments()
+    {
+        return $this->hasMany(MicrosoftDocument::class);
+    }
+
+    public function microsoftMeetings()
+    {
+        return $this->hasMany(MicrosoftMeeting::class);
+    }
+
+
 }

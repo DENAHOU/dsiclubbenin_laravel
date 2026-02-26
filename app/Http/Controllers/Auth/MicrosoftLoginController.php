@@ -7,63 +7,113 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class MicrosoftLoginController extends Controller
 {
+    /**
+     * Redirection vers Microsoft pour l'authentification
+     * Le paramètre 'prompt=login' force Microsoft à afficher la page de login
+     * même si l'utilisateur est déjà connecté (utile pour tester plusieurs comptes)
+     */
     public function redirect(Request $request)
     {
-            $request->session()->put('my_custom_state_check', 'redirect_ok');
-        return Socialite::driver('microsoft')->redirect();
-
+        try {
+            Log::info('Redirection vers Microsoft SSO');
+            // 🔐 prompt=login force Microsoft à afficher la page login à chaque fois
+            return Socialite::driver('microsoft')
+                ->with(['prompt' => 'login'])
+                ->redirect();
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de la redirection Microsoft: ' . $e->getMessage());
+            return redirect()->route('login')
+                ->withErrors(['email' => 'Erreur lors de la redirection vers Microsoft']);
+        }
     }
 
+    /**
+     * Callback après authentification Microsoft
+     */
     public function callback(Request $request)
     {
-        Log::info('Session ID in callback:', ['session_id' => $request->session()->getId()]);
-    if ($request->session()->has('my_custom_state_check')) {
-        Log::info('Custom state check: OK', ['value' => $request->session()->get('my_custom_state_check')]);
-    } else {
-        Log::warning('Custom state check: FAILED - Session issue suspected.');
-    }
-
         try {
-            // Tente de récupérer les informations de l'utilisateur
-            $microsoftUser = Socialite::driver('microsoft')->user();
+            // Récupère les informations de l'utilisateur depuis Microsoft
+            try {
+                $microsoftUser = Socialite::driver('microsoft')->user();
+            } catch (\Laravel\Socialite\Two\InvalidStateException $ise) {
+                // Échec de la vérification d'état - essai stateless en secours
+                Log::warning('InvalidStateException during Microsoft callback, retrying with stateless', ['message' => $ise->getMessage()]);
+                $microsoftUser = Socialite::driver('microsoft')->stateless()->user();
+            }
 
-            Log::info('Microsoft User data received:', (array) $microsoftUser);
-            dd($microsoftUser); // <-- DÉCOMMENTEZ CETTE LIGNE POUR VOIR LES DONNÉES !
+            Log::info('Utilisateur Microsoft authentifié', [
+                'id' => $microsoftUser->getId(),
+                'email' => $microsoftUser->getEmail(),
+                'name' => $microsoftUser->getName()
+            ]);
 
-            // Le reste de votre logique...
+            // Cherche l'utilisateur par microsoft_id
             $user = User::where('microsoft_id', $microsoftUser->getId())->first();
 
             if (!$user) {
+                // Cherche par email
                 $user = User::where('email', $microsoftUser->getEmail())->first();
 
-                if (!$user) {
-                    $user = User::create([
-                        'name' => $microsoftUser->getName(),
-                        'email' => $microsoftUser->getEmail(),
-                        'microsoft_id' => $microsoftUser->getId(),
-                        'password' => encrypt($microsoftUser->getId()),
-                        'email_verified_at' => now(),
-                    ]);
-                } else {
+                if ($user) {
+                    // L'utilisateur existe avec ce email, on lie son compte Microsoft
                     $user->microsoft_id = $microsoftUser->getId();
                     $user->save();
+                    Log::info('Compte Microsoft lié à un utilisateur existant', ['user_id' => $user->id]);
+                } else {
+                        // Prépare email et username (username requis dans la table)
+                        $email = $microsoftUser->getEmail();
+                        $baseUsername = $email ? explode('@', $email)[0] : Str::slug($microsoftUser->getName());
+                        $username = $baseUsername;
+                        $i = 1;
+                        while (User::where('username', $username)->exists()) {
+                            $username = $baseUsername . $i;
+                            $i++;
+                        }
+
+                        // Crée un nouvel utilisateur
+                        $user = User::create([
+                            'name' => $microsoftUser->getName(),
+                            'email' => $email,
+                            'username' => $username,
+                            'microsoft_id' => $microsoftUser->getId(),
+                            'password' => Hash::make(Str::random(40)),
+                            'email_verified_at' => now(),
+                        ]);
+                    Log::info('Nouvel utilisateur créé via Microsoft SSO', ['user_id' => $user->id]);
                 }
             }
 
-            Auth::login($user);
+            // Connecte l'utilisateur
+            Auth::login($user, remember: true);
+            Log::info('Utilisateur connecté avec succès', ['user_id' => $user->id]);
 
-            return redirect('/dashboard');
+            return redirect()->intended('/dashboard');
+
         } catch (\Exception $e) {
-            // ICI NOUS AVONS BESOIN DU MESSAGE D'ERREUR !
-        Log::error('Microsoft SSO Callback Error: ' . $e->getMessage(), ['exception' => $e, 'session_has_state' => $request->session()->has('state')]);
+            Log::error('Erreur lors du callback Microsoft SSO', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
 
+            // Cas fréquent: application restreinte au tenant (locataire unique)
+            $msg = 'Impossible de se connecter avec Microsoft. Veuillez réessayer.';
 
-        dd($e); // <-- CHANGEZ ICI 
-            return redirect()->route('login.member')->withErrors(['email' => 'Impossible de se connecter avec Microsoft. Veuillez réessayer.']);
+            $lower = strtolower($e->getMessage());
+            if (str_contains($lower, 'unauthorized_client') || str_contains($lower, 'not enabled for consumers') || str_contains($lower, 'client does not exist')) {
+                $msg = 'Connexion Microsoft non autorisée : utilisez un compte @clubdsibenin.org (compte organisationnel). Si le problème persiste, contactez l\'administrateur.';
+            }
+
+            return redirect()->route('login')
+                ->withErrors(['email' => $msg]);
         }
     }
 }

@@ -92,6 +92,91 @@
     .upcoming-event-widget .event-title { font-size: 2rem; font-weight: 800; }
     .btn-register { background: var(--dsi-green); color: white; font-weight: 700; border: none; }
 
+    /* Widget Microsoft 365 */
+    .microsoft-widget {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 10px -2px rgba(9, 66, 129, 0.06);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+    }
+
+    .microsoft-widget-header {
+        background: linear-gradient(135deg, #0078d4, #106ebe);
+        color: white;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .microsoft-widget-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .btn-sync {
+        background: rgba(255,255,255,0.2);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.4);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .btn-sync:hover {
+        background: rgba(255,255,255,0.3);
+    }
+
+    .microsoft-widget-body {
+        padding: 1.5rem;
+    }
+
+    .event-item {
+        padding: 1rem;
+        border-left: 4px solid var(--dsi-blue);
+        background: var(--light-bg);
+        margin-bottom: 0.75rem;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+
+    .event-item:hover {
+        transform: translateX(4px);
+        box-shadow: 0 2px 8px rgba(9, 66, 129, 0.1);
+    }
+
+    .event-time {
+        font-size: 0.85rem;
+        color: var(--dsi-blue);
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+
+    .event-subject {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--ink);
+        margin-bottom: 0.25rem;
+    }
+
+    .event-organizer {
+        font-size: 0.85rem;
+        color: var(--muted-ink);
+    }
+
+    .no-events {
+        text-align: center;
+        color: var(--muted-ink);
+        padding: 2rem;
+    }
+
     .tool-widget .widget-body {
         text-align: center;
         justify-content: space-between;
@@ -168,6 +253,30 @@
     color:var(--text);
 }
 
+@media (max-width: 768px) {
+
+    .app-dock {
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .app-icon .icon-bg {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+    }
+
+    .app-icon .app-label {
+        font-size: 0.8rem;
+        text-align: center;
+    }
+
+    .app-dock-wrapper {
+        padding: 0.8rem;
+    }
+}
+
+
 /* COLORS */
 .bg-primary{background:linear-gradient(135deg,#094281,#0b5ed7);}
 .bg-success{background:linear-gradient(135deg,#29963a,#22c55e);}
@@ -179,6 +288,8 @@
 
 <?php $__env->startSection('content'); ?>
     <div class="main-content">
+
+    
 
         <div class="row align-items-center mb-3">
             <!-- Dock d'applications à gauche -->
@@ -200,6 +311,7 @@
                             <div class="icon-bg"><i class="fab fa-microsoft"></i></div>
                             <span class="app-label">Teams</span>
                         </a>
+                        
                         <!-- Notifications -->
                         <?php
                             use App\Models\Notification;
@@ -365,6 +477,8 @@
             </div>
 
         </div>
+
+         --}}
     </div>
 <?php $__env->stopSection(); ?>
 
@@ -379,6 +493,16 @@
             conic-gradient(var(--dsi-green) ${progress}%, var(--light-bg) 0)
         `;
     });
+
+    document.addEventListener('click', function(e) {
+        let sidebar = document.querySelector('.sidebar');
+        if (!sidebar) return;
+        if (!sidebar.contains(e.target) && !e.target.closest('.mobile-toggle')) {
+            sidebar.classList.remove('show');
+        }
+    });
+
+
 </script>
 <?php $__env->stopPush(); ?>
 

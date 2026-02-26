@@ -6,6 +6,9 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    {{-- CSRF Token --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     {{-- Bootstrap --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -152,7 +155,10 @@
                 </ul>
             </div>
 
-
+                {{-- ROLES --}}
+            <a href="{{ route('admin.roles.index') }}" class="{{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
+                <i class="fa fa-user-shield me-2"></i> Gestion des rôles
+            </a>
 
 
             {{-- PARTENAIRES --}}
@@ -175,7 +181,7 @@
             {{-- PROGRAMMES THÉMATIQUES --}}
             <a href="{{ route('admin.programs.index') }}">
                 <i class="fa fa-th-list me-2"></i> Programmes Thématiques
-            </a> 
+            </a>
 
             {{-- ÉVÈNEMENTS --}}
             <div class="has_sub">
@@ -206,7 +212,7 @@
 
 
             {{-- RECRUTEMENTS --}}
-            
+
 
 
             {{-- ESN --}}

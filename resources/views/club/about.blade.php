@@ -247,7 +247,98 @@
             0%, 100% { opacity: 0.2; transform: scale(1); }
             50% { opacity: 0.6; transform: scale(1.3); }
         }
+        
 
+    /* ===== HERO MOBILE ===== */
+    @media (max-width: 768px) {
+
+        .hero-about {
+            height: 25vh;
+            min-height: 200px; /* sécurité */
+            padding: 15px;
+        }
+
+        .hero-about .hero-background-image {
+            animation: ken-burns-mobile 20s ease-out infinite;
+            background-position: center center;
+            /* PAS DE HEIGHT ICI */
+        }
+
+        .hero-content h1 {
+            font-size: 26px;
+            line-height: 1.3;
+            padding: 0 10px;
+        }
+
+    }
+
+    /* Animation plus douce mobile */
+    @keyframes ken-burns-mobile {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.05); }
+    }
+
+
+        /* Animation plus douce mobile */
+        @keyframes ken-burns-mobile {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        .hero-about {
+            min-height: 100svh;
+        }
+
+        .hero-content h1 {
+            letter-spacing: 1px;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+@media (max-width: 768px) {
+
+    .timeline-section {
+        padding: 40px 15px;
+    }
+
+    .timeline-header h2 {
+        font-size: 24px;
+    }
+
+    .timeline-header p {
+        font-size: 14px;
+    }
+
+    .timeline {
+        padding-left: 30px;
+        margin-top: 30px;
+    }
+
+    .timeline::before {
+        left: 10px;
+    }
+
+    .timeline-dot {
+        left: -10px;
+        width: 16px;
+        height: 16px;
+    }
+
+    .timeline-content {
+        padding: 16px;
+        border-radius: 10px;
+    }
+
+    .timeline-title {
+        font-size: 16px;
+    }
+
+    .timeline-description {
+        font-size: 13px;
+    }
+
+}
 
 
     </style>
@@ -331,28 +422,65 @@
                         <div class="timeline-title">Fondation du DSI CLUB</div>
                         <div class="timeline-description">Création du club sous 
                         le nom de Club des Directeurs des Systèmes d'Information
-                         avec l'élection du premier Bureau Exécutif</div>
+                         avec l'élection du premier Bureau Exécutif. Mise en place des partenariats
+                          ASSI, CNIL, MND, ADN etc.</div>
                     </div>
                     <div class="timeline-dot"></div>
                 </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2017</div>
+                        <div class="timeline-title">Formations certifiées</div>
+                        <div class="timeline-description"> Première formation certiﬁante CISA. <br>
+                            Séminaires: Forum CioMAG: Cybersécurité et conﬁance numérique
+                        </div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <div class="timeline-date">2018</div>
                         <div class="timeline-title">Élections du deuxième Bureau Exécutif</div>
-                        <div class="timeline-description">Mise en place du deuxième Bureau Exécutif
-                         élu pour structurer le club et impulser une 
-                        vision stratégique alignée sur les ambitions des membres.</div>
+                        <div class="timeline-description">Mise en place du deuxième Bureau Exécutif <br>
+                            Formation certiﬁante PMP <br>
+                             Formation certiﬁante ITIL <br>
+                             Séminaires: « La Protection des données,
+                              enjeux et solutions » avec le CNIL,
+                               CONFERENCE DE SECURITE INTERIEURE EN REPUBLIQUE DU BENIN
+                               « Les innovations technologiques dans la co-production de la sécurité »
+                        </div>
                     </div>
                     <div class="timeline-dot"></div>
                 </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2019</div>
+                        <div class="timeline-title">Afterwork</div>
+                        <div class="timeline-description">INFRASTRUCTURE À CLÉ PUBLIQUE (PKI) 
+                            Workﬂows d'authentiﬁcation et de signature et intégration avec l’ASSI,
+                             “Cycle DevOps” avec l’ASSI, Transformation digitale avec MediaPart <br>
+                             Séminaire: Forum International CITIC de Tunis, Fortinet Security seminar <br> 
+                             Remise de prix à la startup ALIVO <br>
+                        </div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <div class="timeline-date">2020</div>
-                        <div class="timeline-title">Création du tenants Office 365 du club.
-                        Mise en service du site web du club avec gestion électronique des cotisations</div>
+                        <div class="timeline-title">Création du tenants Office 365 du club.</div>
+                        <div class="timeline-description">
+                            Mise en service du site web du club avec gestion électronique des cotisations <br>
+                            Election du troisième Bureau Exécutif
+                        </div>
                     </div>
                     <div class="timeline-dot"></div>
                 </div>
+                
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <div class="timeline-date">2021</div>
@@ -368,11 +496,14 @@
                     <div class="timeline-content">
                         <div class="timeline-date">2022</div>
                         <div class="timeline-title">Changement de dénomination - Election du quatrième Bureau Exécutif</div>
-                        <div class="timeline-description">Le Club devient Club des Décideurs de Systèmes d'Informations. 
-                        Organisation des DSI Awards 2ème édition</div>
+                        <div class="timeline-description">Le Club devient Club des Décideurs de Systèmes d'Informations. <br> 
+                            Organisation des DSI Awards 2ème édition <br>
+                            Organisation du PRIX NSIA VIE ASSURANCES & DSI CLUB BÉNIN DE L’INNOVATION STARTUPS <br>
+                        </div>
                     </div>
                     <div class="timeline-dot"></div>
                 </div>
+
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <div class="timeline-date">2023</div>

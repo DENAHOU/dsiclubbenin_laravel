@@ -68,8 +68,12 @@
             /* --- Pour les Tablettes et Mobiles (en dessous de 992px) --- */
             @media (max-width: 991.98px) {
                 #header-carousel .carousel-item {
-                    height: 80vh; /* On réduit un peu la hauteur */
+                    height: 65vh; /* On réduit un peu la hauteur */
                     min-height: 600px;
+                }
+
+                #header-carousel .carousel-item img {
+                    height: 45vh; /* On réduit un peu la hauteur */
                 }
 
                 .carousel-caption h1 {
@@ -81,8 +85,13 @@
             /* --- Uniquement pour les Mobiles (en dessous de 768px) --- */
             @media (max-width: 767.98px) {
                 #header-carousel .carousel-item {
-                    height: 65vh; /* Hauteur beaucoup plus petite pour laisser voir la suite */
+                    height: 50vh; /* Hauteur beaucoup plus petite pour laisser voir la suite */
                     min-height: 500px;
+                }
+
+                
+                #header-carousel .carousel-item img {
+                    height: 40vh; /* On réduit un peu la hauteur */
                 }
 
                 .carousel-caption h1 {
@@ -132,8 +141,8 @@
                     <div class="p-3" style="max-width: 900px;">
                         <h5 class="text-white text-uppercase mb-3 animated slideInDown">Club DSI Bénin</h5>
                         <h1 class="display-1 text-white mb-4 animated zoomIn">Le Cœur du Numérique au Bénin</h1>
-                        <a href="register.blade.php" class="btn btn-primary me-3 animated slideInLeft">Rejoindre le Mouvement</a>
-                        <a href="#ecosysteme" class="btn btn-light animated slideInRight">Explorer nos Services</a>
+                        <a href="register.blade.php" class="btn btn-primary me-3 animated slideInLeft">Rejoindre le mouvement</a>
+                        <a href="#ecosysteme" class="btn btn-light animated slideInRight">Explorer nos services</a>
                     </div>
                 </div>
             </div>
@@ -143,8 +152,8 @@
                     <div class="p-3" style="max-width: 900px;">
                         <h5 class="text-white text-uppercase mb-3 animated slideInDown">Innovation & Collaboration</h5>
                         <h1 class="display-1 text-white mb-4 animated zoomIn">Construisons l'Écosystème de Demain</h1>
-                        <a href="register.blade.php" class="btn btn-primary me-3 animated slideInLeft">Devenir Membre</a>
-                        <a href="#activites" class="btn btn-light animated slideInRight">Nos Activités</a>
+                        <a href="register.blade.php" class="btn btn-primary me-3 animated slideInLeft">Devenir membre</a>
+                        <a href="#activites" class="btn btn-light animated slideInRight">Nos activités</a>
                     </div>
                 </div>
             </div>
@@ -230,69 +239,68 @@
     <!-- ======================================================= -->
     <!--       SECTION "ACTIVITÉS" AMÉLIORÉE (À COPIER/COLLER)   -->
     <!-- ======================================================= -->
-
-    <!-- Activités Start -->
-        <div id="activites" class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="container py-5">
-                <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
-                    <h5 class="fw-bold text-primary text-uppercase">Nos Activités</h5>
-                    <h1 class="mb-0">Du Partage d'Expertise au Networking de Haut Niveau</h1>
-                </div>
-                <div class="row g-5">
-                    <!-- CARTE 1: SÉMINAIRES -->
-                    <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.3s">
-                        <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center bg-white h-100">
-                            <div class="service-icon" style="background-color:#123c7c;" >
-                                <i class="fa fa-chalkboard-teacher text-white"></i>
-                            </div>
-                            <h4 class="mb-3"> Nos Formations</h4>
-                            <p class="m-0">Approfondissez vos connaissances sur des sujets de pointe (IA, Cloud, Gouvernance) avec les meilleurs experts du secteur.</p>
-                            <a class="btn btn-lg btn-primary rounded" href="{{ route('activites.formations') }}" style="background-color:#0a2b5c;">
-                                <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
+        <!-- Activités Start -->
+            <div id="activites" class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="container py-5">
+                    <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
+                        <h5 class="fw-bold text-primary text-uppercase">Nos Activités</h5>
+                        <h1 class="mb-0">Du partage d'expertise au networking de haut niveau</h1>
                     </div>
-
-                    <!-- CARTE 2: AFTERWORKS -->
-                    <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.6s">
-                        <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center bg-white h-100">
-                            <div class="service-icon" style="background-color:#123c7c;">
-                                <i class="fa fa-comments text-white" ></i>
+                    <div class="row g-5">
+                        <!-- CARTE 1: SÉMINAIRES -->
+                        <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.3s">
+                            <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center bg-white h-100">
+                                <div class="service-icon" style="background-color:#123c7c;" >
+                                    <i class="fa fa-chalkboard-teacher text-white"></i>
+                                </div>
+                                <h4 class="mb-3"> Formations</h4>
+                                <p class="m-0">Approfondissez vos connaissances sur des sujets de pointe (IA, Cloud, Gouvernance) avec les meilleurs experts du secteur.</p>
+                                <a class="btn btn-lg btn-primary rounded" href="{{ route('activites.formations') }}" style="background-color:#0a2b5c;">
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
                             </div>
-                            <h4 class="mb-3">Séminaires & Afterworks</h4>
-                            <p class="m-0">Échangez avec vos pairs dans un cadre convivial et développez votre réseau professionnel lors de nos rencontres mensuelles.</p>
-                            <a class="btn btn-lg btn-primary rounded" href="{{ route('activites.evenements') }}" style="background-color:#0a2b5c;">
-                                <i class="bi bi-arrow-right"></i>
-                            </a>
                         </div>
-                    </div>
 
-                    <!-- CARTE 3 "STAR": DSI AWARDS -->
-                    <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.9s">
-                        <div class="position-relative bg-primary rounded h-100 d-flex flex-column align-items-center justify-content-center text-center p-5"
-                            style="background-image: linear-gradient(rgba(9, 66, 129, 0.9), rgba(9, 66, 129, 0.9)), url('https://images.unsplash.com/photo-1579548122204-7b8b835b7161?w=800'); background-size: cover;">
-                            <i class="fa fa-trophy fa-3x text-white mb-3" style="color: var(--dsi-gold) !important;"></i>
-                            <h3 class="text-white mb-3">DSI AWARDS</h3>
-                            <p class="text-white mb-3">L'événement annuel qui célèbre et récompense les projets et les leaders de la transformation numérique au Bénin.</p>
-                            <a href="https://dsiawards.bj/" class="btn btn-light py-2 px-4">Découvrir l'Édition</a>
+                        <!-- CARTE 2: AFTERWORKS -->
+                        <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.6s">
+                            <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center bg-white h-100">
+                                <div class="service-icon" style="background-color:#123c7c;">
+                                    <i class="fa fa-comments text-white" ></i>
+                                </div>
+                                <h4 class="mb-3">Séminaires & Afterworks</h4>
+                                <p class="m-0">Échangez avec vos pairs dans un cadre convivial et développez votre réseau professionnel lors de nos rencontres mensuelles.</p>
+                                <a class="btn btn-lg btn-primary rounded" href="{{ route('activites.evenements') }}" style="background-color:#0a2b5c;">
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- CARTE 3 "STAR": DSI AWARDS -->
+                        <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.9s">
+                            <div class="position-relative bg-primary rounded h-100 d-flex flex-column align-items-center justify-content-center text-center p-5"
+                                style="background-image: linear-gradient(rgba(9, 66, 129, 0.9), rgba(9, 66, 129, 0.9)), url('https://images.unsplash.com/photo-1579548122204-7b8b835b7161?w=800'); background-size: cover;">
+                                <i class="fa fa-trophy fa-3x text-white mb-3" style="color: var(--dsi-gold) !important;"></i>
+                                <h3 class="text-white mb-3">DSI AWARDS</h3>
+                                <p class="text-white mb-3">L'événement annuel qui célèbre et récompense les projets et les leaders de la transformation numérique au Bénin.</p>
+                                <a href="https://dsiawards.bj/" class="btn btn-light py-2 px-4">Découvrir l'édition</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    <!-- Activités End -->
+        <!-- Activités End -->
 
 
-        <!-- SECTION ÉCOSYSTÈME CARRIÈRES & ESN (Notre maquette) -->
+    <!-- SECTION ÉCOSYSTÈME CARRIÈRES & ESN (Notre maquette) -->
         <div id="ecosysteme"class="container-fluid py-3 wow fadeInUp" data-wow-delay="0.1s">
             <div class="container py-3">
                 <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
                     <h5 class="fw-bold text-primary text-uppercase">Nos Plateformes</h5>
-                    <h1 class="mb-0">Au Cœur de l'Écosystème Numérique</h1>
+                    <h1 class="mb-0">Au cœur de l'écosystème numérique</h1>
                 </div>
                 <div class="row g-5 align-items-stretch">
-                    <div class="col-lg-6"><div class="p-5 rounded-4 h-100 card-hover" style="background: linear-gradient(135deg, #eef7ff, #ffffff);"><i class="fa-solid fa-briefcase fa-3x  mb-3" style="color:#0a2b5c;"></i><h3 class="fw-bold">Plateforme Carrières Professionnelle Intelligente</h3><p class="text-muted">Plus qu'une liste d'offres, un véritable outil pour une expérience professionnelle.</p><ul class="feature-list mt-3"><li><i class="fa-solid fa-check-circle text-blue-dark me-2"></i>Matching automatisé par IA</li><li><i class="fa-solid fa-check-circle text-blue-dark me-2"></i>Alertes d'offres personnalisées</li><li><i class="fa-solid fa-check-circle text-blue-dark me-2"></i>Statistiques du marché en temps réel</li></ul><a href="{{ route('recrutement') }}" class="btn btn-primary mt-3" style="background-color:#0a2b5c;">Explorer les Offres</a></div></div>
-                    <div class="col-lg-6"><div class="p-5 rounded-4 h-100 card-hover" style="background: linear-gradient(135deg, #f0fff4, #ffffff);"><i class="fa-solid fa-handshake-angle fa-3x text-success mb-3"></i><h3 class="fw-bold">Annuaire Dynamique des ESN</h3><p class="text-muted">Trouvez le partenaire idéal pour la réussite de vos projets numériques.</p><ul class="feature-list mt-3"><li><i class="fa-solid fa-check-circle text-success me-2"></i>Recherche avancée par compétences</li><li><i class="fa-solid fa-check-circle text-success me-2"></i>Mise en relation directe</li><li><i class="fa-solid fa-check-circle text-success me-2"></i>Accès à la communauté de pratique</li></ul><a href="{{ route('esn') }}" class="btn btn-success mt-3">Trouver un Partenaire ESN</a></div></div>
+                    <div class="col-lg-6"><div class="p-5 rounded-4 h-100 card-hover" style="background: linear-gradient(135deg, #eef7ff, #ffffff);"><i class="fa-solid fa-briefcase fa-3x  mb-3" style="color:#0a2b5c;"></i><h3 class="fw-bold">Plateforme carrières professionnelle intelligente</h3><p class="text-muted">Plus qu'une liste d'offres, un véritable outil pour une expérience professionnelle.</p><ul class="feature-list mt-3"><li><i class="fa-solid fa-check-circle text-blue-dark me-2"></i>Matching automatisé par IA</li><li><i class="fa-solid fa-check-circle text-blue-dark me-2"></i>Alertes d'offres personnalisées</li><li><i class="fa-solid fa-check-circle text-blue-dark me-2"></i>Statistiques du marché en temps réel</li></ul><a href="{{ route('recrutement') }}" class="btn btn-primary mt-3" style="background-color:#0a2b5c;">Explorer les offres</a></div></div>
+                    <div class="col-lg-6"><div class="p-5 rounded-4 h-100 card-hover" style="background: linear-gradient(135deg, #f0fff4, #ffffff);"><i class="fa-solid fa-handshake-angle fa-3x text-success mb-3"></i><h3 class="fw-bold">Annuaire dynamique des ESN</h3><p class="text-muted">Trouvez le partenaire idéal pour la réussite de vos projets numériques.</p><ul class="feature-list mt-3"><li><i class="fa-solid fa-check-circle text-success me-2"></i>Recherche avancée par compétences</li><li><i class="fa-solid fa-check-circle text-success me-2"></i>Mise en relation directe</li><li><i class="fa-solid fa-check-circle text-success me-2"></i>Accès à la communauté de pratique</li></ul><a href="{{ route('esn') }}" class="btn btn-success mt-3">Trouver un partenaire ESN</a></div></div>
                 </div>
             </div>
         </div>
@@ -533,7 +541,7 @@
             </div>
         <div class="container">
             <div class="row align-items-center g-5">
-                <div class="col-lg-6 order-lg-2"><h2 class="section-title">Développez vos Compétences</h2><p class="section-subtitle">Accédez à des formations actuelles : Services IT, Gestion de Projet et Sécurité.</p><div class="d-flex flex-wrap gap-2 mb-4"><span class="badge rounded-pill fs-6 text-dark-emphasis bg-dark-subtle border border-dark-subtle" style="color: black;">Gouvernance & Architecture d'Entreprise</span><span class="badge rounded-pill fs-6 text-dark-emphasis bg-dark-subtle border border-dark-subtle" style="color: black;">Gestions des Services IT</span><span class="badge rounded-pill fs-6 text-dark-emphasis bg-dark-subtle border border-dark-subtle" style="color: black;">Gestion de Projet et Programme</span><span class="badge rounded-pill fs-6 text-dark-emphasis bg-dark-subtle border border-dark-subtle" style="color: black;">Sécurité Défensive</span></div><a href="{{ route('activites.formations') }}" class="btn " style="            background: linear-gradient(95deg, var(--dsi-blue), var(--dsi-green));
+                <div class="col-lg-6 order-lg-2"><h2 class="section-title">Développez vos compétences</h2><p class="section-subtitle">Accédez à des formations actuelles : Services IT, Gestion de Projet et Sécurité.</p><div class="d-flex flex-wrap gap-2 mb-4"><span class="badge rounded-pill fs-6 text-dark-emphasis bg-dark-subtle border border-dark-subtle" style="color: black;">Gouvernance & Architecture d'Entreprise</span><span class="badge rounded-pill fs-6 text-dark-emphasis bg-dark-subtle border border-dark-subtle" style="color: black;">Gestions des Services IT</span><span class="badge rounded-pill fs-6 text-dark-emphasis bg-dark-subtle border border-dark-subtle" style="color: black;">Gestion de Projet et Programme</span><span class="badge rounded-pill fs-6 text-dark-emphasis bg-dark-subtle border border-dark-subtle" style="color: black;">Sécurité Défensive</span></div><a href="{{ route('activites.formations') }}" class="btn " style="            background: linear-gradient(95deg, var(--dsi-blue), var(--dsi-green));
             color: white;
             font-weight: 700;
             padding: 0.9rem 2rem;
@@ -766,7 +774,7 @@
     <section class="forum-section">
         <div class="section-title-wrapper">
             <p class="eyebrow">Notre Espace d'Échange</p>
-            <h2>Au Cœur de l'Intelligence Collective</h2>
+            <h2>Au cœur de l'intelligence collective</h2>
         </div>
 
         <div class="forum-wrap">
@@ -794,14 +802,14 @@
 
                 <li class="point">
                     <div class="point-header">
-                        <div class="icon">🔍</div><h3>Recherche Avancée</h3>
+                        <div class="icon">🔍</div><h3>Recherche avancée</h3>
                     </div>
                     <p>Retrouvez instantanément discussions, ressources et documents grâce à un moteur intelligent.</p>
                 </li>
 
                 <li class="point">
                     <div class="point-header">
-                        <div class="icon">🎯</div><h3>Sous-groupes Thématiques</h3>
+                        <div class="icon">🎯</div><h3>Sous-groupes thématiques</h3>
                     </div>
                     <p>Rejoignez des cercles spécialisés : Cybersécurité, IA, Cloud, Gouvernance, et bien plus.</p>
                 </li>
@@ -935,16 +943,16 @@
     <section class="cta-section-v2">
         <div id="cta-particles-js"></div>
         <div class="cta-content">
-            <h2>Prêt à Transformer le Numérique ?</h2>
+            <h2>Prêt à transformer le numérique ?</h2>
             <p class="lead">Rejoignez le réseau des leaders, accédez à des ressources exclusives et participez activement à l'essor technologique du Bénin.</p>
 
             <ul class="benefits-list">
-                <li class="benefit-item"><i class="fas fa-check-circle"></i> Réseau d'Experts de Haut Niveau</li>
-                <li class="benefit-item"><i class="fas fa-check-circle"></i> Paiement en Ligne Sécurisé</li>
-                <li class="benefit-item"><i class="fas fa-check-circle"></i> Ressources & Opportunités Exclusives</li>
+                <li class="benefit-item"><i class="fas fa-check-circle"></i> Réseau d'experts de haut niveau</li>
+                <li class="benefit-item"><i class="fas fa-check-circle"></i> Paiement en ligne sécurisé</li>
+                <li class="benefit-item"><i class="fas fa-check-circle"></i> Ressources & opportunités exclusives</li>
             </ul>
 
-            <a href="{{ route('register') }}" class="btn-cta-final">Adhérer Maintenant</a>
+            <a href="{{ route('register') }}" class="btn-cta-final">Adhérer maintenant</a>
         </div>
     </section>
 

@@ -1,6 +1,12 @@
 @extends('layouts.guest')
 
+
 @section('title', 'ESN')
+
+@php
+use Illuminate\Support\Str;
+@endphp
+
 
 @section('content')
 
@@ -79,9 +85,15 @@
         .esn-info h3 a { color: var(--ink); text-decoration: none; }
         .esn-info .esn-desc { font-size: 0.9rem; color: var(--muted-ink); margin-bottom: 0.75rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .esn-meta { font-size: 0.85rem; color: var(--muted-ink); }
-        .esn-tag { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 20px; color: white; background: var(--dsi-blue); }
-        .esn-tag.startup { background: var(--dsi-green); }
-        .chatbot-fab { position: fixed; bottom: 25px; left: ;: 25px; width: 60px; height: 60px; background-color: var(--dsi-blue); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 5px 20px rgba(0,0,0,0.2); cursor: pointer; z-index: 1000; }
+        .esn-tag {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .chatbot-fab { position: fixed; bottom: 25px; left: 25px; width: 60px; height: 60px; background-color: var(--dsi-blue); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 5px 20px rgba(0,0,0,0.2); cursor: pointer; z-index: 1000; }
     </style>
 
 <!-- ================= ACTE I : LA PROMESSE ================= -->
@@ -123,21 +135,70 @@
     </section>
 
 <!-- ================= ACTE III : L'EXPLORATION ================= -->
-    <section class="directory-section animated-section">
         <div class="section-header">
-            <h2>Explorez l'Annuaire</h2>
-            <p>Découvrez, filtrez et connectez-vous avec les entreprises du service numérique qui façonnent l'avenir technologique du Bénin.</p>
+            <h2>Explorez Notre Annuaire des ESN</h2>
+            <p>Découvrez les ESN qui façonnent l'avenir du numérique au Bénin. Utilisez les filtres pour trouver le partenaire idéal pour votre projet.</p>
         </div>
-        <div class="container">
-            <div class="toolbar"><div class="search-group"><i class="fas fa-search"></i><input type="text" class="form-control" placeholder="Rechercher une entreprise..."></div></div>
-            <main class="directory-grid">
-                <div class="esn-card"><div class="esn-logo"><img src="https://clubdsibenin.bj/storage/registre_commerce/logo/pm5F6bXo4RYQ50bq.png" alt="Logo 41DEVS"></div><div class="esn-info"><div class="d-flex justify-content-between align-items-start"><h3><a href="#">Groupe 41DEVS</a></h3><span class="esn-tag">Entreprise</span></div><p class="esn-desc">Aide les entreprises à devenir plus productives et identifier des leviers...</p><div class="esn-meta"><i class="fas fa-map-marker-alt me-1 text-danger"></i> Cotonou, Gbèdjromédé</div></div></div>
-                <div class="esn-card"><div class="esn-logo"><img src="https://clubdsibenin.bj/storage/registre_commerce/logo/neiHyUdT63XxBNMj.jpg" alt="Logo CyberSpector"></div><div class="esn-info"><div class="d-flex justify-content-between align-items-start"><h3><a href="#">CyberSpector</a></h3><span class="esn-tag startup">Startup</span></div><p class="esn-desc">Entreprise innovante dans le domaine de la CyberSécurité et la Cyber-Intelligence...</p><div class="esn-meta"><i class="fas fa-map-marker-alt me-1 text-danger"></i> Cotonou, St-Jean</div></div></div>
-                <div class="esn-card"><div class="esn-logo"><img src="https://clubdsibenin.bj/storage/registre_commerce/logo/zydBVYAcvnoHndBl.png" alt="Logo 3D Techlogis"></div><div class="esn-info"><div class="d-flex justify-content-between align-items-start"><h3><a href="#">3D Techlogis BENIN</a></h3><span class="esn-tag">Entreprise</span></div><p class="esn-desc">Société innovante qui se distingue par des solutions technologiques adaptées au contexte africain.</p><div class="esn-meta"><i class="fas fa-map-marker-alt me-1 text-danger"></i> Cotonou, Menontin</div></div></div>
-            </main>
-            <nav aria-label="Page navigation" class="d-flex justify-content-center mt-4"><ul class="pagination"><li class="page-item disabled"><a class="page-link" href="#">Précédent</a></li><li class="page-item active"><a class="page-link" href="#">1</a></li><li class="page-item"><a class="page-link" href="#">2</a></li><li class="page-item"><a class="page-link" href="#">Suivant</a></li></ul></nav>
+    <main class="directory-grid">
+
+    @foreach($esns as $esn)
+
+        <div class="esn-card">
+
+            <div class="esn-logo">
+                <img
+                    src="{{ $esn->logo_path
+                        ? asset('storage/'.$esn->logo_path)
+                        : asset('images/default-company.png') }}"
+                    alt="{{ $esn->company_name }}"
+                >
+            </div>
+
+            <div class="esn-info">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <h3>
+                        <a href="#">
+                            {{ $esn->company_name }}
+                        </a>
+                    </h3>
+                    ;
+
+                    @php
+                        $tagClass = match(strtolower($esn->esn_type)) {
+                            'startup' => '#29963a',
+                            'entreprise commerciale' => '#094281',
+                            default => 'bg-secondary'
+                        };
+                    @endphp
+
+                    <span class="esn-tag badge" style="background-color: {{ $tagClass }};">
+                        {{ $esn->esn_type }}
+                    </span>
+
+
+                </div>
+
+                <p class="esn-desc">
+                    {{ Str::limit($esn->description, 120) }}
+                </p>
+
+                <div class="esn-meta">
+                    <i class="fas fa-map-marker-alt me-1 text-danger"></i>
+                    {{ $esn->location }}
+                </div>
+
+            </div>
+
         </div>
-    </section>
+
+    @endforeach
+        <div class="d-flex justify-content-center mt-4">
+            {{ $esns->links('pagination::simple-bootstrap-5') }}
+        </div>
+
+    </main>
 
     <div class="chatbot-fab" title="Besoin d'aide ?"><i class="fa-solid fa-comment-dots"></i></div>
 

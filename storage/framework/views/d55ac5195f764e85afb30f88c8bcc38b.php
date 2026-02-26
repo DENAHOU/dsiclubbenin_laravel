@@ -80,77 +80,102 @@
 
 
 /* --- FOOTER GLOBAL --- */
+/* ===============================
+   FOOTER PREMIUM CLUB DSI
+================================ */
+
 .site-footer-dark {
-    background-color: var(--dsi-blue-dark);
-    color: #c8d2e1;
-    padding: 4rem 1.5rem 1rem;
+    background: linear-gradient(135deg, #0f2b52, #123a6b);
+    color: #c9d4e5;
+    padding: 70px 0 20px;
     font-family: 'Inter', sans-serif;
-
-    /* ✅ Ajoute ceci pour centrer le contenu */
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* centre horizontalement */
-    text-align: center;  /* centre le texte */
 }
 
-
-.site-footer-dark .container {
-    max-width: 1100px;
-    width: 100%;
-}
-
-/* --- HAUTE SECTION --- */
+/* GRID */
 .footer-top {
     display: grid;
-    grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr 1.5fr;
-    gap: 5rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    grid-template-columns: 2fr 1fr 1fr 1.3fr;
+    gap: 60px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-/* --- LOGO & DESCRIPTION --- */
-.footer-logo img {
-    max-width: 250px;
-}
-.text-footer-desc {
-    font-size: 0.8rem;
-    line-height: 1.3;
-    color: #b6c2d1;
-    text-align: center;
+/* LOGO */
+.footer-logo-img {
+    max-width: 230px;
+    margin-bottom: 18px;
 }
 
-/* --- TITRES DE COLONNES --- */
+.footer-desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #a9b8cf;
+    max-width: 320px;
+}
+
+/* COLONNES */
 .footer-col h5 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 1.2rem;
-    color: white;
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    position: relative;
 }
 
-/* --- LIENS --- */
-.footer-col .list-unstyled a {
-    color: #b6c2d1;
-    text-decoration: none;
+.footer-col h5::after {
+    content: "";
+    width: 30px;
+    height: 2px;
+    background: #25b66f;
     display: block;
-    transition: all 0.3s ease;
-    white-space: nowrap;
+    margin-top: 8px;
 }
-.footer-col .list-unstyled a:hover {
-    color: #fff;
+
+/* LISTES */
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-col ul li a {
+    color: #b7c6dc;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 0.92rem;
+}
+
+.footer-col ul li a:hover {
+    color: #ffffff;
     transform: translateX(4px);
 }
 
-/* --- CONTACT --- */
-.footer-contact-list i {
+/* CONTACT */
+.footer-contact ul li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.92rem;
+}
+
+/* ICONES CONTACT PREMIUM */
+.contact-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #25b66f;
-    font-size: 1.1rem;
-}
-.footer-contact-list span {
-    color: #b6c2d1;
-    white-space: nowrap; /* ✅ empêche le retour à la ligne */
-
+    font-size: 14px;
+    flex-shrink: 0;
 }
 
+/* FOOTER SOCIALS (NE TOUCHE PAS TOPBAR) */
 
 /* --- ICONES RESEAUX --- */
 .footer-socials {
@@ -175,6 +200,33 @@
     transform: translateY(-3px);
 }
 
+/* RESPONSIVE */
+@media (max-width: 992px) {
+
+    .footer-top {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .footer-top {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-desc {
+        margin: auto;
+    }
+
+    .footer-contact ul li {
+        justify-content: center;
+    }
+
+}
+
 /* --- BAS DU FOOTER --- */
 .footer-bottom {
     display: flex;
@@ -194,7 +246,7 @@
 }
 
 /* --- RESPONSIVE --- */
-@media (max-width: 992px) {
+/* @media (max-width: 992px) {
     .footer-top {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -212,7 +264,7 @@
     .footer-col .list-unstyled a {
         white-space: normal; /* ✅ autorise à nouveau la coupure sur petits écrans */
     }
-}
+} */
 
 
         /* --- Règles pour la Responsivité --- */
@@ -274,12 +326,155 @@
             transform: translateY(-2px);
             color: var(--dsi-blue-dark) !important; /* icône devient bleu au hover si souhaité */
         }
+
+
+        /* LOGO RESPONSIVE */
+.logo-default {
+    height: 80px;
+    transition: 0.3s;
+}
+
+.logo-sticky {
+    height: 60px;
+    display: none;
+}
+
+/* MOBILE */
+@media (max-width: 991px) {
+
+    .logo-default {
+        height: 55px;
+    }
+
+
+    .navbar-nav .nav-link {
+        padding: 10px 0;
+    }
+
+    .dropdown-menu {
+        background: transparent;
+        border: none;
+    }
+
+}
+
+/* ===== NAVBAR MOBILE ===== */
+
+@media (max-width: 991px) {
+
+    /* Fond blanc navbar */
+    .navbar {
+        background: #ffffff !important;
+        padding: 10px 15px !important;
+    }
+
+    /* Afficher seulement logo sticky */
+    .logo-default {
+        display: none !important;
+    }
+
+    .logo-sticky {
+        display: block !important;
+        height: 50px !important;
+    }
+
+    /* Bouton menu bleu */
+    .navbar-toggler {
+        border: none;
+        color: #094281 !important;
+    }
+
+    .navbar-toggler .fa-bars {
+        color: #094281 !important;
+        font-size: 22px;
+    }
+
+    /* Menu ouvert fond blanc */
+    .navbar-collapse {
+        background: #ffffff;
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    /* Liens menu */
+    .navbar-nav .nav-link {
+        color: #0d1b2a !important;
+        padding: 10px 0;
+    }
+
+    /* Bouton Se connecter */
+    .btn-cta-secondary {
+        background: #ffffff !important;
+        color: #0d6efd !important;
+        border: 2px solid #0d6efd !important;
+    }
+
+    .btn-cta-secondary:hover {
+        background: #ffffff !important;
+        color: #0d6efd !important;
+    }
+
+    /* Devenir membre reste intact */
+}
+
+
+.chatbot-fab {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    width: 60px;
+    height: 60px;
+    background: #094281;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    z-index: 9999;
+    transition: 0.3s;
+}
+
+.chatbot-fab:hover {
+    transform: scale(1.08);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
+    .chatbot-fab {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+        bottom: 15px;
+        left: 15px;
+    }
+
+}
+
+.chatbot-fab {
+    animation: pulseChat 2s infinite;
+}
+@keyframes pulseChat {
+    0% { box-shadow: 0 0 0 0 rgba(9,66,129, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(9,66,129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(9,66,129, 0); }
+}
+
+.chatbot-fab i {
+    pointer-events: none;
+}
+
+
     </style>
     <?php echo $__env->yieldPushContent('styles'); ?>
 </head>
 <body class="font-sans antialiased">
 
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items: center justify-content-center">
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner"></div>
     </div>
 
@@ -329,63 +524,88 @@
     </div>
 
     <!-- Conteneur principal pour Navbar et Hero -->
-    <div class="container-fluid position-relative ">
-        <nav class="navbar navbar-expand-lg navbar-dark px-5  py-lg-0">
-            <a href="<?php echo e(route('home')); ?>" class="navbar-brand p-0">
-                <!-- Logo normal -->
-                <img src="<?php echo e(asset('img/logo.png')); ?>"
-                    alt="Logo Club DSI Bénin"
-                    class="logo-default"
-                    style="height: 100px;">
+<div class="container-fluid position-relative">
+    <nav class="navbar navbar-expand-lg navbar-dark px-lg-5 px-3 py-2 py-lg-0">
 
-                <!-- Logo sticky -->
-                <img src="<?php echo e(asset('img/logo-dsi.png')); ?>"
-                    alt="Logo Sticky"
-                    class="logo-sticky"
-                    style="height: 80px;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="fa fa-bars"></span>
-            </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <div class="navbar-nav ms-auto py-0">
+        <a href="<?php echo e(route('home')); ?>" class="navbar-brand p-0 d-flex align-items-center">
 
-                        <a href="<?php echo e(route('home')); ?>" class="nav-item nav-link">Accueil</a>
+            <!-- Logo normal -->
+            <img src="<?php echo e(asset('img/logo.png')); ?>"
+                 alt="Logo Club DSI Bénin"
+                 class="logo-default img-fluid">
 
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Le Club</a>
-                            <div class="dropdown-menu m-0">
-                                <a href="<?php echo e(route('club.about')); ?>" class="dropdown-item">Qui sommes-nous ?</a>
-                                <a href="<?php echo e(route('club.partners')); ?>" class="dropdown-item">Nos Partenaires</a>
-                                <a href="<?php echo e(route('club.programme')); ?>" class="dropdown-item">Programmes Thématiques</a>
-                            </div>
-                        </div>
+            <!-- Logo sticky -->
+            <img src="<?php echo e(asset('img/logo-dsi.png')); ?>"
+                 alt="Logo Sticky"
+                 class="logo-sticky img-fluid">
+        </a>
 
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Activités</a>
-                            <div class="dropdown-menu m-0">
-                                <a href="<?php echo e(route('activites.evenements')); ?>" class="dropdown-item">Événements & Actualités</a>
-                                <a href="<?php echo e(route('activites.formations')); ?>" class="dropdown-item">Nos Formations</a>
-                                <a href="https://dsiawards.bj/" class="dropdown-item fw-bold" target="_blank">DSI AWARDS</a> <!-- Ajout de target="_blank" -->
-                            </div>
-                        </div>
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse">
+            <span class="fa fa-bars"></span>
+        </button>
 
-                        <a href="<?php echo e(route('recrutement')); ?>" class="nav-item nav-link">Recrutement</a>
-                        <a href="<?php echo e(route('esn')); ?>" class="nav-item nav-link">ESN</a>
-                        <a href="<?php echo e(route('membre.espace')); ?>" class="nav-item nav-link">Membres</a>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
 
-                    </div>
+            <div class="navbar-nav ms-auto py-3 py-lg-0">
 
-                    <div class="d-none d-lg-flex align-items-center gap-2 ms-3">
-                        <!-- Les routes 'login' et 'register' sont fournies par Breeze et sont correctes -->
-                        <a href="<?php echo e(route('login')); ?>" class="btn btn-cta-secondary px-3"><i class="fas fa-sign-in-alt me-2"></i>Se Connecter</a>
-                        <a href="<?php echo e(route('register')); ?>" class="btn btn-cta-primary px-3">Devenir Membre</a>
+                <a href="<?php echo e(route('home')); ?>" class="nav-item nav-link">Accueil</a>
+
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        Le Club
+                    </a>
+                    <div class="dropdown-menu m-0">
+                        <a href="<?php echo e(route('club.about')); ?>" class="dropdown-item">Qui sommes-nous ?</a>
+                        <a href="<?php echo e(route('club.partners')); ?>" class="dropdown-item">Nos Partenaires</a>
+                        <a href="<?php echo e(route('club.programme')); ?>" class="dropdown-item">Programmes Thématiques</a>
                     </div>
                 </div>
-        </nav>
 
-        <?php echo $__env->yieldContent('hero'); ?>
-    </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        Activités
+                    </a>
+                    <div class="dropdown-menu m-0">
+                        <a href="<?php echo e(route('activites.evenements')); ?>" class="dropdown-item">Événements & Actualités</a>
+                        <a href="<?php echo e(route('activites.formations')); ?>" class="dropdown-item">Nos Formations</a>
+                        <a href="https://dsiawards.bj/" class="dropdown-item fw-bold" target="_blank">DSI AWARDS</a>
+                    </div>
+                </div>
+
+                <a href="<?php echo e(route('recrutement')); ?>" class="nav-item nav-link">Recrutement</a>
+                <a href="<?php echo e(route('esn')); ?>" class="nav-item nav-link">ESN</a>
+                <a href="<?php echo e(route('membre.espace')); ?>" class="nav-item nav-link">Membres</a>
+
+                <!-- Boutons visibles sur mobile -->
+                <div class="d-lg-none mt-3">
+                    <a href="<?php echo e(route('login')); ?>" class="btn btn-cta-secondary w-100 mb-2">
+                        <i class="fas fa-sign-in-alt me-2"></i>Se Connecter
+                    </a>
+                    <a href="<?php echo e(route('register')); ?>" class="btn btn-cta-primary w-100">
+                        Devenir Membre
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Boutons Desktop -->
+            <div class="d-none d-lg-flex align-items-center gap-2 ms-3">
+                <a href="<?php echo e(route('login')); ?>" class="btn btn-cta-secondary px-3">
+                    <i class="fas fa-sign-in-alt me-2"></i>Se Connecter
+                </a>
+                <a href="<?php echo e(route('register')); ?>" class="btn btn-cta-primary px-3">
+                    Devenir Membre
+                </a>
+            </div>
+
+        </div>
+    </nav>
+
+    <?php echo $__env->yieldContent('hero'); ?>
+</div>
+
 
     <main>
         <?php echo $__env->yieldContent('content'); ?>
@@ -394,47 +614,62 @@
 <footer class="site-footer-dark">
     <div class="container">
         <!-- SECTION HAUTE -->
-        <div class="footer-top">
-            <!-- LOGO ET DESCRIPTION -->
-            <div class="footer-about footer-logo">
-                <img src="<?php echo e(asset('img/logo.png')); ?>" alt="Logo Club DSI Bénin">
-                <p class="mt-3 text-footer-desc">
-                    Le Club DSI Bénin réunit les décideurs IT pour favoriser la collaboration, l’innovation et le partage d’expériences.
-                </p>
+<!-- SECTION HAUTE -->
+<div class="footer-top">
 
-            </div>
+    <!-- LOGO ET DESCRIPTION -->
+    <div class="footer-about">
+        <img src="<?php echo e(asset('img/logo.png')); ?>" alt="Logo Club DSI Bénin" class="footer-logo-img">
 
-            <!-- COLONNE LE CLUB -->
-            <div class="footer-col">
-                <h5>Le Club</h5>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo e(route('home')); ?>">Accueil</a></li>
-                    <li><a href="<?php echo e(route('club.about')); ?>">À propos</a></li>
-                    <li><a href="<?php echo e(route('contact')); ?>">Contact</a></li>
-                </ul>
-            </div>
+        <p class="footer-desc">
+            Le Club DSI Bénin réunit les décideurs IT pour favoriser la collaboration,
+            l’innovation et le partage d’expériences.
+        </p>
+    </div>
 
+    <!-- COLONNE LE CLUB -->
+    <div class="footer-col">
+        <h5>Le Club</h5>
+        <ul>
+            <li><a href="<?php echo e(route('home')); ?>">Accueil</a></li>
+            <li><a href="<?php echo e(route('club.about')); ?>">À propos</a></li>
+            <li><a href="<?php echo e(route('contact')); ?>">Contact</a></li>
+        </ul>
+    </div>
 
-            <!-- COLONNE RESSOURCES -->
-            <div class="footer-col">
-                <h5>Ressources</h5>
-                <ul class="list-unstyled">
-                    <li><a href="https://clubdsibenin.bj/politique-protection-donnees">Protection de données</a></li>
-                    <li><a href="https://clubdsibenin.bj/utilisation-cookies">Gestion des cookies</a></li>
-                    <li><a href="https://clubdsibenin.bj/conditions-generales-utilisation">Conditions générales</a></li>
-                </ul>
-            </div>
+    <!-- COLONNE RESSOURCES -->
+    <div class="footer-col">
+        <h5>Ressources</h5>
+        <ul>
+            <li><a href="<?php echo e(route('protection-donnees')); ?>">Protection de données</a></li>
+            <li><a href="<?php echo e(route('cookies')); ?>">Gestion des cookies</a></li>
+            <li><a href="<?php echo e(route('conditions-generales')); ?>">Conditions générales</a></li>
+        </ul>
+    </div>
 
-            <!-- COLONNE CONTACT -->
-            <div class="footer-col">
-                <h5>Contact</h5>
-                <ul class="list-unstyled footer-contact-list">
-                    <li class="mb-3 d-flex align-items-start"><i class="fas fa-map-marker-alt mt-1 me-3"></i><span>Cotonou, Benin</span></li>
-                    <li class="mb-3 d-flex align-items-start"><i class="fas fa-envelope mt-1 me-3"></i><span>contact@clubdsibenin.bj</span></li>
-                    <li class="mb-3 d-flex align-items-start"><i class="fas fa-phone mt-1 me-3"></i><span>+229 0191475555 | 0199200404</span></li>
-                </ul>
-            </div>
-        </div>
+    <!-- COLONNE CONTACT -->
+    <div class="footer-col footer-contact">
+        <h5>Contact</h5>
+
+        <ul>
+            <li>
+                <span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+                <span>Cotonou, Benin</span>
+            </li>
+
+            <li>
+                <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+                <span>contact@clubdsibenin.bj</span>
+            </li>
+
+            <li>
+                <span class="contact-icon"><i class="fas fa-phone"></i></span>
+                <span>+229 0191475555 | 0199200404</span>
+            </li>
+        </ul>
+    </div>
+
+</div>
 
         <!-- SECTION BASSE -->
         <div class="footer-bottom">

@@ -45,6 +45,15 @@ use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\FormationController as AdminFormationController;
 use App\Http\Controllers\Shared\SharedResourceController;
+// Tresor dashbord
+use App\Http\Controllers\TresorDashboardController;
+use App\Http\Controllers\TresorMemberController;
+use App\Http\Controllers\TresorCotisationController;
+use App\Http\Controllers\TresorReportController;
+
+
+
+
 
 
 
@@ -147,8 +156,17 @@ Route::middleware(['auth'])->prefix('member')->name('member.')->group(function (
 // Routes pour l'authentification Microsoft
 Route::middleware('web')->group(function () {
     Route::get('/auth/microsoft/redirect', [App\Http\Controllers\Auth\MicrosoftLoginController::class, 'redirect'])->name('login.microsoft.redirect');
-    Route::get('/auth/microsoft/callback', [App\Http\Controllers\Auth\MicrosoftLoginController::class, 'callback']);
+    Route::get('/auth/microsoft/callback', [App\Http\Controllers\Auth\MicrosoftLoginController::class, 'callback'])->name('login.microsoft.callback');
 });
+
+// Routes pour la synchronisation Microsoft 365 (protégées)
+// Route::middleware(['auth'])->prefix('microsoft')->name('microsoft.')->group(function () {
+//     Route::post('/sync', [App\Http\Controllers\Microsoft\MicrosoftSyncController::class, 'sync'])->name('sync');
+//     Route::get('/status', [App\Http\Controllers\Microsoft\MicrosoftSyncController::class, 'status'])->name('status');
+    
+//     // Pages de visualisation
+//     Route::get('/calendar', [App\Http\Controllers\Microsoft\MicrosoftCalendarController::class, 'index'])->name('calendar');
+// });
 
 
 // GROUPE DE ROUTES POUR LES ENTREPRISES (COMPANY)
@@ -298,6 +316,15 @@ Route::get('/competences/coming-soon', [ComingSoonController::class, 'competence
 Route::get('/contact', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
 Route::post('/contact/send', [App\Http\Controllers\ContactController::class, 'send'])->name('contact.send');
 
+// Page de la politique de protection des données (importée depuis POLICY.mhtml)
+Route::view('/protection-donnees', 'politique.protection-donnees')->name('protection-donnees');
+
+// Page de la politique de gestion des cookies (importée depuis COOKIES.mhtml)
+Route::view('/cookies', 'politique.cookies')->name('cookies');
+
+// Page des conditions générales d'utilisation
+Route::view('/conditions-generales', 'politique.conditions-generales')->name('conditions-generales');
+
 
 // Login admin
 Route::get('/admin/login', [AdminAuthController::class, 'loginForm'])->name('admin.login');
@@ -309,10 +336,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Profil admin
     Route::get('/profile', [AdminProfileController::class, 'show'])
         ->name('profile')
-        ->middleware('auth:web,role:admin');
+        ->middleware(['auth:web', 'role:admin']);
 
     // Dashboard admin
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // Gestion des rôles
+    Route::prefix('roles')->name('roles.')->middleware(['auth:web', 'role:admin'])->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\RoleManagementController::class, 'index'])->name('index');
+        Route::post('/{userId}/update', [App\Http\Controllers\Admin\RoleManagementController::class, 'updateRole'])->name('update');
+        Route::get('/{userId}/role', [App\Http\Controllers\Admin\RoleManagementController::class, 'getRole'])->name('get');
+        Route::get('/search', [App\Http\Controllers\Admin\RoleManagementController::class, 'search'])->name('search');
+    });
+
+
 
     // 🔹 Voir un membre validé
     Route::get('/members/{type}/{id}/view', [AdminMemberController::class, 'show'])
@@ -360,6 +397,36 @@ Route::prefix('admin')->name('admin.')->group(function () {
         ->name('members.pending')
         ->middleware('auth:web,role:admin');
 });
+
+
+    // Espace Trésorier
+    Route::prefix('tresor')->name('tresor.')->middleware(['auth:web', 'role:tresor'])->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\TresorDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/profile', [App\Http\Controllers\TresorDashboardController::class, 'profile'])->name('profile');
+
+        // Gestion des membres (trésorier)
+        Route::prefix('members')->name('members.')->group(function () {
+            Route::get('/', [App\Http\Controllers\TresorMemberController::class, 'index'])->name('index');
+            Route::get('/inactive', [App\Http\Controllers\TresorMemberController::class, 'inactive'])->name('inactive');
+        });
+
+        // Gestion des cotisations
+        Route::prefix('cotisations')->name('cotisations.')->group(function () {
+            Route::get('/', [App\Http\Controllers\TresorCotisationController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\TresorCotisationController::class, 'create'])->name('create');
+            Route::post('/store', [App\Http\Controllers\TresorCotisationController::class, 'store'])->name('store');
+            Route::get('/reminder', [App\Http\Controllers\TresorCotisationController::class, 'reminder'])->name('reminder');
+            Route::post('/send-reminder', [App\Http\Controllers\TresorCotisationController::class, 'sendReminder'])->name('sendReminder');
+            Route::get('/personal', [App\Http\Controllers\TresorCotisationController::class, 'personal'])->name('personal');
+        });
+
+        // Rapports financiers
+        Route::prefix('reports')->name('reports.')->group(function () {
+            Route::get('/summary', [App\Http\Controllers\TresorReportController::class, 'summary'])->name('summary');
+            Route::get('/revenue', [App\Http\Controllers\TresorReportController::class, 'revenue'])->name('revenue');
+            Route::get('/debt', [App\Http\Controllers\TresorReportController::class, 'debt'])->name('debt');
+        });
+    });
 
 
 // Routes pour la gestion des membres du bureau
@@ -478,11 +545,15 @@ Route::prefix('admin/formations')->name('admin.formations.')->middleware('auth:w
     Route::delete('/{id}', [AdminFormationController::class, 'destroy'])->name('delete');
 
     // CATEGORIES DE FORMATIONS
-    Route::get('/categories', [AdminFormationController::class, 'categories'])->name('categories');    
+    Route::get('/categories', [AdminFormationController::class, 'categories'])->name('categories');
     Route::post('/categories/store', [AdminFormationController::class, 'categoriesStore'])->name('categories.store');
-    Route::delete('/categories/{id}', [AdminFormationController::class, 'categoriesDelete'])->name('categories.delete');   
+    Route::delete('/categories/{id}', [AdminFormationController::class, 'categoriesDelete'])->name('categories.delete');
 
 });
+
+
+
+
 
 
 // Paiement
@@ -500,7 +571,7 @@ Route::middleware(['auth:web,company,college,administration'])
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 // Webhook pour les paiements
-Route::post('/https://clubdsibenin.bj/webhook', [PayementController::class, 'webhook'])->name('payment.webhook');
+Route::post('/https://clubdsibenin.bj/webhook', [PaymentController::class, 'webhook'])->name('payment.webhook');
 
 
 // --- 3. Les routes d'authentification de Breeze sont incluses ici ---

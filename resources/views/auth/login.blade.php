@@ -36,23 +36,23 @@
             box-shadow: 0 25px 50px -12px rgba(9, 66, 129, 0.2);
             padding: 2.5rem;
         }
-        .login-header { 
-            text-align: center; 
-            margin-bottom: 2rem; 
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
         }
-        .login-header img { 
-            max-height: 50px; 
-            margin-bottom: 1rem; 
+        .login-header img {
+            max-height: 50px;
+            margin-bottom: 1rem;
         }
-        .login-header h1 { 
-            font-size: 1.8rem; 
-            font-weight: 700; 
-            color: var(--dsi-blue); 
+        .login-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dsi-blue);
             margin-bottom: 0.5rem;
         }
-        .login-header p { 
-            color: var(--muted-ink); 
-            font-size: 0.95rem; 
+        .login-header p {
+            color: var(--muted-ink);
+            font-size: 0.95rem;
         }
         .form-floating label {
             color: var(--muted-ink);
@@ -155,10 +155,10 @@
 
         <form method="POST" action="{{ route('login.unified') }}">
             @csrf
-            
+
             <div class="form-floating mb-3">
-                <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                       id="email" name="email" placeholder="name@example.com" 
+                <input type="email" class="form-control @error('email') is-invalid @enderror"
+                       id="email" name="email" placeholder="name@example.com"
                        value="{{ old('email') }}" required autocomplete="email">
                 <label for="email">Adresse email</label>
                 @error('email')
@@ -169,8 +169,8 @@
             </div>
 
             <div class="form-floating mb-3">
-                <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                       id="password" name="password" placeholder="Mot de passe" 
+                <input type="password" class="form-control @error('password') is-invalid @enderror"
+                       id="password" name="password" placeholder="Mot de passe"
                        required autocomplete="current-password">
                 <label for="password">Mot de passe</label>
                 @error('password')
@@ -206,14 +206,15 @@
             <i class="fab fa-microsoft me-2"></i>
             Continuer avec Microsoft
         </a>
+        <p class="mt-2 mb-3 text-muted small text-center">Utilisez votre compte <strong>@clubdsibenin.org</strong> pour la connexion SSO. Les comptes personnels seront pris en charge plus tard.</p>
 
         <div class="links-section">
             <p class="mb-2">
-                Vous n'avez pas de compte ? 
+                Vous n'avez pas de compte ?
                 <a href="{{ route('register') }}">Créer un compte</a>
             </p>
             <p class="mb-0 text-muted small">
-                Membre DSI, Entreprise, Administration, ESN, Partenaire, Candidat ou Recruteur : 
+                Membre DSI, Entreprise, Administration, ESN, Partenaire, Candidat ou Recruteur :
                 utilisez cette même page pour vous connecter.
             </p>
         </div>

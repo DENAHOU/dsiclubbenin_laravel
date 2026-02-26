@@ -12,7 +12,7 @@ class CustomAuthenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        if (! $request->expectsJson()) {
+        if (! $request->expectsJson()) { 
             // Ajoutez cette condition pour ignorer les routes Microsoft
             if ($request->routeIs('login.microsoft.redirect') || $request->routeIs('auth/microsoft/callback')) {
                  return null; // Ne redirige pas, permet à la requête de continuer

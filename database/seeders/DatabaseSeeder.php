@@ -23,6 +23,9 @@ class DatabaseSeeder extends Seeder
                 BoardRoleSeeder::class,
                 ImportUsersFromClubdsibeninProdSeeder::class,
                 ImportPaymentsFromDSIMembersSeeder::class,
+                ImportEsnsSeeder::class,
+                ImportBoardMembersSeeder::class,
+
                 // Vous pouvez ajouter d'autres seeders ici
             ]);
 

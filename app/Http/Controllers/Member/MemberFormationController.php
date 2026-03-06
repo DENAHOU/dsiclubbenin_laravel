@@ -15,7 +15,7 @@ class MemberFormationController extends Controller
     public function index(): View
     {
         $formations = Formation::with('categoryFormation')
-            ->orderBy('date_debut', 'desc')
+            ->orderBy('start_date', 'desc')
             ->get();
 
         return view('member.formations.index', compact('formations'));

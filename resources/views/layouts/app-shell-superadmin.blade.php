@@ -171,7 +171,9 @@
                 <ul class="submenu">
                      <li><a href="{{ route('admin.partners.types') }}">Types de Partenaires</a></li>
                     <li><a href="{{ route('admin.partners.formules') }}">Formules d'adhésions</a></li>
-                    <li><a href="{{ route('admin.partners.index') }}">Liste des Partenaires</a></li>
+                    <li><a href="{{ route('admin.partners.index') }}">Liste des Partenaires approuvés</a></li>
+                    <li><a href="{{ route('admin.partners.listpending') }}">Partenaires en attente</a></li>
+                    <li><a href="{{ route('admin.partners.listrejected') }}">Partenaires rejetés</a></li>
 
                     {{-- PARTENAIRES PRESSE --}}
                     <li><a href="{{ route('admin.partners.press') }}">Partenaires Presse</a></li>

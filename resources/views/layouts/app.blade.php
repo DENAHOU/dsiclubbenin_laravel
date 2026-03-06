@@ -5,7 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        {{-- CHANGER LE TITRE DANS LE FICHIER app.blade.php IL NE DOIT PLUS AFFICHER LARAVEL--}}
+        <title>{{ config('app.name', 'Club DSI Bénin') }}</title>
 
         <!-- Font Awesome (place this in layouts/app.blade.php inside <head>) -->
         <link rel="stylesheet"

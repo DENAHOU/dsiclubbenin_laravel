@@ -130,7 +130,7 @@
 
 
         .premium-content {
-            max-width: 1700px;
+            max-width: 1900px;
             margin: 0 auto;
             padding: 0 2rem;
             display: grid;
@@ -192,7 +192,8 @@
     box-shadow: 0 30px 70px rgba(0,0,0,0.5);
     transition: 0.6s;
     border: 2px solid rgba(255,215,0,0.6);
-    width: 700px;
+    width: 600px;
+    height: 500px;
 }
 
 .premium-image::before {
@@ -696,10 +697,8 @@
         }
     </style>
 
-        <div id="heroCarousel"
-            class="carousel slide hero-carousel carousel-fade"
-            data-bs-ride="carousel"
-            data-bs-interval="5000">  <!-- <<<<<<<<<<<<<<<< LA MAGIE EST ICI -->
+    <body>
+        <div id="heroCarousel"class="carousel slide hero-carousel carousel-fade"data-bs-ride="carousel"data-bs-interval="5000">  <!-- <<<<<<<<<<<<<<<< LA MAGIE EST ICI -->
 
             <!-- Indicateurs (générés dynamiquement) -->
             <div class="carousel-indicators">
@@ -769,7 +768,7 @@
             </section>
 
             <div class="section-header">
-                <h2>Explorez nos Événements & Actualités</h2>
+                <h2>Explorez nos événements & actualités</h2>
                 <p>Restez connecté à l'écosystème numérique. Découvrez les replays de nos afterworks, les résumés de nos séminaires et nos dernières actualités.</p>
             </div>
 
@@ -799,7 +798,7 @@
             @if($events->count() > 0)
                 <section class="new-events-section">
                     <div class="new-events-header">
-                        <h2>Nouveaux Événements</h2>
+                        <h2>Nouveaux événements</h2>
                         <p>Découvrez les derniers événements ajoutés par notre équipe</p>
                     </div>
                     
@@ -932,6 +931,6 @@
                 });
             });
         </script>
-
+    </body>
 
 @endsection

@@ -15,8 +15,10 @@ class RoleManagementController extends Controller
      * Affiche la liste des utilisateurs avec la gestion des rôles
      */
     public function index(): View
+
+    //   ON AFFICHE CEUX DONT status=approved ET is_paid=1    
     {
-        $users = User::orderBy('created_at', 'desc')->get();
+        $users = User::where('status', 'approved')->where('is_paid', 1)->orderBy('created_at', 'desc')->get();
         
         return view('admin.roles.index', compact('users'));
     }
@@ -27,47 +29,44 @@ class RoleManagementController extends Controller
     public function updateRole(Request $request, $userId): JsonResponse
     {
         $request->validate([
-            'role' => ['required', 'in:membre,admin,tresor,company,college,administration,candidat,recruter,partner,esn']
+            'role' => ['required', 'in:membre,admin,tresor']
         ]);
 
         $user = User::findOrFail($userId);
-        $oldRole = $user->role;
         $newRole = $request->role;
 
         DB::beginTransaction();
         try {
-            // Mettre à jour le rôle
-            $user->update(['role' => $newRole]);
 
-            // Si le rôle passe à admin, s'assurer que l'utilisateur est approuvé et payé
             if ($newRole === 'admin') {
-                $user->update([
-                    'status' => 'approved',
-                    'is_paid' => 1
-                ]);
+                $user->is_admin = 1;
             }
+
+            if ($newRole === 'tresor') {
+                $user->is_tresor = 1;
+            }
+
+            if ($newRole === 'membre') {
+                $user->is_admin = 0;
+                $user->is_tresor = 0;
+            }
+
+            $user->save();
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => "Le rôle de {$user->name} a été changé de '{$oldRole}' à '{$newRole}'",
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'role' => $user->role,
-                    'status' => $user->status,
-                    'is_paid' => $user->is_paid
-                ]
+                'message' => "Rôle supplémentaire mis à jour avec succès."
             ]);
 
         } catch (\Exception $e) {
+
             DB::rollBack();
-            
+
             return response()->json([
                 'success' => false,
-                'message' => 'Erreur lors de la mise à jour du rôle: ' . $e->getMessage()
+                'message' => 'Erreur : ' . $e->getMessage()
             ], 500);
         }
     }

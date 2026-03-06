@@ -158,8 +158,8 @@
                                 <li><i class="fas fa-check-circle"></i>Suivez les statistiques du marché.</li>
                             </ul>
                             <div class="hub-actions mt-4">
-                                <a href="<?php echo e(route('login.candidat')); ?>" class="btn btn-primary">Se connecter</a>
-                                <a href="<?php echo e(route('register.candidat')); ?>"" class="btn btn-secondary">Déposer mon CV</a>
+                                <a href="#" class="btn btn-primary">Se connecter</a>
+                                <a href="#" class="btn btn-secondary">Déposer mon CV</a>
                             </div>
                         </div>
                         <div class="hub-panel" id="recruiter-panel" style="display: none;">
@@ -171,8 +171,8 @@
                                 <li><i class="fas fa-check-circle"></i>Utilisez nos statistiques pour recruter.</li>
                             </ul>
                             <div class="hub-actions mt-4">
-                                <a href="<?php echo e(route('register.recruter')); ?>" class="btn btn-primary">Sinscrire</a>
-                                <a href="<?php echo e(route('login.recruter')); ?>" class="btn btn-secondary">Accéder à la CVthèque</a>
+                                <a href="#" class="btn btn-primary">Sinscrire</a>
+                                <a href="#" class="btn btn-secondary">Accéder à la CVthèque</a>
                             </div>
                         </div>
                     </div>
@@ -184,12 +184,11 @@
                     </div>
                 </div>
             </div>
-            
+        
         </div>
     </section>
 
-    
-
+   
     <script>
         const canvas = document.getElementById('plexus-bg');
         if(canvas) {

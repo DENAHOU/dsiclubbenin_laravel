@@ -43,11 +43,7 @@
         }
 
         .form-label { font-weight: 500; }
-        .form-control, .form-select {
-            height: 50px;
-            border-color: var(--border-color);
-            box-shadow: none !important;
-        }
+        .form-control, .form-select { height: 50px; border-color: var(--border-color); box-shadow: none !important; }
         .form-control:focus, .form-select:focus { border-color: var(--dsi-blue); }
         .form-check-input { width: 1.25em; height: 1.25em; }
 
@@ -57,6 +53,24 @@
             background: linear-gradient(95deg, var(--dsi-blue), var(--dsi-green));
             color: white; border: none;
         }
+
+        .form-step { display: none; animation: fadeInSlide 0.5s ease forwards; }
+        .form-step.step-active { display: block; }
+        @keyframes fadeInSlide { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .step-indicator { font-size: 0.85rem; font-weight: bold; color: #ccc; transition: color 0.3s; }
+        .step-indicator.active { color: #0d6efd; }
+
+        .is-invalid { border-color: #dc3545 !important; background-color: #fff8f8; }
+        .invalid-feedback { font-weight: 500; animation: shake 0.4s ease-in-out; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+        .form-control:focus { box-shadow: 0 0 0 0.25rem rgba(41, 150, 58, 0.25) !important; }
+        .is-invalid:focus { box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important; }
+
+        /* Prévisualisation photo */
+        #photo-preview { display: none; width: 100px; height: 100px; object-fit: cover; border: 3px solid var(--dsi-green); border-radius: 50%; margin-bottom: 10px; }
+
     </style>
 </head>
 <body>
@@ -67,113 +81,218 @@
 </section>
 
 <div class="container my-5">
-    <div class="register-form-box">
-        <!--<div class="alert alert-info">
-            <strong>Pour les membres DSI :</strong> La méthode de connexion privilégiée est via votre compte Microsoft 365. Si vous en avez un, nous vous recommandons de vous connecter directement.
-            <div class="text-center mt-3">
-                <a href="{{ route('login.microsoft.redirect') }}" class="btn btn-lg btn-outline-primary"><i class="fab fa-microsoft me-2"></i> Se Connecter avec Microsoft</a>
-            </div>
-        </div>-->
+    <div class="register-form-box shadow-lg p-4 rounded-4 bg-white">
 
-        @if ($errors->any())
-            <div class="alert alert-danger mb-4">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+        <div class="progress-container mb-5">
+            <div class="progress" style="height: 8px;">
+                <div class="progress-bar bg-primary" id="progressBar" role="progressbar" style="width: 33%;"></div>
             </div>
-        @endif
+            <div class="d-flex justify-content-between mt-2">
+                <span class="step-indicator active">Info personnelles</span>
+                <span class="step-indicator">Professionnelle</span>
+                <span class="step-indicator">Votre Compte</span>
+            </div>
+        </div>
 
-        <form action="{{ route('register.membre.store') }}" method="POST" class="row g-4" enctype="multipart/form-data">
-            
+        <form action="{{ route('register.membre.store') }}" method="POST" id="multiStepForm" class="needs-validation" enctype="multipart/form-data" novalidate>
             @csrf
 
-            <!-- SECTION 1 : Informations Personnelles -->
-            <h4 class="form-section-title"><i class="fas fa-user-circle"></i> Informations Personnelles</h4>
-            <div class="col-md-6"><label for="lastname" class="form-label">Nom *</label><input type="text" name="lastname" class="form-control" id="lastname" required></div>
-            <div class="col-md-6"><label for="firstname" class="form-label">Prénom(s) *</label><input type="text" name="firstname" class="form-control" id="firstname" required></div>
-            <div class="col-md-6"><label for="sexe" class="form-label">Sexe *</label><select class="form-select" name="sexe" required><option value="">Choisir...</option><option value="M">Masculin</option><option value="F">Féminin</option></select></div>
-            <div class="col-md-6"><label for="birthday" class="form-label">Date de naissance *</label><input type="date" name="birthday" class="form-control" id="birthday" required></div>
-            <div class="col-md-6"><label for="phone" class="form-label">Numéro de téléphone *</label><input type="tel" name="phone" class="form-control" id="phone" required></div>
-            <div class="col-md-6"><label for="medias_id" class="form-label">Votre Photo *</label><input class="form-control" type="file" name="medias_id" required></div>
-            <div class="col-12"><label for="description" class="form-label">Décrivez-vous en quelques mots</label><textarea name="description" class="form-control" id="description" rows="3"></textarea></div>
+            {{-- ================== ETAPE 1 ================== --}}
+            <div class="form-step step-active" id="step-1">
+                <h4 class="form-section-title mb-4"><i class="fas fa-user-circle me-2"></i>Informations Personnelles</h4>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nom *</label>
+                        <input type="text" name="lastname" class="form-control @error('lastname') is-invalid @enderror" value="{{ old('lastname') }}" required>
+                        @error('lastname') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Prénom(s) *</label>
+                        <input type="text" name="firstname" class="form-control @error('firstname') is-invalid @enderror" value="{{ old('firstname') }}" required>
+                        @error('firstname') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
 
-            <!-- SECTION 2 : Parcours Professionnel -->
-            <h4 class="form-section-title"><i class="fas fa-briefcase"></i> Parcours Professionnel</h4>
-            <div class="col-md-6"><label for="current_employer" class="form-label">Employeur actuel *</label><input type="text" name="current_employer" class="form-control" id="current_employer" required></div>
-            <div class="col-md-6"><label for="employer_contact" class="form-label">Contact Employeur *</label><input type="text" name="employer_contact" class="form-control" id="employer_contact" required></div>
-            <div class="col-md-6"><label for="current_position" class="form-label">Poste de responsabilité actuel *</label><select class="form-select" name="current_position" required><option value="">Choisir...</option><option>Directeur des Systèmes d'Information (DSI)</option><option>Responsable des Systèmes d'Information (RSI)</option><option>Responsable de la Sécurité des SI (RSSI)</option><option>Directeur Technique (DT)</option><option>Responsable Technique (RT)</option></select></div>
+                    <div class="col-md-6">
+                        <label class="form-label">Sexe *</label>
+                        <select class="form-select @error('sexe') is-invalid @enderror" name="sexe" required>
+                            <option value="">Choisir...</option>
+                            <option value="M" {{ old('sexe') == 'M' ? 'selected' : '' }}>Masculin</option>
+                            <option value="F" {{ old('sexe') == 'F' ? 'selected' : '' }}>Féminin</option>
+                        </select>
+                        @error('sexe') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
 
-            <!-- Champ Secteur avec logique "Autre" -->
-            <div class="col-md-6">
-                <label for="sector" class="form-label">Secteur *</label>
-                <select class="form-select" name="sector" id="sectorSelect" required>
-                    <option value="">Choisir...</option>
-                    <option value="Public">Public</option>
-                    <option value="Privé">Privé</option>
-                    <option value="Multinationale">Multinationale</option>
-                    <option value="Organisme international">Organisme international</option>
-                    <option value="ONG">ONG</option>
-                    <option value="Autre">Autre</option>
-                </select>
-            </div>
-            <div class="col-md-6" id="sectorOtherDiv" style="display: none;">
-                <label for="sector_other" class="form-label">Veuillez préciser votre secteur *</label>
-                <input type="text" name="sector_other" class="form-control" id="sectorOtherInput">
-            </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Date de naissance *</label>
+                        <input type="date" name="birthday" class="form-control @error('birthday') is-invalid @enderror" value="{{ old('birthday') }}" required>
+                        @error('birthday') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
 
-            <!-- Champ Catégorie de service avec logique "Autre" -->
-            <div class="col-md-6">
-                <label for="category_of_service" class="form-label">Catégorie de service *</label>
-                <select class="form-select" name="category_of_service" id="categorySelect" required>
-                    <option value="">Choisir la catégorie</option>
-                    <option value="Industrie">Industrie</option><option value="Banque">Banque</option>
-                    <option value="Assurance">Assurance</option><option value="Microfinance">Microfinance</option>
-                    <option value="Santé">Santé</option><option value="Agroalimentaire">Agroalimentaire</option>
-                    <option value="Finance">Finance</option><option value="Humanitaire">Humanitaire</option>
-                    <option value="Ministère">Ministère</option><option value="Agence Gouvernementale">Agence Gouvernementale</option>
-                    <option value="Commerce">Commerce</option><option value="Logistique">Logistique</option>
-                    <option value="Autre">Autre</option>
-                </select>
-            </div>
-            <div class="col-md-6" id="categoryOtherDiv" style="display: none;">
-                <label for="category_other" class="form-label">Veuillez préciser votre catégorie *</label>
-                <input type="text" name="category_other" class="form-control" id="categoryOtherInput">
-            </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Votre Photo (Max 5 Mo) *</label>
+                        <div class="text-center">
+                            <img id="photo-preview" src="#" alt="Aperçu">
+                        </div>
+                        <input class="form-control @error('medias_id') is-invalid @enderror" type="file" name="medias_id" id="photoInput" accept="image/*" required>
+                        @error('medias_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
 
-            <div class="col-md-6"><label for="area_of_expertise" class="form-label">Domaine d'expertise *</label><input type="text" name="area_of_expertise" class="form-control" id="area_of_expertise" required></div>
-            <div class="col-md-6"><label for="initial_training" class="form-label">Formation initiale *</label><input type="text" name="initial_training" class="form-control" id="initial_training" required></div>
+                    <div class="col-12">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="2">{{ old('description') }}</textarea>
+                    </div>
+                </div>
 
-            <!-- SECTION 3 : Votre Compte au Club (Simplifié) -->
-            <h4 class="form-section-title"><i class="fas fa-shield-alt"></i> Votre Compte au Club</h4>
-            <div class="col-md-6"><label for="username" class="form-label">Nom d'utilisateur *</label><input type="text" name="username" class="form-control" id="username" required></div>
-            <div class="col-md-6"><label for="email" class="form-label">E-mail de connexion *</label><input type="email" name="email" class="form-control" id="email" required></div>
-            <div class="col-md-6"><label for="password" class="form-label">Mot de passe *</label><input type="password" name="password" class="form-control" id="password" required></div>
-            <div class="col-md-6"><label for="password_confirmation" class="form-label">Confirmer le mot de passe *</label><input type="password" name="password_confirmation" class="form-control" id="password_confirmation" required></div>
-
-            <div class="col-md-6">
-                <label for="type_members" class="form-label">Type de Membre *</label>
-                <select name="type_members" id="type_members" class="form-control" required>
-                    <option value="individuel" {{ $type == 'individuel' ? 'selected' : '' }}>Membre Individuel</option>
-                    <option value="entite" {{ $type == 'entite' ? 'selected' : '' }}>Entité Utilisatrice</option>
-                    <option value="admin_publique" {{ $type == 'admin_publique' ? 'selected' : '' }}>Administration Publique</option>
-                    <option value="it" {{ $type == 'it' ? 'selected' : '' }}>Collège IT</option>
-                </select>
-            </div>
-
-            <div class="col-12 mt-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="cgv" required>
-                    <label class="form-check-label" for="cgv">
-                        J'ai lu et j'approuve les <a href="#" data-bs-toggle="modal" data-bs-target="#conditionsModal">conditions générales d'adhésion</a>.*
-                    </label>
+                <div class="mt-4 text-end">
+                    <button type="button" class="btn btn-primary next-step px-4">Suivant <i class="fas fa-arrow-right ms-2"></i></button>
                 </div>
             </div>
 
-            <div class="col-12 text-center mt-4">
-                <button type="submit" class="btn btn-submit">Finaliser mon Adhésion</button>
+            {{-- ================== ETAPE 2 ================== --}}
+            <div class="form-step" id="step-2">
+                <h4 class="form-section-title mb-4"><i class="fas fa-briefcase me-2"></i>Parcours Professionnel</h4>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Employeur actuel *</label>
+                        <input type="text" name="current_employer" class="form-control @error('current_employer') is-invalid @enderror" value="{{ old('current_employer') }}" required>
+                        @error('current_employer') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Contact Employeur *</label>
+                        <input type="text" name="employer_contact" class="form-control @error('employer_contact') is-invalid @enderror" value="{{ old('employer_contact') }}" required>
+                        @error('employer_contact') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Poste actuel *</label>
+                        <select name="current_position" class="form-select @error('current_position') is-invalid @enderror" required>
+                            <option value="">Choisir...</option>
+                            <option {{ old('current_position') == "Directeur des Systèmes d'Information (DSI)" ? 'selected' : '' }}>Directeur des Systèmes d'Information (DSI)</option>
+                            <option {{ old('current_position') == "Responsable des Systèmes d'Information (RSI)" ? 'selected' : '' }}>Responsable des Systèmes d'Information (RSI)</option>
+                            <option {{ old('current_position') == "Responsable de la Sécurité des SI (RSSI)" ? 'selected' : '' }}>Responsable de la Sécurité des SI (RSSI)</option>
+                            <option {{ old('current_position') == "Directeur Technique (DT)" ? 'selected' : '' }}>Directeur Technique (DT)</option>
+                            <option {{ old('current_position') == "Responsable Technique (RT)" ? 'selected' : '' }}>Responsable Technique (RT)</option>
+                        </select>
+                        @error('current_position') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Secteur *</label>
+                        <select name="sector" id="sectorSelect" class="form-select @error('sector') is-invalid @enderror" required>
+                            <option value="">Choisir...</option>
+                            <option value="Public" {{ old('sector') == 'Public' ? 'selected' : '' }}>Public</option>
+                            <option value="Privé" {{ old('sector') == 'Privé' ? 'selected' : '' }}>Privé</option>
+                            <option value="Multinationale" {{ old('sector') == 'Multinationale' ? 'selected' : '' }}>Multinationale</option>
+                            <option value="Organisme international" {{ old('sector') == 'Organisme international' ? 'selected' : '' }}>Organisme international</option>
+                            <option value="ONG" {{ old('sector') == 'ONG' ? 'selected' : '' }}>ONG</option>
+                            <option value="Autre" {{ old('sector') == 'Autre' ? 'selected' : '' }}>Autre</option>
+                        </select>
+                        @error('sector') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6" id="sectorOtherDiv" style="display: none;">
+                        <label class="form-label">Veuillez préciser votre secteur *</label>
+                        <input type="text" name="sector_other" id="sectorOtherInput" class="form-control @error('sector_other') is-invalid @enderror" value="{{ old('sector_other') }}">
+                        @error('sector_other') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Catégorie de service *</label>
+                        <select name="category_of_service" id="categorySelect" class="form-select @error('category_of_service') is-invalid @enderror" required>
+                            <option value="">Choisir...</option>
+                            <option value="Industrie" {{ old('category_of_service') == 'Industrie' ? 'selected' : '' }}>Industrie</option>
+                            <option value="Banque" {{ old('category_of_service') == 'Banque' ? 'selected' : '' }}>Banque</option>
+                            <option value="Autre" {{ old('category_of_service') == 'Autre' ? 'selected' : '' }}>Autre</option>
+                        </select>
+                        @error('category_of_service') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6" id="categoryOtherDiv" style="display: none;">
+                        <label class="form-label">Veuillez préciser votre catégorie *</label>
+                        <input type="text" name="category_other" id="categoryOtherInput" class="form-control @error('category_other') is-invalid @enderror" value="{{ old('category_other') }}">
+                        @error('category_other') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Domaine d'expertise *</label>
+                        <input type="text" name="area_of_expertise" class="form-control @error('area_of_expertise') is-invalid @enderror" value="{{ old('area_of_expertise') }}" required>
+                        @error('area_of_expertise') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Formation initiale *</label>
+                        <input type="text" name="initial_training" class="form-control @error('initial_training') is-invalid @enderror" value="{{ old('initial_training') }}" required>
+                        @error('initial_training') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary prev-step">Précédent</button>
+                    <button type="button" class="btn btn-primary next-step px-4">Suivant <i class="fas fa-arrow-right ms-2"></i></button>
+                </div>
             </div>
+
+            {{-- ================== ETAPE 3 ================== --}}
+            <div class="form-step" id="step-3">
+                <h4 class="form-section-title mb-4"><i class="fas fa-shield-alt me-2"></i>Votre Compte</h4>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nom d'utilisateur *</label>
+                        <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" value="{{ old('username') }}">
+                        @error('username') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">E-mail *</label>
+                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required>
+                        @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Mot de passe *</label>
+                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required>
+                        @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Confirmer le mot de passe *</label>
+                        <input type="password" name="password_confirmation" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Type de Membre *</label>
+                        <select name="type_members" id="type_members" class="form-control" required>
+
+                            <option value="individuel" {{ $type == 'individuel' ? 'selected' : '' }}>Membre Individuel</option>
+
+                            <option value="entite" {{ $type == 'entite' ? 'selected' : '' }}>Entité Utilisatrice</option>
+
+                            <option value="admin_publique" {{ $type == 'admin_publique' ? 'selected' : '' }}>Administration Publique</option>
+
+                            <option value="it" {{ $type == 'it' ? 'selected' : '' }}>Collège IT</option>
+
+                        </select>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="termsCheck" required>
+                            <label class="form-check-label" for="termsCheck">
+                                J'ai lu et j'approuve les
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#conditionsModal">
+                                    conditions générales d'adhésion</a>.*
+                            </label>
+                            <div class="invalid-feedback">Vous devez accepter avant de continuer.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-end">
+                    <button type="button" class="btn btn-outline-secondary prev-step">Précédent</button>
+                    <button type="submit" class="btn-submit">S'inscrire</button>
+                </div>
+            </div>
+
         </form>
     </div>
 </div>
@@ -219,38 +338,75 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- SCRIPT POUR LA LOGIQUE CONDITIONNELLE (À AJOUTER À LA FIN DE VOTRE PAGE) -->
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const nextBtns = document.querySelectorAll('.next-step');
+    const prevBtns = document.querySelectorAll('.prev-step');
+    const steps = document.querySelectorAll('.form-step');
+    const progressBar = document.getElementById('progressBar');
+    const indicators = document.querySelectorAll('.step-indicator');
+    let currentStep = 0;
+
+    function showStep(index) {
+        steps.forEach((step, i) => {
+            step.classList.toggle('step-active', i === index);
+            indicators[i].classList.toggle('active', i <= index);
+        });
+        progressBar.style.width = `${((index+1)/steps.length)*100}%`;
+        currentStep = index;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    nextBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (currentStep < steps.length -1) showStep(currentStep+1);
+        });
+    });
+    prevBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (currentStep > 0) showStep(currentStep-1);
+        });
+    });
+
+    // Photo preview
+    const photoInput = document.getElementById('photoInput');
+    const photoPreview = document.getElementById('photo-preview');
+    photoInput.addEventListener('change', function(e){
+        if(this.files && this.files[0]){
+            const reader = new FileReader();
+            reader.onload = function(ev){
+                photoPreview.src = ev.target.result;
+                photoPreview.style.display = 'block';
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+
+    // Champs Autres
     const sectorSelect = document.getElementById('sectorSelect');
     const sectorOtherDiv = document.getElementById('sectorOtherDiv');
-    const sectorOtherInput = document.getElementById('sectorOtherInput');
-
-    sectorSelect.addEventListener('change', function() {
-        if (this.value === 'Autre') {
-            sectorOtherDiv.style.display = 'block';
-            sectorOtherInput.required = true; // Rend le champ obligatoire
-        } else {
-            sectorOtherDiv.style.display = 'none';
-            sectorOtherInput.required = false; // Rend le champ non obligatoire
-            sectorOtherInput.value = ''; // Vide le champ si on change d'avis
-        }
+    sectorSelect.addEventListener('change', () => {
+        sectorOtherDiv.style.display = sectorSelect.value === 'Autre' ? 'block' : 'none';
     });
-
     const categorySelect = document.getElementById('categorySelect');
     const categoryOtherDiv = document.getElementById('categoryOtherDiv');
-    const categoryOtherInput = document.getElementById('categoryOtherInput');
-
-    categorySelect.addEventListener('change', function() {
-        if (this.value === 'Autre') {
-            categoryOtherDiv.style.display = 'block';
-            categoryOtherInput.required = true;
-        } else {
-            categoryOtherDiv.style.display = 'none';
-            categoryOtherInput.required = false;
-            categoryOtherInput.value = '';
-        }
+    categorySelect.addEventListener('change', () => {
+        categoryOtherDiv.style.display = categorySelect.value === 'Autre' ? 'block' : 'none';
     });
+
+    // Si Laravel renvoie des erreurs, reste à la bonne étape
+    @if ($errors->any())
+        @if ($errors->hasAny(['current_employer','employer_contact','current_position']))
+            showStep(1);
+        @elseif ($errors->hasAny(['username','email','password']))
+            showStep(2);
+        @endif
+    @endif
+});
 </script>
+
 </body>
 </html>
+
+
+

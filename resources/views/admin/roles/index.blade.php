@@ -33,7 +33,7 @@
                             </select>
                         </div>
                         <div class="col-md-5 text-end">
-                            <span class="badge bg-info" id="totalUsers">Total: {{ $users->count() }} utilisateurs</span>
+                            <span class="badge bg-info text-dark" id="totalUsers">Total: {{ $users->count() }} utilisateurs</span>
                         </div>
                     </div>
 
@@ -47,7 +47,8 @@
                                     <th>Email</th>
                                     <th>Rôle actuel</th>
                                     <th>Statut</th>
-                                    <th>Paiement</th>
+                                    <th>Adhésion</th>
+                                    <th>Rôle ajouté</th>
                                     <th>Date de création</th>
                                     <th>Actions</th>
                                 </tr>
@@ -58,13 +59,11 @@
                                     <td>{{ $user->id }}</td>
                                     <td>
                                         <strong>{{ $user->name }}</strong>
-                                        @if($user->username)
-                                            <br><small class="text-muted">@{{ $user->username }}</small>
-                                        @endif
+                                       
                                     </td>
                                     <td>{{ $user->email }}</td>
                                     <td>
-                                        <span class="badge bg-{{ $user->role === 'admin' ? 'danger' : ($user->role === 'tresor' ? 'warning' : ($user->role === 'membre' ? 'primary' : 'secondary')) }}" id="role-{{ $user->id }}">
+                                        <span class="badge bg-{{ $user->role === 'admin' ? 'danger' : ($user->role === 'tresor' ? 'warning' : ($user->role === 'member' ? 'primary' : 'secondary')) }}" id="role-{{ $user->id }}">
                                             {{ ucfirst($user->role) }}
                                         </span>
                                     </td>
@@ -78,7 +77,21 @@
                                             {{ $user->is_paid ? 'Payé' : 'Non payé' }}
                                         </span>
                                     </td>
-                                    <td>{{ $user->created_at->format('d/m/Y H:i') }}</td>
+                                   <td id="added-role-{{ $user->id }}">
+                                        @if($user->is_admin == 1 && $user->is_tresor == 1)
+                                            <span class="badge bg-danger">Admin</span>
+                                            <span class="badge bg-warning text-dark">Trésor</span>
+                                        @elseif($user->is_admin == 1)
+                                            <span class="badge bg-danger">Admin</span>
+                                        @elseif($user->is_tresor == 1)
+                                            <span class="badge bg-warning text-dark">Trésor</span>
+                                        @else
+                                            <span class="badge bg-secondary">Aucun</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : '-' }}
+                                    </td>
                                     <td>
                                         <div class="btn-group">
                                             <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -208,20 +221,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 'X-CSRF-TOKEN': csrfToken,
                 'X-Requested-With': 'XMLHttpRequest'
             },
-            body: JSON.stringify({
-                role: newRole
-            })
+            body: JSON.stringify({ role: newRole })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Mettre à jour le badge de rôle
-                const roleBadge = document.getElementById(`role-${userId}`);
-                if (roleBadge) {
-                    roleBadge.textContent = ucfirst(newRole);
-                    roleBadge.className = `badge bg-${newRole === 'admin' ? 'danger' : (newRole === 'tresor' ? 'warning' : (newRole === 'membre' ? 'primary' : 'secondary'))}`;
+                // Mise à jour de la colonne "Rôle ajouté"
+                const addedRoleCell = document.getElementById(`added-role-${userId}`);
+                if (addedRoleCell) {
+                    let badges = '';
+
+                    if (data.user.is_admin == 1) {
+                        badges += '<span class="badge bg-danger">Admin</span> ';
+                    }
+                    if (data.user.is_tresor == 1) {
+                        badges += '<span class="badge bg-warning text-dark">Trésor</span> ';
+                    }
+                    if (!data.user.is_admin && !data.user.is_tresor) {
+                        badges = '<span class="badge bg-secondary">Aucun</span>';
+                    }
+
+                    addedRoleCell.innerHTML = badges;
                 }
-                
+
                 showToast(data.message, 'success');
             } else {
                 showToast(data.message || 'Erreur lors de la mise à jour', 'error');

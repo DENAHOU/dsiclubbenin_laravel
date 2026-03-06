@@ -2,6 +2,35 @@
 
 @section('title', 'Annuaire des Membres')
 
+@if(isset($peutAcceder) && !$peutAcceder)
+<!-- Modal Bootstrap -->
+<div class="modal fade" id="cotisationModal" tabindex="-1" aria-labelledby="cotisationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cotisationModalLabel">Mise à jour des cotisations</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body">
+        <p>Vous devez mettre à jour vos cotisations pour accéder à l'annuaire des membres.</p>
+        <p>Merci de régler les cotisations manquantes depuis votre espace membre.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="{{ route('member.cotisations.pay') }}" class="btn btn-primary">Mettre à jour mes cotisations</a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var cotisationModal = new bootstrap.Modal(document.getElementById('cotisationModal'));
+    cotisationModal.show();
+});
+</script>
+@endif
+
 <style>
     :root {
         --primary-gradient: linear-gradient(135deg, #094281 0%, #29963a 100%);
@@ -332,15 +361,15 @@
             grid-template-columns: 1fr;
             gap: 1rem;
         }
-        
+
         .annuaire-header {
             padding: 1.5rem;
         }
-        
+
         .filter-tabs {
             justify-content: center;
         }
-        
+
         .search-box {
             max-width: 100%;
         }
@@ -355,11 +384,11 @@
             grid-template-columns: 1fr;
             padding: 0 0.5rem;
         }
-        
+
         .filter-tabs {
             gap: 0.3rem;
         }
-        
+
         .filter-tab {
             padding: 0.6rem 0.8rem;
             font-size: 0.8rem;
@@ -433,8 +462,8 @@
                         <!-- Avatar -->
                         <div class="member-avatar-container">
                             @if($member['photo_path'])
-                                <img src="{{ asset('storage/' . $member['photo_path']) }}" 
-                                     class="member-avatar" 
+                                <img src="{{ asset('storage/' . $member['photo_path']) }}"
+                                     class="member-avatar"
                                      alt="{{ $member['name'] }}"
                                      onerror="this.src='{{ asset('img/avatar-default.svg') }}'">
                             @else
@@ -450,7 +479,7 @@
                             <h3 class="member-name">{{ $member['name'] }}</h3>
 
                             <!-- Type -->
-                            <span class="member-type 
+                            <span class="member-type
                                 {{ $member['type'] == 'user' ? 'type-user' : '' }}
                                 {{ $member['type'] == 'company' ? 'type-company' : '' }}
                                 {{ $member['type'] == 'college' ? 'type-college' : '' }}
@@ -490,7 +519,7 @@
                             <!-- Actions -->
                             <div class="member-actions">
 
-                                
+
                                 <button onclick="copyContactInfo('{{ $member['email'] }}', '{{ $member['name'] }}')" class="action-btn btn-secondary-custom">
                                     <i class="fas fa-copy me-2"></i>Copier
                                 </button>
@@ -507,7 +536,7 @@
                         <i class="fas fa-chevron-left me-2"></i>Précédent
                     </a>
                 @endif
-                
+
                 @if($membres->hasMorePages())
                     <a href="{{ $membres->nextPageUrl() }}" class="btn-pagination">
                         Suivant<i class="fas fa-chevron-right ms-2"></i>
@@ -540,7 +569,7 @@ function showNotification(message, type = 'info') {
     notification.className = `position-fixed top-0 end-0 p-3`;
     notification.style.zIndex = '9999';
     notification.style.pointerEvents = 'none';
-    
+
     const bgColor = type === 'success' ? '#43e97b' : '#f093fb';
     notification.innerHTML = `
         <div class="toast show" role="alert" style="background: ${bgColor}; color: white; border-radius: 12px; padding: 1rem; box-shadow: 0 8px 25px rgba(0,0,0,0.15); backdrop-filter: blur(10px);">
@@ -550,9 +579,9 @@ function showNotification(message, type = 'info') {
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
         if (notification.parentNode) {
             notification.style.opacity = '0';

@@ -42,10 +42,10 @@ class DashboardController extends Controller
             // Mois dus = nombre de mois non payés depuis l'adhésion
             $moisDus = max(0, $moisEcoules - intval($montantCotise / 5000));
             $moisDus = intval($moisDus);
-            
+
             // Mois payés = montant cotisé / 5000
             $moisPayes = intval($montantCotise / 5000);
-            
+
             // Mois ajoutés = nombre de mois payés de plus (excédent)
             $moisAjoutes = max(0, $moisPayes - $moisEcoules);
         } else {
@@ -81,7 +81,7 @@ class DashboardController extends Controller
 
         // 🔹 Formations disponibles
         $formations = Formation::with('categoryFormation')
-            ->orderBy('date_debut', 'desc')
+            ->orderBy('start_date', 'desc')
             ->get();
 
         return view('dashboard', compact(

@@ -66,7 +66,6 @@ public function store(Request $request)
         'motivation' => $validated['reason_motivation'],
 
         'status' => 'pending',
-        'is_paid' => false,
     ]);
 
     return redirect()->route('home')

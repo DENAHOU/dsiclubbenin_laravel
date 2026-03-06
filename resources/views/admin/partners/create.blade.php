@@ -39,18 +39,13 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <label class="form-label">Raison sociale</label>
+                <label class="form-label">Nom de l'entreprise</label>
                 <input type="text" name="company_name" class="form-control" required>
             </div>
 
             <div class="col-md-6 mb-3">
-                <label class="form-label">Domaine</label>
-                <input type="text" name="domain" class="form-control" required>
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Responsable</label>
-                <input type="text" name="manager_name" class="form-control" required>
+                <label class="form-label">Pays</label>
+                <input type="text" name="country" class="form-control" required>
             </div>
 
             <div class="col-md-6 mb-3">
@@ -67,6 +62,14 @@
                 <label class="form-label">Logo</label>
                 <input type="file" name="logo_path" class="form-control">
             </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Statut</label>
+                    <select name="status" class="form-select" required>
+                        <option value="pending">En attente</option>
+                        <option value="approved">Approuvé</option>
+                    </select>
+                </div>
         </div>
 
         <button class="btn btn-success">Enregistrer</button>

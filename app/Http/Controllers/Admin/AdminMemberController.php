@@ -39,7 +39,14 @@ class AdminMemberController extends Controller
 
         // Users
         $users = User::select('id', 'name', 'email', 'created_at')
-            ->when($search, fn($q) => $q->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%"))
+            ->where('status', 'approved')
+            ->whereRaw('LOWER(TRIM(role)) = ?', ['member'])
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
             ->get()
             ->map(fn($u) => [
                 'id' => $u->id,
@@ -90,20 +97,43 @@ class AdminMemberController extends Controller
             ]);
 
         // Admins (optionnel)
-        $admins = collect();
-        if (class_exists(\App\Models\Admin::class)) {
-            $admins = Admin::select('id', 'name', 'email', 'created_at')
-                ->when($search, fn($q) => $q->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%"))
-                ->get()
-                ->map(fn($a) => [
-                    'id' => $a->id,
-                    'name' => $a->name,
-                    'email' => $a->email ?? '',
-                    'type' => 'Administrateur',
-                    'slug' => 'admins',
-                    'created_at' => $a->created_at,
-                ]);
-        }
+        $admins = User::select('id', 'name', 'email', 'created_at')
+            ->whereRaw('LOWER(TRIM(role)) = ?', ['admin'])
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->get()
+            ->map(fn($a) => [
+                'id' => $a->id,
+                'name' => $a->name,
+                'email' => $a->email ?? '',
+                'type' => 'Administrateur',
+                'slug' => 'admins',
+                'created_at' => $a->created_at,
+            ]);
+
+        // Tresor
+        $tresor = User::select('id', 'name', 'email', 'created_at')
+            ->whereRaw('LOWER(TRIM(role)) = ?', ['tresor'])
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->get()
+            ->map(fn($t) => [
+                'id' => $t->id,
+                'name' => $t->name,
+                'email' => $t->email ?? '',
+                'type' => 'Trésorerie',
+                'slug' => 'tresor',
+                'created_at' => $t->created_at,
+            ]);
+
 
         // Concat tous
         $all = collect()
@@ -111,11 +141,12 @@ class AdminMemberController extends Controller
             ->concat($companies)
             ->concat($administrations)
             ->concat($colleges)
-            ->concat($admins);
+            ->concat($admins)
+            ->concat($tresor); // obligatoire
 
         // Filtrer par type
         if ($typeFilter) {
-            $all = $all->where('slug', $typeFilter)->values();
+            $all = $all->filter(fn($item) => $item['slug'] === $typeFilter)->values();
         }
 
         // Tri DESC

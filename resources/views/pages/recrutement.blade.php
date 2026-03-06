@@ -129,7 +129,7 @@
     <section class="hero-recruitment-v2">
         <canvas id="plexus-bg"></canvas>
         <div class="hero-content-v2">
-            <p class="eyebrow">Notre Plateforme de Recrutement</p>
+            <p class="eyebrow">Notre plateforme de recrutement</p>
             <h1>L'Intelligence Artificielle au service des Talents</h1>
             <p>Que vous soyez un talent à la recherche de votre prochain défi ou une entreprise en quête du profil idéal, notre plateforme intelligente est conçue pour vous.</p>
         </div>
@@ -146,8 +146,8 @@
         <div class="container py-5">
             <div class="recruitment-hub-light">
                 <div class="hub-toggle">
-                    <button id="candidate-toggle" class="active">Je suis Candidat</button>
-                    <button id="recruiter-toggle">Je suis Recruteur</button>
+                    <button id="candidate-toggle" class="active">Je suis candidat</button>
+                    <button id="recruiter-toggle">Je suis recruteur</button>
                 </div>
                 <div class="hub-content">
                     <div class="hub-panels">
@@ -160,8 +160,8 @@
                                 <li><i class="fas fa-check-circle"></i>Suivez les statistiques du marché.</li>
                             </ul>
                             <div class="hub-actions mt-4">
-                                <a href="{{ route('login.candidat') }}" class="btn btn-primary">Se connecter</a>
-                                <a href="{{ route('register.candidat') }}"" class="btn btn-secondary">Déposer mon CV</a>
+                                <a href="#" class="btn btn-primary">Se connecter</a>
+                                <a href="#" class="btn btn-secondary">Déposer mon CV</a>
                             </div>
                         </div>
                         <div class="hub-panel" id="recruiter-panel" style="display: none;">
@@ -173,8 +173,8 @@
                                 <li><i class="fas fa-check-circle"></i>Utilisez nos statistiques pour recruter.</li>
                             </ul>
                             <div class="hub-actions mt-4">
-                                <a href="{{ route('register.recruter') }}" class="btn btn-primary">Sinscrire</a>
-                                <a href="{{ route('login.recruter') }}" class="btn btn-secondary">Accéder à la CVthèque</a>
+                                <a href="#" class="btn btn-primary">S'inscrire</a>
+                                <a href="#" class="btn btn-secondary">Accéder à la CVthèque</a>
                             </div>
                         </div>
                     </div>
@@ -186,40 +186,11 @@
                     </div>
                 </div>
             </div>
-            {{-- <div class="recruitment-stats-light">
-                <div class="stat-item"><div class="stat-number">500+</div><div class="stat-label">Profils de Talents</div></div>
-                <div class="stat-item"><div class="stat-number">85%</div><div class="stat-label">Taux de Matching pertinent</div></div>
-                <div class="stat-item"><div class="stat-number">24h</div><div class="stat-label">Temps moyen de 1ère réponse</div></div>
-            </div> --}}
+        
         </div>
     </section>
 
-    {{-- <main class="job-board-container" id="job-board">
-        <h1>Trouvez votre Prochain Défi Tech</h1>
-        <p>Explorez les opportunités exclusives offertes par les membres et partenaires du Club DSI Bénin.</p>
-        <div class="container">
-            <div class="filter-bar">
-                <div class="filter-group"><i class="fas fa-search"></i><input type="text" class="form-control" placeholder="Poste, compétence..."></div>
-                <div class="filter-group"><i class="fas fa-map-marker-alt"></i><select class="form-select"><option selected>Toutes les villes</option><option>Cotonou</option><option>Porto-Novo</option></select></div>
-                <div class="filter-group"><i class="fas fa-file-contract"></i><select class="form-select"><option selected>Tout contrat</option><option>CDI</option><option>CDD</option></select></div>
-                <div class="filter-group"><button class="btn btn-primary">Rechercher</button></div>
-            </div>
-            <div class="job-board-layout">
-                <div class="job-listings">
-                    <div class="job-card"><div class="job-card-header"><div class="company-logo"><i class="fas fa-building fa-2x text-muted"></i></div><div><h2 class="job-title">Développeur Full-Stack (Laravel / Vue.js)</h2><div class="company-name">Tech Solutions Bénin</div></div></div><div class="job-tags"><span class="tag tag-location"><i class="fas fa-map-marker-alt"></i> Cotonou</span><span class="tag tag-contract"><i class="fas fa-file-alt"></i> CDI</span><span class="tag tag-remote"><i class="fas fa-wifi"></i> Télétravail partiel</span></div><div class="job-card-footer"><div class="posted-date">Publié il y a 2 jours</div><a href="#" class="btn-details">Voir les détails</a></div></div>
-                    <div class="job-card"><div class="job-card-header"><div class="company-logo"><i class="fas fa-university fa-2x text-muted"></i></div><div><h2 class="job-title">Chef de Projet Cybersécurité</h2><div class="company-name">Grande Banque de la place</div></div></div><div class="job-tags"><span class="tag tag-location"><i class="fas fa-map-marker-alt"></i> Cotonou</span><span class="tag tag-contract"><i class="fas fa-file-alt"></i> CDI</span></div><div class="job-card-footer"><div class="posted-date">Publié il y a 5 jours</div><a href="#" class="btn-details">Voir les détails</a></div></div>
-                    <div class="job-card"><div class="job-card-header"><div class="company-logo"><i class="fas fa-rocket fa-2x text-muted"></i></div><div><h2 class="job-title">Administrateur Cloud (AWS)</h2><div class="company-name">Startup Innovante</div></div></div><div class="job-tags"><span class="tag tag-location"><i class="fas fa-map-marker-alt"></i> Porto-Novo</span><span class="tag tag-contract"><i class="fas fa-file-alt"></i> CDD</span><span class="tag tag-remote"><i class="fas fa-wifi"></i> Télétravail complet</span></div><div class="job-card-footer"><div class="posted-date">Publié il y a 1 semaine</div><a href="#" class="btn-details">Voir les détails</a></div></div>
-                </div>
-                <aside class="sidebar">
-                    <div class="sidebar-widget"><h3 class="widget-title">Créez votre Alerte Emploi</h3><form class="alert-form"><input type="text" placeholder="Poste, mot-clé..."><input type="email" placeholder="votre.email@example.com"><button class="btn-alert">Activer les alertes</button></form></div>
-                    <div class="sidebar-widget ai-recommendation-card"><i class="fas fa-brain"></i><h4>Recommandations par IA</h4><p>Complétez votre profil pour laisser notre IA vous trouver les meilleures opportunités cachées.</p><a href="#" class="btn-profile">Mettre à jour mon profil</a></div>
-                </aside>
-            </div>
-        </div>
-    </main>
-
-    <div class="chatbot-fab" title="Besoin d'aide ? Discutez avec notre assistant."><i class="fa-solid fa-comment-dots"></i></div> --}}
-
+   
     <script>
         const canvas = document.getElementById('plexus-bg');
         if(canvas) {

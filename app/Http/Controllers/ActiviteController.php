@@ -7,6 +7,7 @@ use Illuminate\View\View;
 use App\Models\Event;
 use App\Models\Formation;
 use App\Models\CategoryFormation;
+use App\Models\FormationRegistration; // Assurez-vous d'avoir créé le modèle
 
 class ActiviteController extends Controller
 {
@@ -43,17 +44,50 @@ class ActiviteController extends Controller
      */
     public function formations(): View
     {
-        // Charger les formations actives ajoutées par l'admin avec leurs catégories
-        $formations = Formation::with('categoryFormation')
-            ->where('status', 'actif')
-            ->orderBy('date_debut', 'asc')
-            ->get();
+        $categories = CategoryFormation::all();
+        $formations = Formation::where('status', 'published')->paginate(12);
+        
+        // On récupère toutes les dernières formations publiées
+        $newFormations = Formation::where('status', 'published')->orderBy('created_at', 'desc')->get();
 
         return view('activites.formations', [
-            'formations' => $formations
+            'categories' => $categories,
+            'formations' => $formations,
+            'newFormations' => $newFormations
         ]);
     }
 
+    public function show($id) {
+        $formation = Formation::findOrFail($id);
+        return view('activites.formations_show', compact('formation'));
+    }
+
+    public function registerForm($id) {
+        $formation = Formation::findOrFail($id);
+        return view('activites.formation_register', compact('formation'));
+    }
+
+    public function storeRegistration(Request $request, $id) {
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email'     => 'required|email',
+            'phone'     => 'required|string',
+            'company'   => 'nullable|string',
+        ]);
+
+        FormationRegistration::create([
+            'formation_id' => $id,
+            'full_name'    => $request->full_name,
+            'email'         => $request->email,
+            'phone'         => $request->phone,
+            'company'       => $request->company,
+            'payment_status' => 'pending'
+        ]);
+
+        return redirect()->route('activites.formations')->with('success', 'Votre inscription a été enregistrée !');
+    }
+
+    
     /**
      * Affiche la page dédiée aux DSI Awards.
      */
@@ -62,3 +96,4 @@ class ActiviteController extends Controller
         return view('activites.awards');
     }
 }
+

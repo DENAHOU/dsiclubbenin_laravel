@@ -19,11 +19,14 @@ class AdminDashboardController extends Controller
 
     public function index()
     {
-        // Statistiques basiques
-        $totalUsers = User::count();
-        $totalCompanies = Company::count();
-        $totalAdministrations = Administration::count();
-        $totalColleges = College::count();
+        // Statistiques basiques pour les cartes d'info. 
+        // On affiche les membres lorsque status='approved' et is_paid='1'
+
+        $totalUsers = User::where('status', 'approved')->where('is_paid', 1)->where('role', 'member')->count();
+
+        $totalCompanies = Company::where('status', 'approved')->count();
+        $totalAdministrations = Administration::where('status', 'approved')->count();
+        $totalColleges = College::where('status', 'approved')->count();
 
         // Pending
         $pendingUsers = User::where('status', 'pending')->count();
@@ -50,13 +53,14 @@ class AdminDashboardController extends Controller
      * Récupère et "normalise" les enregistrements pending des différents modèles.
      * Retourne une Collection d'items: id, name, email, type, created_at
      */
-    public function gatherPending($limit = 50)
+    // IL FAUT AFFICHER TOUT SANS LIMITE
+    public function gatherPending()
     {
         // Étape 1 : récupérer pending pour chaque type
-        $users = \App\Models\User::where('status', 'pending')->take($limit)->get();
-        $companies = \App\Models\Company::where('status', 'pending')->take($limit)->get();
-        $administrations = \App\Models\Administration::where('status', 'pending')->take($limit)->get();
-        $colleges = \App\Models\College::where('status', 'pending')->take($limit)->get();
+        $users = \App\Models\User::where('status', 'pending')->get();
+        $companies = \App\Models\Company::where('status', 'pending')->get();
+        $administrations = \App\Models\Administration::where('status', 'pending')->get();
+        $colleges = \App\Models\College::where('status', 'pending')->get();
 
         // Étape 2 : normaliser (tout renvoyer dans un même tableau)
         $pending = collect();
@@ -102,7 +106,7 @@ class AdminDashboardController extends Controller
         }
 
         // Étape 3 : trier par date
-        return $pending->sortByDesc('created_at')->take($limit);
+        return $pending->sortByDesc('created_at');
     }
 
 }

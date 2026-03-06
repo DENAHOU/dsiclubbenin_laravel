@@ -31,6 +31,19 @@
         </tr>
 
         <tr>
+            <th>Logo</th>
+            <td>
+                @if($partner->logo_path)
+                    <img src="{{ asset('storage/' . $partner->logo_path) }}"
+                         alt="Logo de {{ $partner->company_name }}"
+                         style="max-width: 150px; max-height: 150px;">
+                @else
+                    -
+                @endif
+            </td>
+        </tr>
+
+        <tr>
             <th>Statut</th>
             <td>
                 @if($partner->status === 'approved')

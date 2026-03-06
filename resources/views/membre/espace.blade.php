@@ -204,8 +204,8 @@
     <div class="hero-content">
         <h1>Les Visages de l'Innovation</h1>
         <div class="hero-actions">
-            <a href="{{ route('login') }}" class="btn hero-btn primary"><i class="fas fa-sign-in-alt me-2"></i> Accéder à l'Espace Membre</a>
-            <a href="{{ route('register') }}" class="btn hero-btn secondary">Devenir Membre</a>
+            <a href="{{ route('login') }}" class="btn hero-btn primary"><i class="fas fa-sign-in-alt me-2"></i> Accéder à l'espace membre</a>
+            <a href="{{ route('register') }}" class="btn hero-btn secondary">Devenir membre</a>
         </div>
     </div>
 </section>

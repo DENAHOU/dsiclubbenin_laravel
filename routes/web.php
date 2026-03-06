@@ -83,7 +83,13 @@ Route::prefix('club')->name('club.')->group(function () {
 Route::prefix('activites')->name('activites.')->group(function () {
     Route::get('/evenements-actualites', [ActiviteController::class, 'evenements'])->name('evenements');
     Route::get('/formations', [ActiviteController::class, 'formations'])->name('formations');
+    Route::get('/formations/{id}', [ActiviteController::class, 'show'])->name('formations.show');
+    // Inscription
+    Route::get('/formations/{id}/inscription', [ActiviteController::class, 'registerForm'])->name('formations.register');
+    Route::post('/formations/{id}/inscription', [ActiviteController::class, 'storeRegistration'])->name('formations.register.store');
 });
+
+
 
 Route::prefix('dsi-stories')->name('dsistories.')->group(function () {
     Route::get('/temoignages', [DSIStoriesController::class, 'temoignages'])->name('temoignages');
@@ -163,7 +169,7 @@ Route::middleware('web')->group(function () {
 // Route::middleware(['auth'])->prefix('microsoft')->name('microsoft.')->group(function () {
 //     Route::post('/sync', [App\Http\Controllers\Microsoft\MicrosoftSyncController::class, 'sync'])->name('sync');
 //     Route::get('/status', [App\Http\Controllers\Microsoft\MicrosoftSyncController::class, 'status'])->name('status');
-    
+
 //     // Pages de visualisation
 //     Route::get('/calendar', [App\Http\Controllers\Microsoft\MicrosoftCalendarController::class, 'index'])->name('calendar');
 // });
@@ -474,6 +480,11 @@ Route::prefix('admin/partners')->name('admin.partners.')->middleware('auth:web,r
     Route::put('/{id}', [AdminPartnerController::class, 'update'])->name('update');
     Route::delete('/{id}', [AdminPartnerController::class, 'destroy'])->name('delete');
 
+    // Partenaire en attente
+    Route::get('/listpending', [AdminPartnerController::class, 'listpending'])->name('listpending');
+    //Partenaire rejetés
+    Route::get('/listrejected', [AdminPartnerController::class, 'listrejected'])->name('listrejected');
+
     // Routes pour les types de partenaires
     Route::get('/types', [AdminPartnerTypeController::class, 'index'])->name('types');
     Route::get('/types/create', [AdminPartnerTypeController::class, 'create'])->name('types.create');
@@ -543,6 +554,8 @@ Route::prefix('admin/formations')->name('admin.formations.')->middleware('auth:w
     Route::get('/{id}/edit', [AdminFormationController::class, 'edit'])->name('edit');
     Route::put('/{id}', [AdminFormationController::class, 'update'])->name('update');
     Route::delete('/{id}', [AdminFormationController::class, 'destroy'])->name('delete');
+    Route::delete('/{id}', [FormationController::class, 'destroy'])->name('destroy');
+
 
     // CATEGORIES DE FORMATIONS
     Route::get('/categories', [AdminFormationController::class, 'categories'])->name('categories');

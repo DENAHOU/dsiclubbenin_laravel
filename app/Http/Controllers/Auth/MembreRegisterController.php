@@ -13,6 +13,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AdhesionPending;
+use Illuminate\Validation\Rules\Password;
 
 
 
@@ -37,84 +38,88 @@ class MembreRegisterController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+     public function store(Request $request)
     {
-        // --- ÉTAPE 1 : VALIDATION ---
+        // Validation côté serveur
         $request->validate([
-            'lastname' => ['required','string','max:255'],
-            'firstname' => ['required','string','max:255'],
-            'username' => ['required','string','max:255','unique:users'],
-            'email' => ['required','string','email','max:255','unique:users'],
-            'sexe' => ['required','string','in:M,F'],
-            'phone' => ['required','string','max:20'],
-            'birthday' => ['required','date'],
-            'medias_id' => ['required','image','mimes:jpeg,png,jpg,gif','max:2048'],
+            // ETAPE 1: Info perso
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname'  => ['required', 'string', 'max:255'],
+            'sexe'      => ['required', 'in:M,F'],
+            'birthday'  => ['required', 'date'],
+            'medias_id' => ['required', 'image', 'max:5120'], // max 5 Mo
+            'description' => ['nullable', 'string'],
 
-            'employer_contact' => ['required','string','max:255'],
-            'type_members' => ['required','string'],
-            'current_position' => ['required','string'],
-            'current_employer' => ['required','string','max:255'],
-            'sector' => ['required','string'],
-            'sector_other' => ['nullable','required_if:sector,Autre','string','max:255'],
-            'area_of_expertise' => ['required','string','max:255'],
-            'initial_training' => ['required','string','max:255'],
-            'category_of_service' => ['required','string'],
-            'category_other' => ['nullable','required_if:category_of_service,Autre','string'],
+            // ETAPE 2: Info pro
+            'current_employer' => ['required', 'string', 'max:255'],
+            'employer_contact' => ['required', 'string', 'max:255'],
+            'current_position' => ['required', 'string', 'max:255'],
+            'sector'           => ['required', 'string'],
+            'sector_other'     => ['nullable', 'string', 'max:255'],
+            'category_of_service' => ['required', 'string'],
+            'category_other'      => ['nullable', 'string', 'max:255'],
+            'area_of_expertise'   => ['required', 'string', 'max:255'],
+            'initial_training'    => ['required', 'string', 'max:255'],
 
-            'password' => ['required','confirmed', Rules\Password::defaults()],
-            'description' => ['nullable','string'],
+            // ETAPE 3: Compte
+            'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+            'email'    => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'confirmed', Password::min(8)
+                ->mixedCase()
+                ->letters()
+                ->numbers()
+                ->symbols()],
+            'type_members' => ['required', 'in:individuel,entite'],
         ]);
 
-        // --- ÉTAPE 2 : UPLOAD PHOTO ---
-        $photoPath = $request->file('medias_id')->store('photos', 'public');
+        // Gestion upload photo
+        if ($request->hasFile('medias_id')) {
+            $photoPath = $request->file('medias_id')->store('photos_membres', 'public');
+        } else {
+            $photoPath = null;
+        }
 
-        // valeurs finales
-        $sector = $request->sector === 'Autre' ? $request->sector_other : $request->sector;
-        $category = $request->category_of_service === 'Autre' ? $request->category_other : $request->category_of_service;
-
-        // --- ÉTAPE 3 : CRÉATION DU MEMBRE ---
+        // Création du membre
+        $name = $request->firstname . ' ' . $request->lastname;
         $user = User::create([
-            'name' => $request->firstname.' '.$request->lastname,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-
-            'role' => 'membre',
-
+                'name' => $name,
             'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'photo_path' => $photoPath,
-            'sexe' => $request->sexe,
-            'phone' => $request->phone,
-            'birthday' => $request->birthday,
-
-            'employer_contact' => $request->employer_contact,
-            'type_members' => $request->type_members,
-            'current_position' => $request->current_position,
-            'current_employer' => $request->current_employer,
-
-            'sector' => $sector,
-            'area_of_expertise' => $request->area_of_expertise,
-            'initial_training' => $request->initial_training,
-            'category_of_service' => $category,
+            'lastname'  => $request->lastname,
+            'sexe'      => $request->sexe,
+            'birthday'  => $request->birthday,
+            'photo_path'=> $photoPath,
             'description' => $request->description,
-
-            // 👉 NOUVEAUX CHAMPS
-            'status' => 'pending',
-            'is_paid' => false,
+            'current_employer' => $request->current_employer,
+            'employer_contact' => $request->employer_contact,
+            'current_position' => $request->current_position,
+            'sector'           => $request->sector,
+            'sector_other'     => $request->sector_other,
+            'category_of_service' => $request->category_of_service,
+            'category_other'      => $request->category_other,
+            'area_of_expertise'   => $request->area_of_expertise,
+            'initial_training'    => $request->initial_training,
+            'username' => $request->username,
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
+            'type_members' => $request->type_members,
+            'role' => 'membre', // par défaut
         ]);
 
-        // --- ÉTAPE 4 : ENVOI EMAIL ACCUSÉ DE RÉCEPTION ---
-        Mail::to($user->email)->send(
-            new AdhesionPending($user->name, 'user')
-        );
+         Mail::to($user->email)->send(new AdhesionPending($user->name, 'user'));
 
-        // --- ÉTAPE 5 : PAS de connexion automatique ---
-        // Auth::login($user);  ← SUPPRIMÉ
-
-        // --- ÉTAPE 6 : REDIRECTION ---
-        return redirect()->route('home')
-            ->with('success', 'Votre demande d’adhésion a été soumise et est en cours de validation.');
+        return redirect()->route('home')->with('success', 'Votre demande d\'adhésion a été soumise avec succès. Vous recevrez un email de confirmation une fois que votre compte aura été validé par l\'administrateur.');
     }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

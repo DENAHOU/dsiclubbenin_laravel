@@ -7,167 +7,162 @@ use App\Models\User;
 use App\Models\Cotisation;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class AnnuaireController extends Controller
 {
     /**
      * Vérifie si l'utilisateur peut accéder à l'annuaire
      */
-    private function peutAccederAnnuaire($user): bool
+    private function peutAccederAnnuaire(User $user): bool
     {
-        // Calculer les mois dus pour l'utilisateur
-        $montantCotise = Cotisation::where('user_id', $user->id)
+        // Date d'adhésion : utiliser created_at si pas de champ spécifique
+        $dateAdhesion = $user->created_at;
+
+        // Calcul du nombre de mois depuis l'adhésion
+        $moisDepuisAdhesion = $dateAdhesion->diffInMonths(Carbon::now()) + 1;
+
+        // Nombre de mois payés
+        $moisPayes = Cotisation::where('user_id', $user->id)
             ->where('status', 'paid')
-            ->sum('amount');
-        
-        $montantTotalRequis = 350000;
-        $montantRestant = max(0, $montantTotalRequis - $montantCotise);
-        $moisDus = intval($montantRestant / 5000);
-        
-        return $moisDus === 0; // Accès si aucun mois dû
+            ->count(); // on suppose que chaque cotisation = 1 mois
+
+        // Accès uniquement si aucun mois n'est impayé
+        return $moisPayes >= $moisDepuisAdhesion;
     }
+
 
     /**
      * Affiche l'annuaire des membres
      */
-    public function membres(Request $request): View
+  public function membres(Request $request): View
     {
-        // Récupérer les filtres
-        $type = $request->get('type', 'all');
-        $search = $request->get('search', '');
+        $user = $request->user();
 
-        // Collection pour tous les membres
-        $allMembers = collect();
+        // Vérifier le paiement
+        $user = $request->user();
+        $peutAcceder = $this->peutAccederAnnuaire($user);
 
-        // Récupérer les utilisateurs
+        return view('member.annuaire.membres', compact('membres', 'type', 'search', 'peutAcceder'));
+
+      // --- Membres ---
         if ($type === 'all' || $type === 'users') {
-            $usersQuery = \App\Models\User::query();
-            
+            $usersQuery = User::query()
+                ->where('status', 'approved')   // uniquement approuvés
+                ->where('is_paid', 1)           // uniquement payés
+                ->where('role', 'member');      // uniquement rôle membre
+
             if ($search) {
-                $usersQuery->where(function ($q) use ($search) {
+                $usersQuery->where(function($q) use ($search) {
                     $q->where('firstname', 'like', "%{$search}%")
-                      ->orWhere('lastname', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%")
-                      ->orWhere('phone', 'like', "%{$search}%")
-                      ->orWhere('name', 'like', "%{$search}%");
+                    ->orWhere('lastname', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%");
                 });
             }
-            
-            $users = $usersQuery->get()->map(function ($user) {
-                return [
-                    'id' => $user->id,
-                    'name' => trim(($user->name ?? '') . ' ' . ($user->firstname ?? '') . ' ' . ($user->lastname ?? '')),
-                    'firstname' => $user->firstname ?? '',
-                    'lastname' => $user->lastname ?? '',
-                    'email' => $user->email,
-                    'phone' => $user->phone,
-                    'photo_path' => $user->photo_path,
-                    'type' => 'user',
-                    'type_display' => 'Membre',
-                    'current_employer' => $user->current_employer,
-                    'sector' => $user->sector,
-                ];
-            });
+
+            $users = $usersQuery->get()->map(fn($user) => [
+                'id' => $user->id,
+                'name' => trim(($user->name ?? '') . ' ' . ($user->firstname ?? '') . ' ' . ($user->lastname ?? '')),
+                'firstname' => $user->firstname ?? '',
+                'lastname' => $user->lastname ?? '',
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'photo_path' => $user->photo_path,
+                'type' => 'user',
+                'type_display' => 'Membre',
+                'current_employer' => $user->current_employer,
+                'sector' => $user->sector,
+            ]);
+
             $allMembers = $allMembers->concat($users);
         }
 
-        // Récupérer les entreprises
+
+        // --- Entreprises ---
         if ($type === 'all' || $type === 'company') {
             $companiesQuery = \App\Models\Company::query();
-            
             if ($search) {
-                $companiesQuery->where(function ($q) use ($search) {
+                $companiesQuery->where(function($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
                       ->orWhere('email', 'like', "%{$search}%")
                       ->orWhere('phone', 'like', "%{$search}%")
                       ->orWhere('contact_name', 'like', "%{$search}%");
                 });
             }
-            
-            $companies = $companiesQuery->get()->map(function ($company) {
-                return [
-                    'id' => $company->id,
-                    'name' => $company->name,
-                    'firstname' => $company->contact_name,
-                    'lastname' => '',
-                    'email' => $company->email,
-                    'phone' => $company->phone,
-                    'photo_path' => $company->logo_path,
-                    'type' => 'company',
-                    'type_display' => 'Entreprise',
-                    'current_employer' => $company->name,
-                    'sector' => $company->sector,
-                ];
-            });
+            $companies = $companiesQuery->get()->map(fn($company) => [
+                'id' => $company->id,
+                'name' => $company->name,
+                'firstname' => $company->contact_name,
+                'lastname' => '',
+                'email' => $company->email,
+                'phone' => $company->phone,
+                'photo_path' => $company->logo_path,
+                'type' => 'company',
+                'type_display' => 'Entreprise',
+                'current_employer' => $company->name,
+                'sector' => $company->sector,
+            ]);
             $allMembers = $allMembers->concat($companies);
         }
 
-        // Récupérer les collèges IT
+        // --- Collèges ---
         if ($type === 'all' || $type === 'college') {
             $collegesQuery = \App\Models\College::query();
-            
             if ($search) {
-                $collegesQuery->where(function ($q) use ($search) {
+                $collegesQuery->where(function($q) use ($search) {
                     $q->where('company_name', 'like', "%{$search}%")
                       ->orWhere('email', 'like', "%{$search}%")
                       ->orWhere('contact_name', 'like', "%{$search}%");
                 });
             }
-            
-            $colleges = $collegesQuery->get()->map(function ($college) {
-                return [
-                    'id' => $college->id,
-                    'name' => $college->company_name,
-                    'firstname' => $college->contact_name,
-                    'lastname' => '',
-                    'email' => $college->email,
-                    'phone' => null,
-                    'photo_path' => $college->logo_path,
-                    'type' => 'college',
-                    'type_display' => 'Collège IT',
-                    'current_employer' => $college->company_name,
-                    'sector' => 'Éducation/Formation',
-                ];
-            });
+            $colleges = $collegesQuery->get()->map(fn($college) => [
+                'id' => $college->id,
+                'name' => $college->company_name,
+                'firstname' => $college->contact_name,
+                'lastname' => '',
+                'email' => $college->email,
+                'phone' => null,
+                'photo_path' => $college->logo_path,
+                'type' => 'college',
+                'type_display' => 'Collège IT',
+                'current_employer' => $college->company_name,
+                'sector' => 'Éducation/Formation',
+            ]);
             $allMembers = $allMembers->concat($colleges);
         }
 
-        // Récupérer les administrations publiques
+        // --- Administrations ---
         if ($type === 'all' || $type === 'administration') {
             $adminQuery = \App\Models\Administration::query();
-            
             if ($search) {
-                $adminQuery->where(function ($q) use ($search) {
+                $adminQuery->where(function($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
                       ->orWhere('email', 'like', "%{$search}%")
                       ->orWhere('contact_phone', 'like', "%{$search}%")
                       ->orWhere('contact_name', 'like', "%{$search}%");
                 });
             }
-            
-            $administrations = $adminQuery->get()->map(function ($admin) {
-                return [
-                    'id' => $admin->id,
-                    'name' => $admin->name,
-                    'firstname' => $admin->contact_name,
-                    'lastname' => '',
-                    'email' => $admin->email,
-                    'phone' => $admin->contact_phone,
-                    'photo_path' => $admin->logo_path ?? null,
-                    'type' => 'administration',
-                    'type_display' => 'Administration',
-                    'current_employer' => $admin->name,
-                    'sector' => 'Service Public',
-                ];
-            });
+            $administrations = $adminQuery->get()->map(fn($admin) => [
+                'id' => $admin->id,
+                'name' => $admin->name,
+                'firstname' => $admin->contact_name,
+                'lastname' => '',
+                'email' => $admin->email,
+                'phone' => $admin->contact_phone,
+                'photo_path' => $admin->logo_path ?? null,
+                'type' => 'administration',
+                'type_display' => 'Administration',
+                'current_employer' => $admin->name,
+                'sector' => 'Service Public',
+            ]);
             $allMembers = $allMembers->concat($administrations);
         }
 
-        // Trier par nom
+        // Trier et paginer
         $allMembers = $allMembers->sortBy('name');
-
-        // Paginer manuellement
-        $page = request()->get('page', 1);
+        $page = $request->get('page', 1);
         $perPage = 12;
         $total = $allMembers->count();
         $membres = new \Illuminate\Pagination\LengthAwarePaginator(
@@ -178,19 +173,7 @@ class AnnuaireController extends Controller
             ['path' => request()->url(), 'pageName' => 'page']
         );
 
-        // Compter les membres par type
-        $stats = [
-            'total' => \App\Models\User::count() 
-                     + \App\Models\Company::count() 
-                     + \App\Models\College::count() 
-                     + \App\Models\Administration::count(),
-            'users' => \App\Models\User::count(),
-            'company' => \App\Models\Company::count(),
-            'college' => \App\Models\College::count(),
-            'administration' => \App\Models\Administration::count(),
-        ];
-
-        return view('member.annuaire.membres', compact('membres', 'stats', 'type', 'search'));
+        return view('member.annuaire.membres', compact('membres', 'type', 'search'));
     }
 
     /**
@@ -240,7 +223,7 @@ class AnnuaireController extends Controller
             ];
 
             return view('member.annuaire.partenaires', compact('partenaires', 'stats', 'type', 'search', 'partnerTypes'));
-            
+
         } catch (\Exception $e) {
             // En cas d'erreur, afficher un message d'erreur
             return view('member.annuaire.partenaires', [

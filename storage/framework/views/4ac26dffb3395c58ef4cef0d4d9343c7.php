@@ -367,6 +367,31 @@
                             </a>
                         </li>
 
+                            
+                            <li>
+                                <a class="dropdown-item" href="<?php echo e(route('dashboard')); ?>">
+                                    <i class="fas fa-user"></i> Espace Membre
+                                </a>
+                            </li>
+
+                            
+                            <?php if(auth()->user()->is_admin == 1): ?>
+                                <li>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.dashboard')); ?>">
+                                        <i class="fas fa-user-shield text-danger"></i> Administrateur
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                            
+                            <?php if(auth()->user()->is_tresor == 1): ?>
+                                <li>
+                                    <a class="dropdown-item" href="<?php echo e(route('tresor.dashboard')); ?>">
+                                        <i class="fas fa-coins text-warning"></i> Trésorier
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
                         <li>
                             <form method="POST" action="<?php echo e(route('logout')); ?>">
                                 <?php echo csrf_field(); ?>
@@ -478,7 +503,7 @@
 
         </div>
 
-         --}}
+        
     </div>
 <?php $__env->stopSection(); ?>
 

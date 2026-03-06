@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\PartnerApprovedMail;
 use App\Mail\PartnerRejectedMail;
 use App\Models\PressPartner;
+use App\Models\PartnerType;
+use Illuminate\Support\Facades\Storage;
 
 
 class AdminPartnerController extends Controller
@@ -20,17 +22,43 @@ class AdminPartnerController extends Controller
 
     public function index()
     {
+        // JE VEUX AFFICHER LES PARTENAIRES APPROUVES 
         $partners = Partner::with(['PartnerType', 'PartnerFormule'])
+            ->where('status', 'approved')
             ->orderBy('created_at', 'asc')
             ->get();
 
         return view('admin.partners.index', compact('partners'));
     }
 
+    public function listpending()
+    {
+        $partners = Partner::with(['PartnerType', 'PartnerFormule'])
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return view('admin.partners.listpending', compact('partners'));
+    }
+
+    public function listrejected()
+    {
+        $partners = Partner::with(['PartnerType', 'PartnerFormule'])
+            ->where('status', 'rejected')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return view('admin.partners.listrejected', compact('partners'));
+    }
+
 
     public function create()
     {
-        return view('admin.partners.create');
+            
+        $types = PartnerType::all();
+        $formules = PartnerFormule::all();
+
+        return view('admin.partners.create', compact('types', 'formules'));
     }
 
      public function show($id)
@@ -42,17 +70,31 @@ class AdminPartnerController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|string',
+        $validated = $request->validate([
+            'partner_type_id' => 'required|exists:partners_types,id',
+            'partner_formule_id' => 'required|exists:partner_formules,id',
+            'company_name' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'required|string|max:20',
+            'status' => 'required|in:pending,approved',
+            'logo_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        Partner::create($request->all());
+        // 📁 GESTION DU LOGO
+        if ($request->hasFile('logo_path')) {
+            $path = $request->file('logo_path')->store('partner_logos', 'public');
+
+            $validated['logo_path'] = $path;
+        }
+
+        Partner::create($validated);
 
         return redirect()
             ->route('admin.partners.index')
             ->with('success', '✅ Partenaire ajouté avec succès');
     }
+
 
     public function edit($id)
     {

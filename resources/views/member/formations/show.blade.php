@@ -2,7 +2,9 @@
 
 @section('title', 'Détails de la formation')
 
+@section('content')
 <div class="container-fluid py-4">
+    {{-- Breadcrumb --}}
     <div class="row">
         <div class="col-12">
             <nav aria-label="breadcrumb">
@@ -20,56 +22,44 @@
     </div>
 
     <div class="row">
+        {{-- Partie principale --}}
         <div class="col-lg-8">
             <div class="card shadow-sm border-0">
-                @if($formation->image)
-                    @php
-                        $imagePath = $formation->image;
-                        // Essayer différents chemins possibles
-                        if (!str_starts_with($imagePath, 'http') && !str_starts_with($imagePath, '/')) {
-                            if (file_exists(public_path('storage/' . $imagePath))) {
-                                $imagePath = asset('storage/' . $imagePath);
-                            } elseif (file_exists(public_path('images/' . $imagePath))) {
-                                $imagePath = asset('images/' . $imagePath);
-                            } elseif (file_exists(public_path('img/' . $imagePath))) {
-                                $imagePath = asset('img/' . $imagePath);
-                            } else {
-                                $imagePath = asset($imagePath);
-                            }
-                        }
-                    @endphp
-                    <img src="{{ $imagePath }}" 
-                         class="card-img-top" 
-                         style="height: 400px; object-fit: cover;"
-                         alt="{{ $formation->titre }}"
-                         onerror="this.src='{{ asset('img/avatar-default.svg') }}'">
-                @else
-                    <div class="card-img-top d-flex align-items-center justify-content-center bg-light" 
-                         style="height: 400px;">
-                        <i class="fas fa-book fa-5x text-muted"></i>
-                    </div>
-                @endif
-                
+                {{-- Image --}}
+                @php
+                    $imagePath = $formation->image_path ? 'storage/' . $formation->image_path : null;
+                    $imageUrl = ($imagePath && file_exists(public_path($imagePath))) 
+                        ? asset($imagePath) 
+                        : asset('img/avatar-default.svg');
+                @endphp
+
+                <img src="{{ $imageUrl }}" 
+                     class="card-img-top" 
+                     style="height: 400px; object-fit: cover;" 
+                     alt="{{ $formation->titre }}">
+
                 <div class="card-body">
+                    {{-- Badges --}}
                     <div class="mb-3">
-                        @if($formation->categoryFormation)
+                        @if($formation->categorie_formation_id && $formation->categoryFormation)
                             <span class="badge bg-primary bg-opacity-10 text-primary me-2">
                                 {{ $formation->categoryFormation->nom }}
                             </span>
                         @endif
-                        
-                        <span class="badge {{ $formation->status == 'actif' ? 'bg-success' : 'bg-secondary' }}">
-                            {{ $formation->status }}
+                        <span class="badge {{ $formation->status == 'published' ? 'bg-success' : 'bg-secondary' }}">
+                            {{ ucfirst($formation->status) }}
                         </span>
                     </div>
-                    
+
+                    {{-- Titre --}}
                     <h1 class="card-title h2 mb-4">{{ $formation->titre }}</h1>
-                    
+
+                    {{-- Infos --}}
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <p class="mb-2">
                                 <strong><i class="fas fa-calendar me-2"></i>Date de début :</strong>
-                                {{ $formation->date_debut ? $formation->date_debut->format('d/m/Y') : 'Date à définir' }}
+                                {{ $formation->start_date ? \Carbon\Carbon::parse($formation->start_date)->format('d/m/Y H:i') : 'Date à définir' }}
                             </p>
                             <p class="mb-2">
                                 <strong><i class="fas fa-clock me-2"></i>Durée :</strong>
@@ -79,22 +69,24 @@
                         <div class="col-md-6">
                             <p class="mb-2">
                                 <strong><i class="fas fa-map-marker-alt me-2"></i>Lieu :</strong>
-                                {{ $formation->lieu ?? 'En ligne' }}
+                                {{ $formation->location ?? 'En ligne' }}
                             </p>
                             <p class="mb-2">
                                 <strong><i class="fas fa-tag me-2"></i>Prix :</strong>
-                                {{ $formation->prix ? number_format($formation->prix, 0, ',', ' ') . ' FCFA' : 'Gratuit' }}
+                                {{ $formation->price ? number_format($formation->price, 0, ',', ' ') . ' FCFA' : 'Gratuit' }}
                             </p>
                         </div>
                     </div>
-                    
+
+                    {{-- Description --}}
                     <div class="mb-4">
                         <h4>Description</h4>
                         <div class="text-muted">
                             {!! nl2br(e($formation->description)) !!}
                         </div>
                     </div>
-                    
+
+                    {{-- Objectifs --}}
                     @if($formation->objectifs)
                         <div class="mb-4">
                             <h4>Objectifs</h4>
@@ -103,7 +95,8 @@
                             </div>
                         </div>
                     @endif
-                    
+
+                    {{-- Prérequis --}}
                     @if($formation->prerequis)
                         <div class="mb-4">
                             <h4>Prérequis</h4>
@@ -115,23 +108,22 @@
                 </div>
             </div>
         </div>
-        
+
+        {{-- Sidebar --}}
         <div class="col-lg-4">
-            <div class="card shadow-sm border-0">
+            <div class="card shadow-sm border-0 mb-3">
                 <div class="card-body">
                     <h5 class="card-title mb-4">Inscription</h5>
-                    
-                    @if($formation->lien_inscription_en_ligne || $formation->lien_inscription_presentiel)
+                    @if($formation->online_url || $formation->lien_inscription_presentiel)
                         <div class="d-grid gap-2">
-                            @if($formation->lien_inscription_en_ligne)
-                                <a href="{{ $formation->lien_inscription_en_ligne }}" 
+                            @if($formation->online_url)
+                                <a href="{{ $formation->online_url }}" 
                                    class="btn btn-primary" 
                                    target="_blank">
                                     <i class="fas fa-laptop me-2"></i>
                                     S'inscrire en ligne
                                 </a>
                             @endif
-                            
                             @if($formation->lien_inscription_presentiel)
                                 <a href="{{ $formation->lien_inscription_presentiel }}" 
                                    class="btn btn-outline-primary" 
@@ -147,26 +139,25 @@
                             Les inscriptions ne sont pas encore ouvertes pour cette formation.
                         </div>
                     @endif
-                    
+
                     <hr>
-                    
                     <div class="small text-muted">
                         <p class="mb-2">
                             <strong>Contact :</strong><br>
                             {{ $formation->contact ?? 'contact@club-dsi.com' }}
                         </p>
-                        
-                        @if($formation->date_fin)
+                        @if($formation->end_date)
                             <p class="mb-0">
                                 <strong>Date de fin :</strong><br>
-                                {{ $formation->date_fin->format('d/m/Y') }}
+                                {{ \Carbon\Carbon::parse($formation->end_date)->format('d/m/Y') }}
                             </p>
                         @endif
                     </div>
                 </div>
             </div>
-            
-            <div class="card shadow-sm border-0 mt-3">
+
+            {{-- Partage social --}}
+            <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <h6 class="card-title mb-3">Partager cette formation</h6>
                     <div class="d-flex gap-2">
@@ -193,19 +184,15 @@
 function shareOnFacebook() {
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
 }
-
 function shareOnTwitter() {
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(document.title)}&url=${encodeURIComponent(window.location.href)}`, '_blank');
 }
-
 function shareOnWhatsApp() {
     window.open(`https://wa.me/?text=${encodeURIComponent(document.title + ' ' + window.location.href)}`, '_blank');
 }
-
 function copyLink() {
     navigator.clipboard.writeText(window.location.href);
     alert('Lien copié dans le presse-papiers !');
 }
 </script>
-
 @endsection

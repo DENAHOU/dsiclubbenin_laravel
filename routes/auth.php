@@ -54,20 +54,20 @@ Route::middleware('guest')->group(function () {
     Route::post('login/member', [AuthenticatedSessionController::class, 'store']);
 
     // Connexion pour les autres acteurs
-    // Route::get('login/company', [CompanyLoginController::class, 'create'])->middleware('guest')->name('login.company');
-    // Route::post('login/company', [CompanyLoginController::class, 'store'])->middleware('guest');
-    // Route::get('login/administration', [AdministrationLoginController::class, 'create'])->middleware('guest')->name('login.administration');
-    // Route::post('login/administration', [AdministrationLoginController::class, 'store'])->middleware('guest');
-    // Route::get('login/college', [CollegeLoginController::class, 'create'])->middleware('guest')->name('login.college');
-    // Route::post('login/college', [CollegeLoginController::class, 'store'])->middleware('guest');
-    // Route::get('login/candidat', [CandidatLoginController::class, 'create'])->middleware('guest')->name('login.candidat');
-    // Route::post('login/candidat', [CandidatLoginController::class, 'store'])->middleware('guest');
-    // Route::get('login/recruter', [RecruterLoginController::class, 'create'])->middleware('guest')->name('login.recruter');
-    // Route::post('login/recruter', [RecruterLoginController::class, 'store'])->middleware('guest');
-    // Route::get('login/partner', [PartnerLoginController::class, 'create'])->middleware('guest')->name('login.partner');
-    // Route::post('login/partner', [PartnerLoginController::class, 'store'])->middleware('guest');
-    // Route::get('login/esn', [EsnLoginController::class, 'create'])->middleware('guest')->name('login.esn');
-    // Route::post('login/esn', [EsnLoginController::class, 'store'])->middleware('guest');
+    Route::get('login/company', [CompanyLoginController::class, 'create'])->middleware('guest')->name('login.company');
+    Route::post('login/company', [CompanyLoginController::class, 'store'])->middleware('guest');
+    Route::get('login/administration', [AdministrationLoginController::class, 'create'])->middleware('guest')->name('login.administration');
+    Route::post('login/administration', [AdministrationLoginController::class, 'store'])->middleware('guest');
+    Route::get('login/college', [CollegeLoginController::class, 'create'])->middleware('guest')->name('login.college');
+    Route::post('login/college', [CollegeLoginController::class, 'store'])->middleware('guest');
+    Route::get('login/candidat', [CandidatLoginController::class, 'create'])->middleware('guest')->name('login.candidat');
+    Route::post('login/candidat', [CandidatLoginController::class, 'store'])->middleware('guest');
+    Route::get('login/recruter', [RecruterLoginController::class, 'create'])->middleware('guest')->name('login.recruter');
+    Route::post('login/recruter', [RecruterLoginController::class, 'store'])->middleware('guest');
+    Route::get('login/partner', [PartnerLoginController::class, 'create'])->middleware('guest')->name('login.partner');
+    Route::post('login/partner', [PartnerLoginController::class, 'store'])->middleware('guest');
+    Route::get('login/esn', [EsnLoginController::class, 'create'])->middleware('guest')->name('login.esn');
+    Route::post('login/esn', [EsnLoginController::class, 'store'])->middleware('guest');
 
     // --- 3. PARCOURS D'INSCRIPTION DÉDIÉS ---
 

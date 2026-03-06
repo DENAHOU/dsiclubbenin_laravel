@@ -8,14 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckRole
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string  $role
-     * @return mixed
-     */
     public function handle(Request $request, Closure $next, string $role)
     {
         if (!Auth::check()) {
@@ -23,23 +15,47 @@ class CheckRole
         }
 
         $user = Auth::user();
-        
-        if ($user->role !== $role) {
-            // Rediriger vers le dashboard approprié selon le rôle
-            return $this->redirectToDashboard($user->role);
+
+        switch ($role) {
+
+            case 'admin':
+                if (
+                    $user->role === 'admin' ||  // Super Admin
+                    $user->is_admin == 1        // Admin ajouté
+                ) {
+                    return $next($request);
+                }
+                break;
+
+            case 'tresor':
+                if ($user->is_tresor == 1) {
+                    return $next($request);
+                }
+                break;
+
+            case 'membre':
+                // Tout utilisateur connecté peut accéder à son espace membre
+                return $next($request);
         }
 
-        return $next($request);
+        return $this->redirectToDashboard($user);
     }
 
     /**
-     * Redirige vers le dashboard approprié selon le rôle
+     * Redirection intelligente
      */
-    private function redirectToDashboard(string $role)
+    private function redirectToDashboard($user)
     {
+        if ($user->is_admin == 1) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user->is_tresor == 1) {
+            return redirect()->route('tresor.dashboard');
+        }
+
+        // Sinon dashboard principal selon role
         $routes = [
-            'admin' => 'admin.dashboard',
-            'tresor' => 'tresor.dashboard',
             'company' => 'company.dashboard',
             'college' => 'college.dashboard',
             'administration' => 'administration.dashboard',
@@ -50,8 +66,8 @@ class CheckRole
             'membre' => 'dashboard',
         ];
 
-        $routeName = $routes[$role] ?? 'dashboard';
-        
+        $routeName = $routes[$user->role] ?? 'dashboard';
+
         return redirect()->route($routeName);
     }
 }

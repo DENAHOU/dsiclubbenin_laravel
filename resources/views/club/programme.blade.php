@@ -271,7 +271,7 @@
 
         <main class="themes-container">
             <div class="section-header">
-                <h2>Les Thématiques au Cœur de Nos Échanges</h2>
+                <h2>Les thématiques au cœur de nos échanges</h2>
                 <p>Découvrez les sujets clés qui animent notre communauté. Cliquez sur une carte pour en savoir plus.</p>
             </div>
 
@@ -322,7 +322,7 @@
                 <section class="excellence-section">                    
                     <div class="excellence-content">
                         <div class="excellence-header">
-                            <h2>Programmes d'Excellence</h2>
+                            <h2>Programmes d'excellence</h2>
                             <p>Découvrez les programmes exclusifs ajoutés par notre équipe, conçus pour vous offrir une expérience d'apprentissage premium et innovante.</p>
                         </div>
                         

@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\Payment;
-use Carbon\Carbon;
 
 class CheckPayment
 {
@@ -23,30 +22,28 @@ class CheckPayment
             return redirect()->route('login');
         }
 
-        // 🔓 Exempter les utilisateurs SSO Microsoft de la vérification de paiement
-        // Ils vont directement au dashboard sans d'autres étapes
-        // if ($user->microsoft_id && str_ends_with($user->email, '@clubdsibenin.org')) {
-        //     return $next($request);
-        // }
+        // 🔹 Si l'utilisateur a déjà payé via is_paid, on le laisse passer
+        if ((int)$user->is_paid === 1) {
+            return $next($request);
+        }
 
-        // Vérifier si l'utilisateur a un paiement valide et complété
+        // 🔹 Vérifier la table payments pour les nouveaux utilisateurs
         $payment = Payment::where('payable_id', $user->id)
             ->where('payable_type', get_class($user))
             ->first();
 
-        // Si pas de paiement trouvé, rediriger vers la page de paiement
         if (!$payment) {
             return redirect()->route('payments.checkout')
                 ->with('warning', 'Vous devez effectuer votre paiement de cotisation pour accéder à cette ressource.');
         }
 
-        // Si le paiement existe mais n'est pas complété, rediriger vers le paiement
-        if ($payment->status !== 'completed' && $payment->status !== 'approved') {
+        // 🔹 Si le paiement existe mais n'est pas complété ou approuvé
+        if (!in_array($payment->status, ['completed', 'approved'])) {
             return redirect()->route('payments.checkout')
                 ->with('warning', 'Votre paiement n\'est pas encore complété. Veuillez finir votre paiement.');
         }
 
-        // Si le paiement est valide et complété, continuer
+        // 🔹 Tout est ok, continuer
         return $next($request);
     }
 }

@@ -483,7 +483,7 @@
         <div class="row gx-0">
             <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
-                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>Cotonou, Bénin</small>
+                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>St Michel C/510 Cotonou, Bénin</small>
                     <small class="text-light"><i class="fa fa-envelope-open me-2"></i>contact@clubdsibenin.bj</small>
                     <small class="text-light ms-3"><i class="fas fa-phone me-2"></i>+229 0191475555 | 0199200404</small>
 
@@ -632,8 +632,9 @@
         <h5>Le Club</h5>
         <ul>
             <li><a href="{{ route('home') }}">Accueil</a></li>
-            <li><a href="{{ route('club.about') }}">À propos</a></li>
-            <li><a href="{{ route('contact') }}">Contact</a></li>
+            <li><a href="{{ route('club.about') }}">Nos missions</a></li>
+            <li><a href="{{ route('club.about') }}">Nos valeurs</a></li>
+            <li><a href="{{ route('club.about') }}">Notre histoire</a></li>
         </ul>
     </div>
 
@@ -654,7 +655,7 @@
         <ul>
             <li>
                 <span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
-                <span>Cotonou, Benin</span>
+                <span>St Michel C/510 Cotonou, Benin</span>
             </li>
 
             <li>
@@ -690,7 +691,7 @@
 </footer>
 
 
-    <div class="chatbot-fab" title="Besoin d'aide ?"><i class="fa-solid fa-comment-dots"></i></div>
+    {{-- <div class="chatbot-fab" title="Besoin d'aide ?"><i class="fa-solid fa-comment-dots"></i></div> --}}
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded back-to-top" style="background-color: var(--dsi-blue);"><i class="bi bi-arrow-up"></i></a>
@@ -705,5 +706,131 @@
     <script src="{{ asset('lib/owlcarousel/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     @stack('scripts')
+
+
+
+
+
+    <!-- ... (tout le début de votre layout  ... -->
+
+    <!-- ======================================================= -->
+    <!--       COPIEZ TOUT LE BLOC CI-DESSOUS                  -->
+    <!-- ======================================================= -->
+
+    <!-- COMPOSANT CHATBOT -->
+    <div class="chatbot-container">
+        <div class="chatbot-fab" id="open-chatbot" title="Besoin d'aide ?"><i class="fas fa-comment-dots"></i></div>
+        <div class="chatbot-window" id="chatbot-window">
+            <div class="chatbot-header">
+                <div class="header-content"><i class="fas fa-robot"></i><div><h5>Assistant DSI Club</h5><small>En ligne</small></div></div>
+                <button class="close-btn" id="close-chatbot">&times;</button>
+            </div>
+            <div class="chatbot-body" id="chatbot-body">
+                <div class="chat-message bot"><div class="message-content">Bonjour ! Je suis l'assistant du Club DSI Bénin. Comment puis-je vous aider ? Voici quelques questions fréquentes :</div></div>
+                <div class="faq-questions" id="faq-questions">
+                    {{-- La magie est ici : on boucle sur la variable $faqs fournie par le AppServiceProvider --}}
+                    @forelse ($faqs as $faq)
+                        <button class="faq-btn" data-faq-id="{{ $faq->id }}">{{ $faq->title }}</button>
+                    @empty
+                        <p class="text-muted small">Aucune question fréquente n'est disponible pour le moment.</p>
+                    @endforelse
+                </div>
+            </div>
+            <div class="chatbot-footer" id="chatbot-footer" style="display: none;">
+                <button class="back-to-faq" id="back-to-faq"><i class="fas fa-arrow-left"></i> Poser une autre question</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STYLES DU CHATBOT -->
+    <style>
+        .chatbot-fab { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: linear-gradient(135deg, #094281, #29963a); color: white; border-radius: 50%; display: grid; place-items: center; font-size: 1.8rem; box-shadow: 0 5px 20px rgba(0,0,0,0.2); cursor: pointer; z-index: 1000; transition: transform 0.3s ease; }
+        .chatbot-fab:hover { transform: scale(1.1); }
+        .chatbot-window { position: fixed; bottom: 100px; left: 25px; width: 370px; max-height: 80vh; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; z-index: 999; transform: scale(0.9) translateY(20px); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .chatbot-window.active { transform: scale(1) translateY(0); opacity: 1; pointer-events: auto; }
+        .chatbot-header { background: linear-gradient(135deg, #094281, #29963a);; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .header-content { display: flex; align-items: center; gap: 0.75rem; }
+        .header-content .fa-robot { font-size: 1.5rem; }
+        .header-content h5 { margin: 0; font-weight: 700; }
+        .header-content small { opacity: 0.8; }
+        .close-btn { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+        .chatbot-body { padding: 1rem; overflow-y: auto; flex-grow: 1; }
+        .chat-message { margin-bottom: 1rem; display: flex; }
+        .message-content { padding: 0.75rem 1rem; border-radius: 12px; max-width: 85%; line-height: 1.6; }
+        .chat-message.bot .message-content { background-color: #f4f7fc; border-top-left-radius: 0; }
+        .chat-message.user .message-content { background-color: #094281; color: white; border-top-right-radius: 0; }
+        .chat-message.user { justify-content: flex-end; }
+        .faq-questions .faq-btn { display: block; width: 100%; background-color: white; border: 1px solid #e5eaf2; padding: 0.8rem; border-radius: 8px; text-align: left; font-weight: 500; margin-bottom: 0.5rem; cursor: pointer; transition: background-color 0.2s ease, border-color 0.2s ease; }
+        .faq-questions .faq-btn:hover { background-color: #f4f7fc; border-color: #094281; }
+        .chatbot-footer { padding: 1rem; border-top: 1px solid #e5eaf2; }
+        .back-to-faq { width: 100%; background: #094281; color: white; border: none; padding: 0.7rem; border-radius: 8px; font-weight: 600; }
+    </style>
+
+    <!-- SCRIPT DU CHATBOT -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const openChatbotBtn = document.getElementById('open-chatbot');
+        const closeChatbotBtn = document.getElementById('close-chatbot');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const chatbotBody = document.getElementById('chatbot-body');
+        const faqQuestionsContainer = document.getElementById('faq-questions');
+        const chatbotFooter = document.getElementById('chatbot-footer');
+        const backToFaqBtn = document.getElementById('back-to-faq');
+
+        // On récupère les données de la FAQ que Laravel nous a données
+        const faqs = @json($faqs->keyBy('id'));
+
+        // Ouvre et ferme le chatbot
+        openChatbotBtn.addEventListener('click', () => chatbotWindow.classList.add('active'));
+        closeChatbotBtn.addEventListener('click', () => chatbotWindow.classList.remove('active'));
+
+        // Gère le clic sur une question
+        faqQuestionsContainer.addEventListener('click', function (e) {
+            if (e.target && e.target.matches('.faq-btn')) {
+                const faqId = e.target.dataset.faqId;
+                const selectedFaq = faqs[faqId];
+
+                if (selectedFaq) {
+                    // Cache la liste des questions
+                    faqQuestionsContainer.style.display = 'none';
+
+                    // Affiche le message de l'utilisateur
+                    const userMessage = document.createElement('div');
+                    userMessage.classList.add('chat-message', 'user');
+                    userMessage.innerHTML = `<div class="message-content">${selectedFaq.title}</div>`;
+                    chatbotBody.appendChild(userMessage);
+
+                    // Affiche la réponse du bot
+                    const botMessage = document.createElement('div');
+                    botMessage.classList.add('chat-message', 'bot');
+                    botMessage.innerHTML = `<div class="message-content">${selectedFaq.content}</div>`;
+                    
+                    setTimeout(() => { // Petit délai pour un effet plus naturel
+                        chatbotBody.appendChild(botMessage);
+                        chatbotBody.scrollTop = chatbotBody.scrollHeight; // Scroll vers le bas
+                        chatbotFooter.style.display = 'block'; // Affiche le bouton "Retour"
+                    }, 500);
+                }
+            }
+        });
+
+        // =============================================
+        //       LA CORRECTION EST ICI
+        // =============================================
+        // Gère le retour à la liste des questions
+        backToFaqBtn.addEventListener('click', () => {
+            // Vide la conversation, en gardant seulement le premier message (le message de bienvenue)
+            while (chatbotBody.children.length > 1) {
+                chatbotBody.removeChild(chatbotBody.lastChild);
+            }
+            
+            // Réaffiche la liste des questions
+            faqQuestionsContainer.style.display = 'block';
+            
+            // Cache le footer
+            chatbotFooter.style.display = 'none';
+        });
+    });
+</script>
 </body>
 </html>

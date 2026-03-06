@@ -1,226 +1,130 @@
 @extends('layouts.app-shell-superadmin')
 
+@section('title', 'Modifier la Formation')
+
 @section('content')
-<div class="admin-header">
-    <h1>Modifier une Formation</h1>
-    <a href="{{ route('admin.formations.index') }}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-2"></i>Retour
-    </a>
-</div>
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold mb-0">Modifier la Formation</h1>
+            <p class="text-muted">{{ $formation->titre }}</p>
+        </div>
+        <a href="{{ route('admin.formations.index') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Annuler
+        </a>
+    </div>
 
-<div class="card">
-    <div class="card-body">
-        <form method="POST" action="{{ route('admin.formations.update', $formation->id) }}" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
-            
-            <div class="mb-3">
-                <label for="titre" class="form-label">Titre</label>
-                <input type="text" class="form-control @error('titre') is-invalid @enderror" 
-                       id="titre" name="titre" value="{{ old('titre', $formation->titre) }}" required>
-                @error('titre')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-            <div class="mb-3">
-                <label for="categorie_formation_id" class="form-label">Catégorie</label>
-                <select class="form-select @error('categorie_formation_id') is-invalid @enderror" 
-                        id="categorie_formation_id" name="categorie_formation_id" required>
-                    <option value="">Sélectionner une catégorie</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('categorie_formation_id', $formation->categorie_formation_id) == $category->id ? 'selected' : '' }}>
-                            {{ $category->nom }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('categorie_formation_id')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea class="form-control @error('description') is-invalid @enderror" 
-                          id="description" name="description" rows="4" required>{{ old('description', $formation->description) }}</textarea>
-                @error('description')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3">
-                <label for="type_formation" class="form-label">Type de formation</label>
-                <select class="form-select @error('type_formation') is-invalid @enderror" 
-                        id="type_formation" name="type_formation" required>
-                    <option value="">Sélectionner un type</option>
-                    <option value="presentiel" {{ old('type_formation', $formation->type_formation) == 'presentiel' ? 'selected' : '' }}>Présentiel</option>
-                    <option value="en_ligne" {{ old('type_formation', $formation->type_formation) == 'en_ligne' ? 'selected' : '' }}>En ligne</option>
-                </select>
-                @error('type_formation')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="row">
-                <div class="col-md-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <form action="{{ route('admin.formations.update', $formation->id) }}" method="POST" enctype="multipart/form-data" class="row g-3">
+                @csrf
+                @method('PUT')
+                
+                <!-- Colonne Principale -->
+                <div class="col-md-8">
                     <div class="mb-3">
-                        <label for="date_debut" class="form-label">Date de début</label>
-                        <input type="date" class="form-control @error('date_debut') is-invalid @enderror" 
-                               id="date_debut" name="date_debut" value="{{ old('date_debut', $formation->date_debut ? $formation->date_debut->format('Y-m-d') : '') }}" required>
-                        @error('date_debut')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <label for="titre" class="form-label">Titre *</label>
+                        <input type="text" name="titre" id="titre" class="form-control" value="{{ old('titre', $formation->titre) }}" required>
                     </div>
-                </div>
-                <div class="col-md-4">
+
                     <div class="mb-3">
-                        <label for="date_fin" class="form-label">Date de fin</label>
-                        <input type="date" class="form-control @error('date_fin') is-invalid @enderror" 
-                               id="date_fin" name="date_fin" value="{{ old('date_fin', $formation->date_fin ? $formation->date_fin->format('Y-m-d') : '') }}" required>
-                        @error('date_fin')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <label for="description" class="form-label">Description *</label>
+                        <textarea name="description" id="description" class="form-control" rows="8" required>{{ old('description', $formation->description) }}</textarea>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label for="date_cloture_inscription" class="form-label">Date de clôture d'inscription</label>
-                        <input type="date" class="form-control @error('date_cloture_inscription') is-invalid @enderror" 
-                               id="date_cloture_inscription" name="date_cloture_inscription" value="{{ old('date_cloture_inscription', $formation->date_cloture_inscription ? $formation->date_cloture_inscription->format('Y-m-d') : '') }}" required>
-                        @error('date_cloture_inscription')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-            </div>
 
-            <div class="mb-3">
-                <label for="lieu" class="form-label">Lieu</label>
-                <input type="text" class="form-control @error('lieu') is-invalid @enderror" 
-                       id="lieu" name="lieu" value="{{ old('lieu', $formation->lieu) }}" 
-                       placeholder="Obligatoire si présentiel">
-                @error('lieu')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3">
-                <label for="lien_formation" class="form-label">Lien de la formation</label>
-                <input type="url" class="form-control @error('lien_formation') is-invalid @enderror" 
-                       id="lien_formation" name="lien_formation" value="{{ old('lien_formation', $formation->lien_formation) }}" 
-                       placeholder="Lien vers la page de la formation">
-                @error('lien_formation')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <!-- Section Inscriptions -->
-            <div class="card mb-3">
-                <div class="card-header">
-                    <h6 class="mb-0"><i class="fas fa-user-plus me-2"></i>Liens d'inscription</h6>
-                </div>
-                <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <h6 class="text-primary mb-3">Inscription en ligne</h6>
-                            
-                            <div class="mb-3">
-                                <label for="lien_inscription_en_ligne" class="form-label">Lien d'inscription en ligne</label>
-                                <input type="url" class="form-control @error('lien_inscription_en_ligne') is-invalid @enderror" 
-                                       id="lien_inscription_en_ligne" name="lien_inscription_en_ligne" value="{{ old('lien_inscription_en_ligne', $formation->lien_inscription_en_ligne) }}" 
-                                       placeholder="https://example.com/inscription">
-                                @error('lien_inscription_en_ligne')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="prix_en_ligne" class="form-label">Prix en ligne (FCFA)</label>
-                                <input type="number" step="0.01" class="form-control @error('prix_en_ligne') is-invalid @enderror" 
-                                       id="prix_en_ligne" name="prix_en_ligne" value="{{ old('prix_en_ligne', $formation->prix_en_ligne) }}" 
-                                       placeholder="0">
-                                @error('prix_en_ligne')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <label for="lieu" class="form-label">Lieu (Location DB)</label>
+                            <input type="text" name="lieu" id="lieu" class="form-control" value="{{ old('lieu', $formation->location) }}">
                         </div>
-                        
                         <div class="col-md-6">
-                            <h6 class="text-success mb-3">Inscription présentiel</h6>
-                            
-                            <div class="mb-3">
-                                <label for="lien_inscription_presentiel" class="form-label">Lien d'inscription présentiel</label>
-                                <input type="url" class="form-control @error('lien_inscription_presentiel') is-invalid @enderror" 
-                                       id="lien_inscription_presentiel" name="lien_inscription_presentiel" value="{{ old('lien_inscription_presentiel', $formation->lien_inscription_presentiel) }}" 
-                                       placeholder="https://example.com/inscription">
-                                @error('lien_inscription_presentiel')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="prix_presentiel" class="form-label">Prix présentiel (FCFA)</label>
-                                <input type="number" step="0.01" class="form-control @error('prix_presentiel') is-invalid @enderror" 
-                                       id="prix_presentiel" name="prix_presentiel" value="{{ old('prix_presentiel', $formation->prix_presentiel) }}" 
-                                       placeholder="0">
-                                @error('prix_presentiel')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <label for="lien_formation" class="form-label">Lien (Online URL DB)</label>
+                            <input type="url" name="lien_formation" id="lien_formation" class="form-control" value="{{ old('lien_formation', $formation->online_url) }}">
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="mb-3">
-                <label class="form-label">Média</label>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="image" class="form-label">Image</label>
-                        <input type="file" class="form-control @error('image') is-invalid @enderror" 
-                               id="image" name="image" accept="image/*">
-                        @if($formation->image)
-                            <small class="text-muted d-block mt-1">Image actuelle: {{ $formation->image }}</small>
-                        @endif
-                        @error('image')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                <!-- Colonne Latérale -->
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Statut</label>
+                        <select name="status" id="status" class="form-select">
+                            <option value="draft" @selected(old('status', $formation->status) == 'draft')>Brouillon</option>
+                            <option value="published" @selected(old('status', $formation->status) == 'published')>Publiée</option>
+                            <option value="archived" @selected(old('status', $formation->status) == 'archived')>Archivée</option>
+                        </select>
                     </div>
-                    <div class="col-md-6">
-                        <label for="video_url" class="form-label">URL de la vidéo</label>
-                        <input type="url" class="form-control @error('video_url') is-invalid @enderror" 
-                               id="video_url" name="video_url" value="{{ old('video_url', $formation->video_url) }}" 
-                               placeholder="https://youtube.com/watch?v=...">
-                        @error('video_url')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+
+                    <div class="mb-3">
+                        <label for="type_formation" class="form-label">Type *</label>
+                        <select name="type_formation" id="type_formation" class="form-select" required>
+                            {{-- On compare avec 'presentiel' car c'est ce qui est stocké en DB (Enum) --}}
+                            <option value="en_presentiel" @selected(old('type_formation', $formation->type_formation) == 'presentiel')>En Présentiel</option>
+                            <option value="en_ligne" @selected(old('type_formation', $formation->type_formation) == 'en_ligne')>En Ligne</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categorie_formation_id" class="form-label">Catégorie *</label>
+                        <select name="categorie_formation_id" id="categorie_formation_id" class="form-select" required>
+                            <option value="">Choisir...</option>
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat->id }}" @selected(old('categorie_formation_id', $formation->categorie_formation_id) == $cat->id)>
+                                    {{ $cat->nom }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="start_date" class="form-label">Date de début *</label>
+                        <input type="datetime-local" name="start_date" id="start_date" class="form-control" 
+                               value="{{ old('start_date', $formation->start_date ? \Carbon\Carbon::parse($formation->start_date)->format('Y-m-d\TH:i') : '') }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date_fin" class="form-label">Date de fin *</label>
+                        <input type="datetime-local" name="date_fin" id="date_fin" class="form-control" 
+                               value="{{ old('date_fin', $formation->end_date ? \Carbon\Carbon::parse($formation->end_date)->format('Y-m-d\TH:i') : '') }}" required>
+                    </div>
+
+                    {{-- On affiche le prix unique de la DB dans les deux champs selon le type --}}
+                    <div class="mb-3">
+                        <label for="prix_presentiel" class="form-label">Prix (Présentiel)</label>
+                        <input type="number" name="prix_presentiel" id="prix_presentiel" class="form-control" 
+                               value="{{ old('prix_presentiel', $formation->type_formation == 'presentiel' ? $formation->price : 0) }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="prix_en_ligne" class="form-label">Prix (En Ligne)</label>
+                        <input type="number" name="prix_en_ligne" id="prix_en_ligne" class="form-control" 
+                               value="{{ old('prix_en_ligne', $formation->type_formation == 'en_ligne' ? $formation->price : 0) }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label d-block">Image actuelle</label>
+                        @if($formation->image_path)
+                            <img src="{{ asset('storage/' . $formation->image_path) }}" class="img-thumbnail mb-2" style="max-height: 100px;">
+                        @endif
+                        <input type="file" name="image" id="image" class="form-control">
                     </div>
                 </div>
-                <small class="text-muted">Choisissez soit une image soit une vidéo (pas les deux)</small>
-            </div>
 
-            <div class="mb-3">
-                <label for="status" class="form-label">Statut</label>
-                <select class="form-select @error('status') is-invalid @enderror" 
-                        id="status" name="status" required>
-                    <option value="">Sélectionner un statut</option>
-                    <option value="actif" {{ old('status', $formation->status) == 'actif' ? 'selected' : '' }}>Actif</option>
-                    <option value="inactif" {{ old('status', $formation->status) == 'inactif' ? 'selected' : '' }}>Inactif</option>
-                </select>
-                @error('status')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save me-2"></i>Mettre à jour
-                </button>
-                <a href="{{ route('admin.formations.index') }}" class="btn btn-secondary">
-                    Annuler
-                </a>
-            </div>
-        </form>
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-primary px-4">Mettre à jour la Formation</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @endsection

@@ -7,6 +7,7 @@ use App\Models\Partner;
 use App\Models\PressPartner;
 use App\Models\Program;
 use App\Models\Event;
+use App\Models\PartnerType;
 
 class ClubController extends Controller
 {
@@ -33,7 +34,11 @@ class ClubController extends Controller
 
         $pressPartners = PressPartner::all();
 
-        return view('club.partners', compact('partners', 'pressPartners'));
+        $types = PartnerType::with(['partners' => function ($query) {
+            $query->where('status', 'approved');
+        }])->get();
+
+        return view('club.partners', compact('partners', 'pressPartners', 'types'));
     }
 
-}
+ }

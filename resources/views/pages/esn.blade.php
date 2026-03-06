@@ -103,8 +103,9 @@ use Illuminate\Support\Str;
 
     <section class="triptyque-section animated-section">
         <div class="section-header">
-            <h2>Un Écosystème Conçu pour Votre Croissance</h2>
-            <p>Que vous soyez une startup innovante, un partenaire stratégique ou une ESN établie, le Club DSI vous offre une plateforme unique pour accélérer votre développement.</p>
+            <h2>Un écosystème conçu pour vous</h2>
+            <p>Que vous soyez une startup innovante, un partenaire stratégique ou une ESN établie,
+                 le Club DSI vous offre une plateforme unique pour accélérer votre développement.</p>
         </div>
         <div class="triptyque-container">
             <div class="triptyque-tabs">
@@ -123,8 +124,9 @@ use Illuminate\Support\Str;
 <!-- ================= ACTE II : LA COMMUNAUTÉ ================= -->
     <section class="community-section animated-section">
         <div class="section-header">
-            <h2>Découvrez nos Communautés de Pratique</h2>
-            <p>Chaque groupe est un hub d'expertise dédié à un segment clé de notre écosystème, animé par des experts pour favoriser l'innovation et les synergies.</p>
+            <h2>Découvrez nos communautés de pratique</h2>
+            <p>Chaque groupe est un hub d'expertise dédié à un segment clé de notre écosystème,
+                 animé par des experts pour favoriser l'innovation et les synergies.</p>
         </div>
         <div class="community-grid">
             <div class="community-card" data-bs-toggle="modal" data-bs-target="#photonModal"><img src="https://clubdsibenin.bj/assets/images/groupe/photon2.jpeg" alt=""><div class="community-card-overlay"><h3>Groupe Photon</h3><span class="btn-join">Voir les détails</span></div></div>
@@ -136,8 +138,9 @@ use Illuminate\Support\Str;
 
 <!-- ================= ACTE III : L'EXPLORATION ================= -->
         <div class="section-header">
-            <h2>Explorez Notre Annuaire des ESN</h2>
-            <p>Découvrez les ESN qui façonnent l'avenir du numérique au Bénin. Utilisez les filtres pour trouver le partenaire idéal pour votre projet.</p>
+            <h2>Explorez notre annuaire des ESN</h2>
+            <p>Découvrez les ESN qui façonnent l'avenir du numérique au Bénin. 
+                Utilisez les filtres pour trouver le partenaire idéal pour votre projet.</p>
         </div>
     <main class="directory-grid">
 

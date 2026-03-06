@@ -87,7 +87,7 @@
                     min-height: 500px;
                 }
 
-                
+
                 #header-carousel .carousel-item img {
                     height: 40vh; /* On réduit un peu la hauteur */
                 }
@@ -112,6 +112,21 @@
                     font-size: 1.8rem !important;
                 }
             }
+
+            #typewriter::after {
+            content: "|";
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0% {opacity:1;}
+            50% {opacity:0;}
+            100% {opacity:1;}
+        }
+
+        #typewriter::after {
+            content: "";
+        }
         </style>
 
     <!-- ======================================================= -->
@@ -139,7 +154,9 @@
                 <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                     <div class="p-3" style="max-width: 900px;">
                         <h5 class="text-white text-uppercase mb-3 animated slideInDown">Club DSI Bénin</h5>
-                        <h1 class="display-1 text-white mb-4 animated zoomIn">Le Cœur du Numérique au Bénin</h1>
+                        
+                        <h1 class="display-1 text-white mb-4 animated zoomIn typewriter"
+                        data-text="Le Cœur du Numérique au Bénin"></h1>
                         <a href="register.blade.php" class="btn btn-primary me-3 animated slideInLeft">Rejoindre le mouvement</a>
                         <a href="#ecosysteme" class="btn btn-light animated slideInRight">Explorer nos services</a>
                     </div>
@@ -150,7 +167,8 @@
                 <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                     <div class="p-3" style="max-width: 900px;">
                         <h5 class="text-white text-uppercase mb-3 animated slideInDown">Innovation & Collaboration</h5>
-                        <h1 class="display-1 text-white mb-4 animated zoomIn">Construisons l'Écosystème de Demain</h1>
+                        <h1 class="display-1 text-white mb-4 animated zoomIn typewriter"
+                        data-text="Construisons l'Écosystème de Demain"></h1>
                         <a href="register.blade.php" class="btn btn-primary me-3 animated slideInLeft">Devenir membre</a>
                         <a href="#activites" class="btn btn-light animated slideInRight">Nos activités</a>
                     </div>
@@ -289,268 +307,6 @@
             </div>
         <!-- Activités End -->
 
-
-    <!-- SECTION ÉCOSYSTÈME CARRIÈRES & ESN (Notre maquette) -->
-        <div id="ecosysteme"class="container-fluid py-3 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="container py-3">
-                <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
-                    <h5 class="fw-bold text-primary text-uppercase">Nos Plateformes</h5>
-                    <h1 class="mb-0">Au cœur de l'écosystème numérique</h1>
-                </div>
-                <div class="row g-5 align-items-stretch">
-                    <div class="col-lg-6"><div class="p-5 rounded-4 h-100 card-hover" style="background: linear-gradient(135deg, #eef7ff, #ffffff);"><i class="fa-solid fa-briefcase fa-3x  mb-3" style="color:#0a2b5c;"></i><h3 class="fw-bold">Plateforme carrières professionnelle intelligente</h3><p class="text-muted">Plus qu'une liste d'offres, un véritable outil pour une expérience professionnelle.</p><ul class="feature-list mt-3"><li><i class="fa-solid fa-check-circle text-blue-dark me-2"></i>Matching automatisé par IA</li><li><i class="fa-solid fa-check-circle text-blue-dark me-2"></i>Alertes d'offres personnalisées</li><li><i class="fa-solid fa-check-circle text-blue-dark me-2"></i>Statistiques du marché en temps réel</li></ul><a href="<?php echo e(route('recrutement')); ?>" class="btn btn-primary mt-3" style="background-color:#0a2b5c;">Explorer les offres</a></div></div>
-                    <div class="col-lg-6"><div class="p-5 rounded-4 h-100 card-hover" style="background: linear-gradient(135deg, #f0fff4, #ffffff);"><i class="fa-solid fa-handshake-angle fa-3x text-success mb-3"></i><h3 class="fw-bold">Annuaire dynamique des ESN</h3><p class="text-muted">Trouvez le partenaire idéal pour la réussite de vos projets numériques.</p><ul class="feature-list mt-3"><li><i class="fa-solid fa-check-circle text-success me-2"></i>Recherche avancée par compétences</li><li><i class="fa-solid fa-check-circle text-success me-2"></i>Mise en relation directe</li><li><i class="fa-solid fa-check-circle text-success me-2"></i>Accès à la communauté de pratique</li></ul><a href="<?php echo e(route('esn')); ?>" class="btn btn-success mt-3">Trouver un partenaire ESN</a></div></div>
-                </div>
-            </div>
-        </div>
-
-    
-    <style>
-        :root {
-            --dsi-blue: #0b3f7a;
-            --dsi-green: #29963a;
-            --light-bg: #f4f7fc;
-            --ink: #0e1a2b;
-            --muted-ink: #5c6b81;
-            --border-color: #e5eaf2;
-        }
-
-        /* SECTION PRINCIPALE */
-        .skills-platform-section {
-            background: var(--light-bg);
-            padding: clamp(3rem, 5vw, 5rem) 1.5rem;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* Lignes décoratives légères */
-        .skills-platform-section::before,
-        .skills-platform-section::after {
-            content: "";
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(41,150,58,0.12) 0%, transparent 70%);
-            z-index: 0;
-        }
-        .skills-platform-section::before {
-            top: -40px;
-            left: -40px;
-        }
-        .skills-platform-section::after {
-            bottom: -40px;
-            right: -40px;
-        }
-
-        .skills-platform-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: clamp(2rem, 5vw, 4rem);
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        @media (max-width: 992px) {
-            .skills-platform-container { grid-template-columns: 1fr; text-align: center; }
-        }
-
-        /* PARTIE GAUCHE */
-        .skills-info {
-            animation: fadeSlide 1.3s ease forwards;
-            opacity: 0;
-            transform: translateY(25px);
-        }
-
-        .skills-info .eyebrow {
-            color: var(--dsi-green);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .skills-info h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 800;
-            color: var(--ink);
-            margin: 0.75rem 0 1.2rem 0;
-        }
-
-        .skills-info p {
-            color: var(--muted-ink);
-            line-height: 1.7;
-            font-size: 1.05rem;
-            margin-bottom: 2rem;
-            max-width: 520px;
-        }
-
-        .skills-info .btn {
-            background: linear-gradient(95deg, var(--dsi-blue), var(--dsi-green));
-            color: white;
-            font-weight: 700;
-            padding: 0.9rem 2rem;
-            border-radius: 10px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .skills-info .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-3px);
-        }
-
-        /* FONCTIONNALITÉS */
-        .features-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .feature-card {
-            background: white;
-            border-radius: 14px;
-            padding: 1.5rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 1.25rem;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 5px 15px -5px rgba(11, 63, 122, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: fadeSlide 1s ease forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .feature-card:nth-child(1) { animation-delay: 0.3s; }
-        .feature-card:nth-child(2) { animation-delay: 0.5s; }
-        .feature-card:nth-child(3) { animation-delay: 0.7s; }
-        .feature-card:nth-child(4) { animation-delay: 0.9s; }
-        .feature-card:nth-child(5) { animation-delay: 1.1s; }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px -10px rgba(11, 63, 122, 0.15);
-        }
-
-        .feature-icon {
-            flex-shrink: 0;
-            width: 50px; height: 50px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--dsi-blue), var(--dsi-green));
-            display: grid;
-            place-items: center;
-            color: white;
-            font-size: 1.3rem;
-        }
-
-        .feature-card h4 {
-            margin: 0;
-            font-weight: 700;
-            color: var(--ink);
-        }
-
-        .feature-card p {
-            margin: 0.3rem 0 0;
-            color: var(--muted-ink);
-            font-size: 0.9rem;
-        }
-
-        @keyframes fadeSlide {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
-
-<section class="skills-platform-section">
-            <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 650px;">
-                <h5 class="fw-bold text-primary text-uppercase">Plateforme de gestion des compétences</h5>
-                <h1 class="mb-0">Valoriser les talents, connecter les opportunités</h1>
-            </div>
-
-            <div class="skills-platform-container">
-                <!-- Partie gauche -->
-                <div class="skills-info">
-                    <p class="eyebrow">Club DSI Bénin</p>
-                    <h2>Une plateforme pour révéler les talents du numérique</h2>
-                    <p>
-                        Cet espace digital permet de <strong>centraliser les profils d’experts</strong>,
-                        <strong>favoriser les opportunités professionnelles</strong>
-                        et <strong>renforcer les partenariats</strong> entre les acteurs publics, privés et les DSI membres.
-                    </p>
-                    <a href="<?php echo e(route('competences.comingsoon')); ?>" class="btn">
-                        <i class="fas fa-user-plus me-2"></i> Rejoindre la plateforme
-                    </a>
-                </div>
-
-                <!-- Partie droite -->
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-database"></i></div>
-                        <div>
-                            <h4>Centralisation des profils</h4>
-                            <p>Une base regroupant CV, diplômes, certificats et expériences des experts membres.</p>
-                        </div>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-search"></i></div>
-                        <div>
-                            <h4>Recherche ciblée</h4>
-                            <p>Les entreprises et institutions peuvent filtrer les profils selon des critères précis.</p>
-                        </div>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                        <div>
-                            <h4>Traçabilité & sécurité</h4>
-                            <p>Chaque mise en relation est enregistrée pour garantir transparence et confiance.</p>
-                        </div>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-coins"></i></div>
-                        <div>
-                            <h4>Revenus pour le Club</h4>
-                            <p>Abonnements et commissions sur les mises en relation réussies renforcent la pérennité du modèle.</p>
-                        </div>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-globe-africa"></i></div>
-                        <div>
-                            <h4>Rayonnement international</h4>
-                            <p>La plateforme valorise l’expertise béninoise sur les marchés régionaux et mondiaux.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-</section>
-
-
-    <!-- SECTION FORMATIONS -->
-    <section id="training" class="section ">
-            <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
-                <h5 class="fw-bold text-primary text-uppercase">Se Former pour Performer</h5>
-                <h1 class="mb-0">Des compétences à jour, pour un avenir connecté</h1>
-            </div>
-        <div class="container">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6 order-lg-2"><h2 class="section-title">Développez vos compétences</h2><p class="section-subtitle">Accédez à des formations actuelles : Services IT, Gestion de Projet et Sécurité.</p><div class="d-flex flex-wrap gap-2 mb-4"><span class="badge rounded-pill fs-6 text-dark-emphasis bg-dark-subtle border border-dark-subtle" style="color: black;">Gouvernance & Architecture d'Entreprise</span><span class="badge rounded-pill fs-6 text-dark-emphasis bg-dark-subtle border border-dark-subtle" style="color: black;">Gestions des Services IT</span><span class="badge rounded-pill fs-6 text-dark-emphasis bg-dark-subtle border border-dark-subtle" style="color: black;">Gestion de Projet et Programme</span><span class="badge rounded-pill fs-6 text-dark-emphasis bg-dark-subtle border border-dark-subtle" style="color: black;">Sécurité Défensive</span></div><a href="<?php echo e(route('activites.formations')); ?>" class="btn " style="            background: linear-gradient(95deg, var(--dsi-blue), var(--dsi-green));
-            color: white;
-            font-weight: 700;
-            padding: 0.9rem 2rem;
-            border-radius: 10px;
-            text-decoration: none;
-            transition: all 0.3s ease;">Voir le catalogue</a></div>
-                <div class="col-lg-6 order-lg-1"><img class="rounded-4 w-100" style="box-shadow: var(--shadow-lg);" alt="Session de formation" src="<?php echo e(asset('img/img.jpg')); ?>" /></div>
-            </div>
-        </div>
-    </section>
 
     <!-- SECTION NEXUSDSI HUB (Version sobre sans animation de fond) -->
     <style>
@@ -769,7 +525,6 @@
             to { transform: translateY(0); opacity: 1; }
         }
     </style>
-
     <section class="forum-section">
         <div class="section-title-wrapper">
             <p class="eyebrow">Notre Espace d'Échange</p>
@@ -823,6 +578,306 @@
         </div>
     </section>
 
+
+    <!-- SECTION FORMATIONS -->
+<section id="training" class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="container py-5">
+        <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 800px;">
+            <h5 class="fw-bold text-primary text-uppercase">Se Former pour performer</h5>
+            <h1 class="mb-0">Des Compétences à Jour, pour un avenir connecté</h1>
+        </div>
+
+        <div class="row g-5 align-items-center">
+            <!-- Colonne de l'Image -->
+            <div class="col-lg-6 wow zoomIn" data-wow-delay="0.3s">
+                <div class="position-relative">
+                    <img class="img-fluid w-100 rounded" src="<?php echo e(asset('img/img.jpg')); ?>" alt="Session de formation">
+                </div>
+            </div>
+
+            <!-- Colonne du Texte -->
+            <div class="col-lg-6 wow slideInRight" data-wow-delay="0.6s">
+                <h2 class="fw-bold mb-3" style="color: var(--dsi-blue-dark);">Développez des compétences d'avenir</h2>
+                <p class="lead text-muted mb-4">Accédez à des parcours certifiants 
+                     conçus par des experts pour les défis actuels et futurs des DSI, notamment en :</p>
+                
+                <!-- Liste des thématiques améliorée -->
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-shield-alt fa-2x me-3" style="color: var(--dsi-blue);"></i>
+                            <h5 class="mb-0 fw-semi-bold">Gouvernance & Stratégie SI</h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-sitemap fa-2x me-3" style="color: var(--dsi-blue);"></i>
+                            <h5 class="mb-0 fw-semi-bold">Gestion de Projet Agile</h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                         <div class="d-flex align-items-center">
+                            <i class="fas fa-brain fa-2x me-3" style="color: var(--dsi-blue);"></i>
+                            <h5 class="mb-0 fw-semi-bold">Intelligence Artificielle & Data</h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                         <div class="d-flex align-items-center">
+                            <i class="fas fa-lock fa-2x me-3" style="color: var(--dsi-blue);"></i>
+                            <h5 class="mb-0 fw-semi-bold">Cybersécurité & Résilience</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="<?php echo e(route('activites.formations')); ?>" class="btn btn-primary py-3 px-5 mt-5" style="background-color: var(--dsi-blue-dark); color: white;">Explorer le Catalogue</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- SECTION ÉCOSYSTÈME CARRIÈRES & ESN (Notre maquette) -->
+        <div id="ecosysteme"class="container-fluid py-3 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="container py-3">
+                <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
+                    <h5 class="fw-bold text-primary text-uppercase">Nos Plateformes</h5>
+                    <h1 class="mb-0">Au cœur de l'écosystème numérique</h1>
+                </div>
+                <div class="row g-5 align-items-stretch">
+                    <div class="col-lg-6"><div class="p-5 rounded-4 h-100 card-hover" style="background: linear-gradient(135deg, #eef7ff, #ffffff);"><i class="fa-solid fa-briefcase fa-3x  mb-3" style="color:#0a2b5c;"></i><h3 class="fw-bold">Plateforme carrière professionnelle intelligente</h3><p class="text-muted">Plus qu'une liste d'offres, un véritable outil pour une expérience professionnelle.</p><ul class="feature-list mt-3"><li><i class="fa-solid fa-check-circle text-blue-dark me-2"></i>Matching automatisé par IA</li><li><i class="fa-solid fa-check-circle text-blue-dark me-2"></i>Alertes d'offres personnalisées</li><li><i class="fa-solid fa-check-circle text-blue-dark me-2"></i>Statistiques du marché en temps réel</li></ul><a href="<?php echo e(route('recrutement')); ?>" class="btn btn-primary mt-3" style="background-color:#0a2b5c;">Explorer les offres</a></div></div>
+                    <div class="col-lg-6"><div class="p-5 rounded-4 h-100 card-hover" style="background: linear-gradient(135deg, #f0fff4, #ffffff);"><i class="fa-solid fa-handshake-angle fa-3x text-success mb-3"></i><h3 class="fw-bold">Annuaire dynamique des ESN</h3><p class="text-muted">Trouvez le partenaire idéal pour la réussite de vos projets numériques.</p><ul class="feature-list mt-3"><li><i class="fa-solid fa-check-circle text-success me-2"></i>Recherche avancée par compétences</li><li><i class="fa-solid fa-check-circle text-success me-2"></i>Mise en relation directe</li><li><i class="fa-solid fa-check-circle text-success me-2"></i>Accès à la communauté de pratique</li></ul><a href="<?php echo e(route('esn')); ?>" class="btn btn-success mt-3">Trouver un partenaire ESN</a></div></div>
+                </div>
+            </div>
+        </div>
+
+
+        
+    <style>
+        :root {
+            --dsi-blue: #0b3f7a;
+            --dsi-green: #29963a;
+            --light-bg: #f4f7fc;
+            --ink: #0e1a2b;
+            --muted-ink: #5c6b81;
+            --border-color: #e5eaf2;
+        }
+
+        /* SECTION PRINCIPALE */
+        .skills-platform-section {
+            background: var(--light-bg);
+            padding: clamp(3rem, 5vw, 5rem) 1.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Lignes décoratives légères */
+        .skills-platform-section::before,
+        .skills-platform-section::after {
+            content: "";
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(41,150,58,0.12) 0%, transparent 70%);
+            z-index: 0;
+        }
+        .skills-platform-section::before {
+            top: -40px;
+            left: -40px;
+        }
+        .skills-platform-section::after {
+            bottom: -40px;
+            right: -40px;
+        }
+
+        .skills-platform-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(2rem, 5vw, 4rem);
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 992px) {
+            .skills-platform-container { grid-template-columns: 1fr; text-align: center; }
+        }
+
+        /* PARTIE GAUCHE */
+        .skills-info {
+            animation: fadeSlide 1.3s ease forwards;
+            opacity: 0;
+            transform: translateY(25px);
+        }
+
+        .skills-info .eyebrow {
+            color: var(--dsi-green);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .skills-info h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            color: var(--ink);
+            margin: 0.75rem 0 1.2rem 0;
+        }
+
+        .skills-info p {
+            color: var(--muted-ink);
+            line-height: 1.7;
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+            max-width: 520px;
+        }
+
+        .skills-info .btn {
+            background: linear-gradient(95deg, var(--dsi-blue), var(--dsi-green));
+            color: white;
+            font-weight: 700;
+            padding: 0.9rem 2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .skills-info .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+        }
+
+        /* FONCTIONNALITÉS */
+        .features-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 14px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 5px 15px -5px rgba(11, 63, 122, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeSlide 1s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.3s; }
+        .feature-card:nth-child(2) { animation-delay: 0.5s; }
+        .feature-card:nth-child(3) { animation-delay: 0.7s; }
+        .feature-card:nth-child(4) { animation-delay: 0.9s; }
+        .feature-card:nth-child(5) { animation-delay: 1.1s; }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(11, 63, 122, 0.15);
+        }
+
+        .feature-icon {
+            flex-shrink: 0;
+            width: 50px; height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--dsi-blue), var(--dsi-green));
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 1.3rem;
+        }
+
+        .feature-card h4 {
+            margin: 0;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .feature-card p {
+            margin: 0.3rem 0 0;
+            color: var(--muted-ink);
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeSlide {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+<section class="skills-platform-section">
+            <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 650px;">
+                <h5 class="fw-bold text-primary text-uppercase">Plateforme de gestion des compétences</h5>
+                <h1 class="mb-0">Valoriser les talents, connecter les opportunités</h1>
+            </div>
+
+            <div class="skills-platform-container">
+                <!-- Partie gauche -->
+                <div class="skills-info">
+                    <p class="eyebrow">Club DSI Bénin</p>
+                    <h2>Une plateforme pour révéler les talents du numérique</h2>
+                    <p>
+                        Cet espace digital permet de <strong>centraliser les profils d’experts</strong>,
+                        <strong>favoriser les opportunités professionnelles</strong>
+                        et <strong>renforcer les partenariats</strong> entre les acteurs publics, privés et les DSI membres.
+                    </p>
+                    <a href="<?php echo e(route('competences.comingsoon')); ?>" class="btn">
+                        <i class="fas fa-user-plus me-2"></i> Rejoindre la plateforme
+                    </a>
+                </div>
+
+                <!-- Partie droite -->
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-database"></i></div>
+                        <div>
+                            <h4>Centralisation des profils</h4>
+                            <p>Une base regroupant CV, diplômes, certificats et expériences des experts membres.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-search"></i></div>
+                        <div>
+                            <h4>Recherche ciblée</h4>
+                            <p>Les entreprises et institutions peuvent filtrer les profils selon des critères précis.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div>
+                            <h4>Traçabilité & sécurité</h4>
+                            <p>Chaque mise en relation est enregistrée pour garantir transparence et confiance.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-coins"></i></div>
+                        <div>
+                            <h4>Alimenter la Croissance Collective</h4>
+                            <p>Un modèle conçu pour réinvestir chaque succès dans
+                                 le développement de nouvelles opportunités pour la communauté.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-globe-africa"></i></div>
+                        <div>
+                            <h4>Rayonnement international</h4>
+                            <p>La plateforme valorise l’expertise béninoise sur les marchés régionaux et mondiaux.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</section>
 
     <!-- SECTION CTA FINALE (Notre maquette) -->
     <style>
@@ -975,6 +1030,29 @@
             }
         });
     </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const elements = document.querySelectorAll(".typewriter");
+
+    elements.forEach(el => {
+        const text = el.getAttribute("data-text");
+        let i = 0;
+
+        function typeWriter() {
+            if (i < text.length) {
+                el.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 120);
+            }
+        }
+
+        typeWriter();
+    });
+
+});
+</script>
 
 <?php $__env->stopSection(); ?>
 

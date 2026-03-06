@@ -375,6 +375,31 @@
                             </a>
                         </li>
 
+                            {{-- Toujours visible --}}
+                            <li>
+                                <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                    <i class="fas fa-user"></i> Espace Membre
+                                </a>
+                            </li>
+
+                            {{-- Si Admin --}}
+                            @if(auth()->user()->is_admin == 1)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                        <i class="fas fa-user-shield text-danger"></i> Administrateur
+                                    </a>
+                                </li>
+                            @endif
+
+                            {{-- Si Trésor --}}
+                            @if(auth()->user()->is_tresor == 1)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('tresor.dashboard') }}">
+                                        <i class="fas fa-coins text-warning"></i> Trésorier
+                                    </a>
+                                </li>
+                            @endif
+
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -572,7 +597,7 @@
                 </div>
             </div>
         </div>
-        @endif --}} --}}
+        @endif --}}
     </div>
 @endsection
 

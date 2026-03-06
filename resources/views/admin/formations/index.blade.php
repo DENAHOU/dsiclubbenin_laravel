@@ -1,110 +1,98 @@
 @extends('layouts.app-shell-superadmin')
 
-@section('content')
-<div class="admin-header">
-    <h1>Liste des Formations</h1>
-    <a href="{{ route('admin.formations.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus me-2"></i>Ajouter une formation
-    </a>
-</div>
+@section('title', 'Gestion des Formations')
 
-<div class="card">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Titre</th>
-                        <th>Catégorie</th>
-                        <th>Type</th>
-                        <th>Date début</th>
-                        <th>Date fin</th>
-                        <th>Média</th>
-                        <th>Prix en ligne</th>
-                        <th>Prix présentiel</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($formations as $formation)
-                    <tr>
-                        <td>{{ $formation->id }}</td>
-                        <td>{{ $formation->titre }}</td>
-                        <td>{{ $formation->categoryFormation->nom ?? '-' }}</td>
-                        <td>
-                            <span class="badge bg-{{ $formation->type_formation == 'presentiel' ? 'primary' : 'info' }}">
-                                {{ $formation->type_formation == 'presentiel' ? 'Présentiel' : 'En ligne' }}
-                            </span>
-                        </td>
-                        <td>{{ $formation->date_debut ? $formation->date_debut->format('d/m/Y') : '-' }}</td>
-                        <td>{{ $formation->date_fin ? $formation->date_fin->format('d/m/Y') : '-' }}</td>
-                        <td>
-                            @if($formation->image)
-                                <img src="{{ asset($formation->image) }}" alt="Image" style="max-width: 50px; max-height: 50px; object-fit: cover;">
-                            @elseif($formation->video_url)
-                                <i class="fas fa-video text-primary"></i>
-                                <small class="d-block">Vidéo</small>
-                            @else
-                                <span class="text-muted">-</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if($formation->prix_en_ligne)
-                                <span class="badge bg-info">{{ number_format($formation->prix_en_ligne, 0, ',', ' ') }} FCFA</span>
-                            @else
-                                <span class="text-muted">-</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if($formation->prix_presentiel)
-                                <span class="badge bg-success">{{ number_format($formation->prix_presentiel, 0, ',', ' ') }} FCFA</span>
-                            @else
-                                <span class="text-muted">-</span>
-                            @endif
-                        </td>
-                        <td>
-                            <span class="badge bg-{{ $formation->status == 'actif' ? 'success' : 'secondary' }}">
-                                {{ $formation->status }}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <a href="{{ route('admin.formations.edit', $formation->id) }}" class="btn btn-sm btn-outline-primary" title="Modifier">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                
-                                @if($formation->lien_inscription_en_ligne)
-                                    <a href="{{ $formation->lien_inscription_en_ligne }}" target="_blank" class="btn btn-sm btn-outline-info" title="Voir inscription en ligne">
-                                        <i class="fas fa-laptop"></i>
-                                    </a>
-                                @endif
-                                
-                                @if($formation->lien_inscription_presentiel)
-                                    <a href="{{ $formation->lien_inscription_presentiel }}" target="_blank" class="btn btn-sm btn-outline-success" title="Voir inscription présentiel">
-                                        <i class="fas fa-building"></i>
-                                    </a>
-                                @endif
-                                
-                                <form method="POST" action="{{ route('admin.formations.delete', $formation->id) }}" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette formation?')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="11" class="text-center">Aucune formation trouvée</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+@push('styles')
+<style>
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+    .status-badge {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.3em 0.6em;
+        border-radius: 20px;
+    }
+    .status-published { background-color: #d1fae5; color: #065f46; }
+    .status-draft { background-color: #feefc3; color: #92400e; }
+    .status-archived { background-color: #e5e7eb; color: #374151; }
+</style>
+@endpush
+
+@section('content')
+    <div class="container-fluid py-4">
+        <!-- Header de la page -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3 fw-bold mb-0">Gestion des Formations</h1>
+                <p class="text-muted">Créez, modifiez et gérez toutes les formations du Club DSI.</p>
+            </div>
+            <a href="{{ route('admin.formations.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus-circle me-2"></i> Ajouter une Formation
+            </a>
+        </div>
+
+        <!-- Alerte de succès -->
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <!-- Tableau des formations -->
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Titre</th>
+                                <th scope="col">Catégorie</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Date de Début</th>
+                                <th scope="col">Statut</th>
+                                <th scope="col" class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($formations as $formation)
+                                <tr>
+                                    <td>
+                                        <strong class="text-dark">{{ $formation->titre }}</strong>
+                                    </td>
+                                    <td>{{ $formation->categoryFormation->nom ?? 'N/A' }}</td>
+                                    <td>{{ $formation->type_formation }}</td>
+                                    {{-- Remplacez la ligne 66 par ceci --}}
+                                    <td>{{ $formation->start_date ? \Carbon\Carbon::parse($formation->start_date)->format('d/m/Y') : 'N/A' }}</td>
+                                    <td>
+                                        <span class="status-badge status-{{ $formation->status }}">{{ ucfirst($formation->status) }}</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="{{ route('admin.formations.edit', $formation->id) }}" class="btn btn-sm btn-outline-primary" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="{{ route('admin.formations.destroy', $formation->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette formation ?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-4">Aucune formation trouvée.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer bg-white">
+                {{ $formations->links() }}
+            </div>
         </div>
     </div>
-</div>
 @endsection

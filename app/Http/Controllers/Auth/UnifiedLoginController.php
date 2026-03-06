@@ -91,4 +91,19 @@ private function redirectToDashboard(string $role): RedirectResponse
         return redirect('/')
             ->with('success', 'Vous avez été déconnecté avec succès.');
     }
+
+
+
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->is_admin == 1) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user->is_tresor == 1) {
+            return redirect()->route('tresor.dashboard');
+        }
+
+        return redirect()->route('member.dashboard');
+    }
 }

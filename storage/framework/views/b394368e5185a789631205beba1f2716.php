@@ -357,7 +357,7 @@
             <div class="content-row">
                 <div class="content-text">
                     <p class="eyebrow">Notre Identité</p>
-                    <h2>Le Premier Réseau des Décideurs IT au Bénin</h2>
+                    <h2>Le Premier réseau des décideurs IT au Bénin</h2>
                     <p>Porté sur les fonts baptismaux suite à l’Assemblée générale du 20 août 2016, le Club DSI est une Association enregistrée au Bénin qui regroupe plus d'une centaine de décideurs informatiques d’entreprises privées, d’entités publiques, et d’organisations internationales sur tout le territoire.</p>
                 </div>
                 <div class="content-image">
@@ -376,7 +376,7 @@
                 </div>
                 <div class="content-text" style="order: 1;">
                     <p class="eyebrow">Notre Vocation</p>
-                    <h2>Créer de la Valeur par le Numérique</h2>
+                    <h2>Créer de la valeur par le numérique</h2>
                     <p>Notre mission première est de créer un cadre d’échange pour permettre à chaque membre d’exprimer ses talents et de partager ses expériences. Au-delà du renforcement de nos liens, nous contribuons activement à :</p>
                     <ul>
                         <li>La promotion des bonnes pratiques des systèmes d'information.</li>
@@ -392,7 +392,7 @@
     <section class="content-section values-section animated-section">
         <div class="container">
             <div class="section-header" style="padding-top: 0;">
-                <h2>Au Cœur de Nos Actions</h2>
+                <h2>Au cœur de nos actions</h2>
                 <p>La recherche continuelle de la perfection nous caractérise. Nous agissons ensemble pour construire l’avenir et bénéficier des opportunités d’aujourd’hui et de demain.</p>
             </div>
             <div class="values-grid">
@@ -410,7 +410,7 @@
         
         <div class="timeline-container">
             <div class="timeline-header">
-                <h2>Notre Histoire Digitale</h2>
+                <h2>Notre histoire digitale</h2>
                 <p>Une décennie d'innovation et d'excellence dans l'écosystème numérique béninois</p>
             </div>
             <div class="timeline">
@@ -419,7 +419,7 @@
                         <div class="timeline-date">2016</div>
                         <div class="timeline-title">Fondation du DSI CLUB</div>
                         <div class="timeline-description">Création du club sous 
-                        le nom de Club des Directeurs des Systèmes d'Information
+                        le nom de Club des Directeurs des Systèmes d'Informations
                          avec l'élection du premier Bureau Exécutif. Mise en place des partenariats
                           ASSI, CNIL, MND, ADN etc.</div>
                     </div>
@@ -440,7 +440,7 @@
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <div class="timeline-date">2018</div>
-                        <div class="timeline-title">Élections du deuxième Bureau Exécutif</div>
+                        <div class="timeline-title">Election du deuxième Bureau Exécutif</div>
                         <div class="timeline-description">Mise en place du deuxième Bureau Exécutif <br>
                             Formation certiﬁante PMP <br>
                              Formation certiﬁante ITIL <br>
@@ -482,7 +482,7 @@
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <div class="timeline-date">2021</div>
-                        <div class="timeline-title">Premier DSI Awards</div>
+                        <div class="timeline-title">Première édition des DSI Awards</div>
                         <div class="timeline-description">Lancement de la 
                         première édition des DSI Awards pour récompenser 
                         l'excellence numérique et célébrer les meilleurs 
@@ -494,7 +494,8 @@
                     <div class="timeline-content">
                         <div class="timeline-date">2022</div>
                         <div class="timeline-title">Changement de dénomination - Election du quatrième Bureau Exécutif</div>
-                        <div class="timeline-description">Le Club devient Club des Décideurs de Systèmes d'Informations. <br> 
+                        <div class="timeline-description">Le Club des Directeurs des Systèmes d'Informations
+                             devient Club des Décideurs de Systèmes d'Informations. <br> 
                             Organisation des DSI Awards 2ème édition <br>
                             Organisation du PRIX NSIA VIE ASSURANCES & DSI CLUB BÉNIN DE L’INNOVATION STARTUPS <br>
                         </div>
@@ -514,7 +515,8 @@
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <div class="timeline-date">2024</div>
-                        <div class="timeline-title">Election du cinquième Bureau Exécutif & DSI Awards 4ème édition</div>
+                        <div class="timeline-title">Election du cinquième Bureau Exécutif & 
+                            DSI Awards 4ème édition</div>
                     </div>
                     <div class="timeline-dot"></div>
                 </div>

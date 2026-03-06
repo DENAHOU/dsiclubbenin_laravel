@@ -26,6 +26,15 @@
 .badge-company { background:#e8f5e9; color:#1b5e20; }
 .badge-administration { background:#fff3e0; color:#e65100; }
 .badge-college { background:#f3e5f5; color:#6a1b9a; }
+.badge-admin {
+    background:#e1f5fe;
+    color:#01579b;
+}
+
+.badge-tresor {
+    background:#fce4ec;
+    color:#880e4f;
+}
 
 .table-hover tbody tr:hover {
     background:#f8fbff;
@@ -67,7 +76,7 @@
                 <option value="administrations" {{ request('type')=='administrations' ? 'selected' : '' }}>Administration publique</option>
                 <option value="colleges" {{ request('type')=='colleges' ? 'selected' : '' }}>Collège IT</option>
                 <option value="admins" {{ request('type')=='admins' ? 'selected' : '' }}>Administrateurs</option>
-                {{-- <option value="tresor" {{ request('type')=='tresor' ? 'selected' : '' }}>Trésorerie</option> --}}
+                <option value="tresor" {{ request('type')=='tresor' ? 'selected' : '' }}>Trésorerie</option>
             </select>
         </div>
 
@@ -106,7 +115,9 @@
                             @elseif($m['type'] == 'Collège IT')
                                 <span class="badge badge-type badge-college">{{ $m['type'] }}</span>
                             @elseif($m['type'] == 'Administrateur')
-                                <span class="badge badge-type badge-college">{{ $m['type'] }}</span>
+                                <span class="badge badge-type badge-admin">{{ $m['type'] }}</span>
+                            @elseif($m['type'] == 'Trésorerie')
+                                <span class="badge badge-type badge-tresor">{{ $m['type'] }}</span>
                             @else
                                 <span class="badge badge-type badge-college">{{ $m['type'] }}</span>
                             @endif
